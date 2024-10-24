@@ -110,6 +110,7 @@ model PasswordReset {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  validUntil DateTime 
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @db.ObjectId

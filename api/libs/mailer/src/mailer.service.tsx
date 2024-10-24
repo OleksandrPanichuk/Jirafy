@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { render } from '@react-email/components';
 import FormData from 'form-data';
-import Mailgun, { MailgunMessageData } from 'mailgun.js';
+import Mailgun from 'mailgun.js';
 import { EmailTemplates, TemplatesMatch } from './mailer.constants';
+import { MailMessageData } from './mailer.types';
 
 @Injectable()
 export class MailerService {
@@ -14,9 +15,9 @@ export class MailerService {
 
   constructor(private readonly config: ConfigService) {}
 
-  public async sendWithMailgun(
+  public async sendHTML(
     template: EmailTemplates,
-    options: Omit<MailgunMessageData, 'from' | 'html'>,
+    options: MailMessageData,
     data?: any,
   ) {
     try {
@@ -28,7 +29,6 @@ export class MailerService {
         {
           from: `Jirafy <jirafy@${this.config.get('MAILGUN_DOMAIN')}>`,
           html: emailHtml,
-          
           ...options,
         },
       );
