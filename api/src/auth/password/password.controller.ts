@@ -2,7 +2,7 @@ import { Body, Controller, Patch, Post } from '@nestjs/common';
 import { ResetPasswordInput, SendTokenInput, VerifyTokenInput } from './dto';
 import { PasswordService } from './password.service';
 
-@Controller('password')
+@Controller('/auth/password')
 export class PasswordController {
   constructor(private readonly passwordService: PasswordService) {}
 
@@ -15,7 +15,6 @@ export class PasswordController {
   public resetPassword(@Body() dto: ResetPasswordInput) {
     return this.passwordService.resetPassword(dto);
   }
-
 
   @Post('verify-token')
   public verifyToken(@Body() dto: VerifyTokenInput) {

@@ -6,5 +6,5 @@ export type OAuthUser = {
   displayName?: string;
   firstName?: string;
   lastName?: string;
-  
+  verified?: boolean;
 };

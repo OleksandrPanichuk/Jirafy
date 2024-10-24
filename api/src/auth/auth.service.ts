@@ -1,4 +1,4 @@
-import { PrismaService } from '@app/prisma'
+import { PrismaService } from '@app/prisma';
 import {
   BadRequestException,
   ConflictException,
@@ -6,31 +6,33 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
-} from '@nestjs/common'
-import { SignInInput, SignUpInput, VerifyInput } from './dto'
+} from '@nestjs/common';
+import { SignInInput, SignUpInput, VerifyInput } from './dto';
 
-import { OAuthUser } from '@/common/types'
-import * as bcrypt from 'bcrypt'
-import { OAuthState } from './auth.constants'
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { OAuthState } from './auth.constants';
+import { OAuthUser } from './auth.types';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prisma: PrismaService) {}
-
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   public async verify(input: VerifyInput) {
     const user = await this.prisma.user.findUnique({
-      where: input
+      where: input,
     });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-
     return {
-      status: 'ok'
-    }
+      status: 'ok',
+    };
   }
 
   public async signUp(dto: SignUpInput) {
@@ -93,7 +95,7 @@ export class AuthService {
 
     if (!user) {
       const [fn, ln] = displayName?.split(' ') ?? [undefined, undefined];
-      return {
+      const data = {
         state: OAuthState.NO_ACCOUNT,
         user: {
           email,
@@ -101,12 +103,22 @@ export class AuthService {
           lastName: lastName ?? ln,
           displayName: displayName ?? this.extractDisplayNameFromEmail(email),
           avatar,
+          verified: true,
         },
+      };
+
+      const token = this.jwtService.sign(data, {
+        expiresIn: '10m',
+      });
+
+      return {
+        state: OAuthState.NO_ACCOUNT,
+        token,
       };
     }
 
     return {
-      state: OAuthState.NO_ACCOUNT,
+      state: OAuthState.SIGNED_IN,
       userId: user.id,
     };
   }

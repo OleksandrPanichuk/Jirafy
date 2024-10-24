@@ -1,5 +1,4 @@
 import { AuthenticatedGuard } from '@/common/guards';
-import { OAuthUser } from '@/common/types';
 import {
   Body,
   Controller,
@@ -16,6 +15,7 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { OAuthState } from './auth.constants';
 import { AuthService } from './auth.service';
+import { OAuthUser } from './auth.types';
 import { SignInInput, SignUpInput, VerifyInput } from './dto';
 import { GithubOAuthGuard, GoogleOAuthGuard } from './guards';
 
@@ -103,9 +103,9 @@ export class AuthController {
         session.passport = { user: data.userId };
         return res.redirect(this.CLIENT_URL);
       }
-
-      res.cookie('oauth_data', data.user, {
-        expires: new Date(Date.now() + 60000),
+      
+      res.cookie('oauth_data', data.token, {
+        expires: new Date(Date.now() + 1000 * 60 * 10),
       });
 
       return res.redirect(this.CLIENT_URL + '/onboarding');
