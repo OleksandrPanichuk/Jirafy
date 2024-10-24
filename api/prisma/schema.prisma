@@ -1,0 +1,449 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type File {
+  url String
+  key String?
+}
+
+enum InviteState {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+  GUEST
+}
+
+enum Network {
+  PUBLIC
+  PRIVATE
+}
+
+enum StateType {
+  BACKLOG
+  UNSTARTED
+  STARTED
+  COMPLETED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ActivityType {
+  CREATE_ISSUE
+  UPDATE_ISSUE
+  DELETE_ISSUE
+  CREATE_PROJECT
+  UPDATE_PROJECT
+  DELETE_PROJECT
+  CREATE_LABEL
+  UPDATE_LABEL
+  DELETE_LABEL
+  CREATE_STATE
+  UPDATE_STATE
+  DELETE_STATE
+  CREATE_MEMBER
+  UPDATE_MEMBER
+  DELETE_MEMBER
+  CREATE_INVITE
+  UPDATE_INVITE
+  DELETE_INVITE
+  CREATE_CYCLE
+  UPDATE_CYCLE
+  DELETE_CYCLE
+  COMMENT_ISSUE
+}
+
+enum IssueStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  email String @unique
+
+  firstName   String?
+  lastName    String?
+  displayName String?
+  avatar      File?
+  hash        String? @db.String
+  coverImage  File?
+
+  passwordResets PasswordReset[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspaces Member[]
+  invites    Invites[]
+  acitvities Activity[]
+  comments   Comment[]
+  reactions  Reaction[]
+  mentions   Mention[]
+
+  @@map("users")
+}
+
+model PasswordReset {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  token String @unique
+  email String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+
+  @@map("password_resets")
+}
+
+model Member {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+
+  role MemberRole
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?    @db.ObjectId
+
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  projectId String?  @db.ObjectId
+
+  page   Document? @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  pageId String?   @db.ObjectId
+
+  defaultAssignee Boolean @default(false)
+  isLead          Boolean @default(false)
+
+  createdIssues Issue[]
+  assignements  Assignee[]
+
+  @@map("members")
+}
+
+model Assignee {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String @db.ObjectId
+
+  issue   Issue  @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  issueId String @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("assignees")
+}
+
+model Workspace {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name String
+  slug String @unique
+  size Int
+  logo File?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  invites  Invites[]
+  members  Member[]
+  projects Project[]
+  activity Activity[]
+
+  @@map("workspaces")
+}
+
+model Invites {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  email String
+  state InviteState
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?    @db.ObjectId
+
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String?  @db.ObjectId
+
+  @@map("invites")
+}
+
+model Project {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name        String
+  description String?
+  cover       File?
+  emoji       String?
+  network     Network @default(PUBLIC)
+  identifier  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String    @db.ObjectId
+
+  members   Member[]
+  invites   Invites[]
+  states    StatePerProject[]
+  labels    Label[]
+  issues    Issue[]
+  activity  Activity[]
+  cycles    Cycle[]
+  documents Document[]
+
+  @@map("projects")
+}
+
+model StatePerProject {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String  @db.ObjectId
+
+  states  State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId String @db.ObjectId
+
+  @@map("states_per_project")
+}
+
+model State {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name  String    @unique
+  color String
+  type  StateType
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects StatePerProject[]
+  issues   Issue[]
+
+  @@map("states")
+}
+
+model Label {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name  String
+  color String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String  @db.ObjectId
+
+  issues LabelPerIssue[]
+
+  @@map("labels")
+}
+
+model LabelPerIssue {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  label   Label  @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  labelId String @db.ObjectId
+
+  issue   Issue  @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  issueId String @db.ObjectId
+
+  @@map("labels_per_issue")
+}
+
+model Issue {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  title       String
+  description String?     @db.String
+  priority    Priority?
+  status      IssueStatus
+  order       Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String  @db.ObjectId
+
+  state   State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId String @db.ObjectId
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  creator   Member? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+  creatorId String? @db.ObjectId
+
+  cycle   Cycle?  @relation(fields: [cycleId], references: [id], onDelete: SetNull)
+  cycleId String? @db.ObjectId
+
+  comments  Comment[]
+  reactions Reaction[]
+  labels    LabelPerIssue[]
+  activity  Activity[]
+  assignees Assignee[]
+
+  @@map("issues")
+}
+
+model Activity {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  type ActivityType
+  data String?      @db.String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?    @db.ObjectId
+
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  projectId String?  @db.ObjectId
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId String? @db.ObjectId
+
+  issue   Issue?  @relation(fields: [issueId], references: [id], onDelete: SetNull)
+  issueId String? @db.ObjectId
+
+  @@map("activities")
+}
+
+model Comment {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  message String @db.String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+
+  issue   Issue  @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  issueId String @db.ObjectId
+
+  reactions Reaction[]
+
+  @@map("comments")
+}
+
+model Reaction {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  type String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+
+  issue   Issue?  @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  issueId String? @db.ObjectId
+
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String?  @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reactions")
+}
+
+model Cycle {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name        String
+  description String?
+
+  startDate DateTime
+  endDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String  @db.ObjectId
+
+  issues Issue[]
+
+  @@map("cycles")
+}
+
+model Document {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  title      String
+  content    String? @db.String
+  coverImage File?
+  icon       String?
+
+  parentDocument   Document?  @relation("parent", fields: [parentDocumentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentDocumentId String?    @db.ObjectId
+  subDocuments     Document[] @relation("parent")
+
+  isArchived Boolean @default(false)
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String  @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  network Network @default(PUBLIC)
+
+  member   Member[]
+  mentions Mention[]
+
+  @@map("documents")
+}
+
+model Mention {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentId String   @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("mentions")
+}

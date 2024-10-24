@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--dark: #131313;
+	--gray: #2e333d;
+	--blue: #6b8afd;
+}
+
+.no-scroll {
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
