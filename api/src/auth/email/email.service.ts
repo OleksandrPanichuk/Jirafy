@@ -45,13 +45,16 @@ export class EmailService {
       },
     });
 
+    const clientUrl = this.config.get<string>('CLIENT_URL');
+    const link = `${clientUrl}/verify-email?token=${token}`;
+    
     await this.mailer.sendHTML(
       EmailTemplates.VERIFY_EMAIL,
       {
         to: user.email,
         subject: 'Verify email at Jirafy',
       },
-      { email: user.email, token },
+      { name: user.displayName || user.firstName || 'Dear Customer', link },
     );
 
     return 'Check your email for the email verification link';

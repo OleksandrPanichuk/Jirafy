@@ -61,6 +61,8 @@ exports.envSchema = Joi.object({
     GITHUB_CLIENT_ID: Joi.string().required(),
     GITHUB_CLIENT_SECRET: Joi.string().required(),
     MAILGUN_API_KEY: Joi.string().required(),
+    TOKEN_EXPIRATION: Joi.number().optional(),
+    JWT_SECRET: Joi.string().required(),
 });
 
 
@@ -108,8 +110,8 @@ function getSessionConfig(config) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const jsx_runtime_1 = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 const components_1 = __webpack_require__(/*! @react-email/components */ "@react-email/components");
-const ResetPassword = ({ email, token }) => {
-    return ((0, jsx_runtime_1.jsx)(components_1.Html, { children: (0, jsx_runtime_1.jsxs)(components_1.Container, { children: [(0, jsx_runtime_1.jsxs)(components_1.Text, { children: ["Hi, ", email, "."] }), (0, jsx_runtime_1.jsx)(components_1.Text, { children: "You have requested to reset your password. Please click the link below to reset your password." }), (0, jsx_runtime_1.jsx)(components_1.Button, { href: `http://localhost:3000/reset-password?token=${token}`, children: "Reset password" })] }) }));
+const ResetPassword = ({ email, link }) => {
+    return ((0, jsx_runtime_1.jsx)(components_1.Html, { children: (0, jsx_runtime_1.jsxs)(components_1.Container, { children: [(0, jsx_runtime_1.jsxs)(components_1.Text, { children: ["Hi, ", email, "."] }), (0, jsx_runtime_1.jsx)(components_1.Text, { children: "You have requested to reset your password. Please click the link below to reset your password." }), (0, jsx_runtime_1.jsx)(components_1.Button, { href: link, children: "Reset password" })] }) }));
 };
 exports["default"] = ResetPassword;
 
@@ -120,17 +122,40 @@ exports["default"] = ResetPassword;
 /*!*********************************!*\
   !*** ./emails/verify-email.tsx ***!
   \*********************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const jsx_runtime_1 = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-const react_1 = __importDefault(__webpack_require__(/*! react */ "react"));
-const VerifyEmail = () => {
-    return (0, jsx_runtime_1.jsx)("div", { children: "VerifyEmail" });
+const components_1 = __webpack_require__(/*! @react-email/components */ "@react-email/components");
+const main = {
+    backgroundColor: '#f6f9fc',
+    padding: '20px',
+};
+const container = {
+    backgroundColor: '#ffffff',
+    borderRadius: '8px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    padding: '40px',
+    maxWidth: '600px',
+    margin: '0 auto',
+};
+const heading = {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    marginBottom: '20px',
+};
+const paragraph = {
+    fontSize: '16px',
+    lineHeight: '24px',
+    marginBottom: '20px',
+};
+const link = {
+    color: '#1a73e8',
+    textDecoration: 'none',
+};
+const VerifyEmail = ({ name, link: verificationLink }) => {
+    return ((0, jsx_runtime_1.jsxs)(components_1.Html, { children: [(0, jsx_runtime_1.jsx)(components_1.Head, {}), (0, jsx_runtime_1.jsx)(components_1.Preview, { children: "Verify your email address" }), (0, jsx_runtime_1.jsx)(components_1.Body, { style: main, children: (0, jsx_runtime_1.jsxs)(components_1.Container, { style: container, children: [(0, jsx_runtime_1.jsxs)(components_1.Heading, { style: heading, children: ["Hi ", name, ","] }), (0, jsx_runtime_1.jsxs)(components_1.Text, { style: paragraph, children: ["We just need to verify your email address before you can access", ' ', "Jirafy."] }), (0, jsx_runtime_1.jsx)(components_1.Text, { style: paragraph, children: (0, jsx_runtime_1.jsx)(components_1.Link, { href: verificationLink, style: link, children: "Verify your email address" }) }), (0, jsx_runtime_1.jsx)(components_1.Text, { style: paragraph, children: "Thanks! \u2013 The Jirafy team" })] }) })] }));
 };
 exports["default"] = VerifyEmail;
 
@@ -259,7 +284,7 @@ let MailerService = class MailerService {
             key: this.config.get('MAILGUN_API_KEY'),
         });
     }
-    async sendWithMailgun(template, options, data) {
+    async sendHTML(template, options, data) {
         try {
             const Component = mailer_constants_1.TemplatesMatch[template];
             const emailHtml = await (0, components_1.render)((0, jsx_runtime_1.jsx)(Component, { ...data }));
@@ -518,8 +543,8 @@ let AuthController = class AuthController {
                 session.passport = { user: data.userId };
                 return res.redirect(this.CLIENT_URL);
             }
-            res.cookie('oauth_data', data.user, {
-                expires: new Date(Date.now() + 60000),
+            res.cookie('oauth_data', data.token, {
+                expires: new Date(Date.now() + 1000 * 60 * 10),
             });
             return res.redirect(this.CLIENT_URL + '/onboarding');
         }
@@ -623,19 +648,36 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
 const users_service_1 = __webpack_require__(/*! @/users/users.service */ "./src/users/users.service.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
 const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
 const auth_controller_1 = __webpack_require__(/*! ./auth.controller */ "./src/auth/auth.controller.ts");
 const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./src/auth/auth.service.ts");
+const email_module_1 = __webpack_require__(/*! ./email/email.module */ "./src/auth/email/email.module.ts");
+const password_module_1 = __webpack_require__(/*! ./password/password.module */ "./src/auth/password/password.module.ts");
 const strategy_1 = __webpack_require__(/*! ./strategy */ "./src/auth/strategy/index.ts");
 const google_strategy_1 = __webpack_require__(/*! ./strategy/google.strategy */ "./src/auth/strategy/google.strategy.ts");
 const session_serializer_1 = __webpack_require__(/*! ./utils/session.serializer */ "./src/auth/utils/session.serializer.ts");
-const password_module_1 = __webpack_require__(/*! ./password/password.module */ "./src/auth/password/password.module.ts");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [passport_1.PassportModule.register({ session: true }), password_module_1.PasswordModule],
+        imports: [
+            passport_1.PassportModule.register({ session: true }),
+            jwt_1.JwtModule.registerAsync({
+                imports: [config_1.ConfigModule],
+                useFactory: async (configService) => ({
+                    secret: configService.get('JWT_SECRET'),
+                    signOptions: {
+                        expiresIn: '10m',
+                    },
+                }),
+                inject: [config_1.ConfigService],
+            }),
+            password_module_1.PasswordModule,
+            email_module_1.EmailModule,
+        ],
         providers: [
             auth_service_1.AuthService,
             session_serializer_1.SessionSerializer,
@@ -690,26 +732,28 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthService = void 0;
 const prisma_1 = __webpack_require__(/*! @app/prisma */ "./libs/prisma/src/index.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
 const bcrypt = __importStar(__webpack_require__(/*! bcrypt */ "bcrypt"));
 const auth_constants_1 = __webpack_require__(/*! ./auth.constants */ "./src/auth/auth.constants.ts");
 let AuthService = class AuthService {
-    constructor(prisma) {
+    constructor(prisma, jwtService) {
         this.prisma = prisma;
+        this.jwtService = jwtService;
     }
     async verify(input) {
         const user = await this.prisma.user.findUnique({
-            where: input
+            where: input,
         });
         if (!user) {
             throw new common_1.NotFoundException('User not found');
         }
         return {
-            status: 'ok'
+            status: 'ok',
         };
     }
     async signUp(dto) {
@@ -761,7 +805,7 @@ let AuthService = class AuthService {
         });
         if (!user) {
             const [fn, ln] = displayName?.split(' ') ?? [undefined, undefined];
-            return {
+            const data = {
                 state: auth_constants_1.OAuthState.NO_ACCOUNT,
                 user: {
                     email,
@@ -769,11 +813,19 @@ let AuthService = class AuthService {
                     lastName: lastName ?? ln,
                     displayName: displayName ?? this.extractDisplayNameFromEmail(email),
                     avatar,
+                    verified: true,
                 },
+            };
+            const token = this.jwtService.sign(data, {
+                expiresIn: '10m',
+            });
+            return {
+                state: auth_constants_1.OAuthState.NO_ACCOUNT,
+                token,
             };
         }
         return {
-            state: auth_constants_1.OAuthState.NO_ACCOUNT,
+            state: auth_constants_1.OAuthState.SIGNED_IN,
             userId: user.id,
         };
     }
@@ -784,7 +836,7 @@ let AuthService = class AuthService {
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [typeof (_a = typeof prisma_1.PrismaService !== "undefined" && prisma_1.PrismaService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof prisma_1.PrismaService !== "undefined" && prisma_1.PrismaService) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object])
 ], AuthService);
 
 
@@ -933,6 +985,271 @@ __decorate([
 
 /***/ }),
 
+/***/ "./src/auth/email/dto/index.ts":
+/*!*************************************!*\
+  !*** ./src/auth/email/dto/index.ts ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./send-token.dto */ "./src/auth/email/dto/send-token.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./verify-email.dto */ "./src/auth/email/dto/verify-email.dto.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./src/auth/email/dto/send-token.dto.ts":
+/*!**********************************************!*\
+  !*** ./src/auth/email/dto/send-token.dto.ts ***!
+  \**********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SendTokenInput = void 0;
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class SendTokenInput {
+}
+exports.SendTokenInput = SendTokenInput;
+__decorate([
+    (0, class_validator_1.IsEmail)(undefined, { message: 'Invalid email' }),
+    __metadata("design:type", String)
+], SendTokenInput.prototype, "email", void 0);
+
+
+/***/ }),
+
+/***/ "./src/auth/email/dto/verify-email.dto.ts":
+/*!************************************************!*\
+  !*** ./src/auth/email/dto/verify-email.dto.ts ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.VerifyEmailInput = void 0;
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class VerifyEmailInput {
+}
+exports.VerifyEmailInput = VerifyEmailInput;
+__decorate([
+    (0, class_validator_1.IsUUID)('4', { message: 'Invalid token' }),
+    __metadata("design:type", String)
+], VerifyEmailInput.prototype, "token", void 0);
+
+
+/***/ }),
+
+/***/ "./src/auth/email/email.controller.ts":
+/*!********************************************!*\
+  !*** ./src/auth/email/email.controller.ts ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EmailController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const dto_1 = __webpack_require__(/*! ./dto */ "./src/auth/email/dto/index.ts");
+const email_service_1 = __webpack_require__(/*! ./email.service */ "./src/auth/email/email.service.ts");
+let EmailController = class EmailController {
+    constructor(emailService) {
+        this.emailService = emailService;
+    }
+    sendResetPasswordToken(dto) {
+        return this.emailService.sendVerifyEmailToken(dto);
+    }
+    verifyEmail(dto) {
+        return this.emailService.verify(dto);
+    }
+};
+exports.EmailController = EmailController;
+__decorate([
+    (0, common_1.Post)('send-token'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.SendTokenInput !== "undefined" && dto_1.SendTokenInput) === "function" ? _b : Object]),
+    __metadata("design:returntype", void 0)
+], EmailController.prototype, "sendResetPasswordToken", null);
+__decorate([
+    (0, common_1.Post)('verify'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.VerifyEmailInput !== "undefined" && dto_1.VerifyEmailInput) === "function" ? _c : Object]),
+    __metadata("design:returntype", void 0)
+], EmailController.prototype, "verifyEmail", null);
+exports.EmailController = EmailController = __decorate([
+    (0, common_1.Controller)('/auth/email'),
+    __metadata("design:paramtypes", [typeof (_a = typeof email_service_1.EmailService !== "undefined" && email_service_1.EmailService) === "function" ? _a : Object])
+], EmailController);
+
+
+/***/ }),
+
+/***/ "./src/auth/email/email.module.ts":
+/*!****************************************!*\
+  !*** ./src/auth/email/email.module.ts ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EmailModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const email_controller_1 = __webpack_require__(/*! ./email.controller */ "./src/auth/email/email.controller.ts");
+const email_service_1 = __webpack_require__(/*! ./email.service */ "./src/auth/email/email.service.ts");
+const mailer_1 = __webpack_require__(/*! @app/mailer */ "./libs/mailer/src/index.ts");
+let EmailModule = class EmailModule {
+};
+exports.EmailModule = EmailModule;
+exports.EmailModule = EmailModule = __decorate([
+    (0, common_1.Module)({
+        controllers: [email_controller_1.EmailController],
+        providers: [email_service_1.EmailService],
+        imports: [mailer_1.MailerModule]
+    })
+], EmailModule);
+
+
+/***/ }),
+
+/***/ "./src/auth/email/email.service.ts":
+/*!*****************************************!*\
+  !*** ./src/auth/email/email.service.ts ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EmailService = void 0;
+const mailer_1 = __webpack_require__(/*! @app/mailer */ "./libs/mailer/src/index.ts");
+const prisma_1 = __webpack_require__(/*! @app/prisma */ "./libs/prisma/src/index.ts");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const mailer_constants_1 = __webpack_require__(/*! @app/mailer/mailer.constants */ "./libs/mailer/src/mailer.constants.ts");
+const uuid_1 = __webpack_require__(/*! uuid */ "uuid");
+let EmailService = class EmailService {
+    constructor(mailer, prisma, config) {
+        this.mailer = mailer;
+        this.prisma = prisma;
+        this.config = config;
+        this.TOKEN_EXPIRATION = this.config.get('TOKEN_EXPIRATION') || 1000 * 60 * 60;
+    }
+    async sendVerifyEmailToken(dto) {
+        const user = await this.prisma.user.findUnique({
+            where: { email: dto.email },
+        });
+        if (!user) {
+            throw new common_1.NotFoundException('User not found');
+        }
+        const token = (0, uuid_1.v4)();
+        await this.prisma.passwordReset.deleteMany({
+            where: { userId: user.id },
+        });
+        await this.prisma.passwordReset.create({
+            data: {
+                token,
+                userId: user.id,
+                email: user.email,
+                validUntil: new Date(Date.now() + this.TOKEN_EXPIRATION),
+            },
+        });
+        const clientUrl = this.config.get('CLIENT_URL');
+        const link = `${clientUrl}/verify-email?token=${token}`;
+        await this.mailer.sendHTML(mailer_constants_1.EmailTemplates.VERIFY_EMAIL, {
+            to: user.email,
+            subject: 'Verify email at Jirafy',
+        }, { name: user.displayName || user.firstName || 'Dear Customer', link });
+        return 'Check your email for the email verification link';
+    }
+    async verify(dto) {
+        const reset = await this.prisma.passwordReset.findUnique({
+            where: { token: dto.token },
+        });
+        if (!reset) {
+            throw new common_1.BadRequestException('Invalid token');
+        }
+        if (Date.now() > reset.validUntil.getTime()) {
+            throw new common_1.BadRequestException('Token expired');
+        }
+        await this.prisma.user.update({
+            where: { id: reset.userId },
+            data: { verified: true },
+        });
+        return 'Email verified';
+    }
+};
+exports.EmailService = EmailService;
+exports.EmailService = EmailService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof mailer_1.MailerService !== "undefined" && mailer_1.MailerService) === "function" ? _a : Object, typeof (_b = typeof prisma_1.PrismaService !== "undefined" && prisma_1.PrismaService) === "function" ? _b : Object, typeof (_c = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _c : Object])
+], EmailService);
+
+
+/***/ }),
+
 /***/ "./src/auth/guards/github.guard.ts":
 /*!*****************************************!*\
   !*** ./src/auth/guards/github.guard.ts ***!
@@ -1015,6 +1332,69 @@ __exportStar(__webpack_require__(/*! ./google.guard */ "./src/auth/guards/google
 
 /***/ }),
 
+/***/ "./src/auth/password/dto/index.ts":
+/*!****************************************!*\
+  !*** ./src/auth/password/dto/index.ts ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./reset-password.dto */ "./src/auth/password/dto/reset-password.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./send-token.dto */ "./src/auth/password/dto/send-token.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./verify-token.dto */ "./src/auth/password/dto/verify-token.dto.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./src/auth/password/dto/reset-password.dto.ts":
+/*!*****************************************************!*\
+  !*** ./src/auth/password/dto/reset-password.dto.ts ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ResetPasswordInput = void 0;
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+const verify_token_dto_1 = __webpack_require__(/*! ./verify-token.dto */ "./src/auth/password/dto/verify-token.dto.ts");
+class ResetPasswordInput extends verify_token_dto_1.VerifyTokenInput {
+}
+exports.ResetPasswordInput = ResetPasswordInput;
+__decorate([
+    (0, class_validator_1.IsStrongPassword)({}, { message: 'Password is too weak' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(8, { message: 'Password is too short' }),
+    __metadata("design:type", String)
+], ResetPasswordInput.prototype, "password", void 0);
+
+
+/***/ }),
+
 /***/ "./src/auth/password/dto/send-token.dto.ts":
 /*!*************************************************!*\
   !*** ./src/auth/password/dto/send-token.dto.ts ***!
@@ -1047,6 +1427,36 @@ __decorate([
 
 /***/ }),
 
+/***/ "./src/auth/password/dto/verify-token.dto.ts":
+/*!***************************************************!*\
+  !*** ./src/auth/password/dto/verify-token.dto.ts ***!
+  \***************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.VerifyTokenInput = void 0;
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class VerifyTokenInput {
+}
+exports.VerifyTokenInput = VerifyTokenInput;
+__decorate([
+    (0, class_validator_1.IsUUID)('4', { message: 'Invalid token' }),
+    __metadata("design:type", String)
+], VerifyTokenInput.prototype, "token", void 0);
+
+
+/***/ }),
+
 /***/ "./src/auth/password/password.controller.ts":
 /*!**************************************************!*\
   !*** ./src/auth/password/password.controller.ts ***!
@@ -1066,11 +1476,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b;
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PasswordController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const send_token_dto_1 = __webpack_require__(/*! ./dto/send-token.dto */ "./src/auth/password/dto/send-token.dto.ts");
+const dto_1 = __webpack_require__(/*! ./dto */ "./src/auth/password/dto/index.ts");
 const password_service_1 = __webpack_require__(/*! ./password.service */ "./src/auth/password/password.service.ts");
 let PasswordController = class PasswordController {
     constructor(passwordService) {
@@ -1079,17 +1489,37 @@ let PasswordController = class PasswordController {
     sendResetPasswordToken(dto) {
         return this.passwordService.sendResetPasswordToken(dto);
     }
+    resetPassword(dto) {
+        return this.passwordService.resetPassword(dto);
+    }
+    verifyToken(dto) {
+        return this.passwordService.verifyToken(dto);
+    }
 };
 exports.PasswordController = PasswordController;
 __decorate([
     (0, common_1.Post)('send-token'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof send_token_dto_1.SendTokenInput !== "undefined" && send_token_dto_1.SendTokenInput) === "function" ? _b : Object]),
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.SendTokenInput !== "undefined" && dto_1.SendTokenInput) === "function" ? _b : Object]),
     __metadata("design:returntype", void 0)
 ], PasswordController.prototype, "sendResetPasswordToken", null);
+__decorate([
+    (0, common_1.Patch)('reset'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.ResetPasswordInput !== "undefined" && dto_1.ResetPasswordInput) === "function" ? _c : Object]),
+    __metadata("design:returntype", void 0)
+], PasswordController.prototype, "resetPassword", null);
+__decorate([
+    (0, common_1.Post)('verify-token'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_d = typeof dto_1.VerifyTokenInput !== "undefined" && dto_1.VerifyTokenInput) === "function" ? _d : Object]),
+    __metadata("design:returntype", void 0)
+], PasswordController.prototype, "verifyToken", null);
 exports.PasswordController = PasswordController = __decorate([
-    (0, common_1.Controller)('password'),
+    (0, common_1.Controller)('/auth/password'),
     __metadata("design:paramtypes", [typeof (_a = typeof password_service_1.PasswordService !== "undefined" && password_service_1.PasswordService) === "function" ? _a : Object])
 ], PasswordController);
 
@@ -1136,61 +1566,120 @@ exports.PasswordModule = PasswordModule = __decorate([
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PasswordService = void 0;
 const mailer_1 = __webpack_require__(/*! @app/mailer */ "./libs/mailer/src/index.ts");
 const mailer_constants_1 = __webpack_require__(/*! @app/mailer/mailer.constants */ "./libs/mailer/src/mailer.constants.ts");
 const prisma_1 = __webpack_require__(/*! @app/prisma */ "./libs/prisma/src/index.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const bcrypt = __importStar(__webpack_require__(/*! bcrypt */ "bcrypt"));
 const uuid_1 = __webpack_require__(/*! uuid */ "uuid");
 let PasswordService = class PasswordService {
-    constructor(prisma, mailer) {
+    constructor(prisma, mailer, config) {
         this.prisma = prisma;
         this.mailer = mailer;
+        this.config = config;
+        this.TOKEN_EXPIRATION = this.config.get('TOKEN_EXPIRATION') || 1000 * 60 * 60;
     }
     async sendResetPasswordToken(dto) {
         const user = await this.prisma.user.findUnique({
-            where: {
-                email: dto.email,
-            },
+            where: { email: dto.email },
         });
         if (!user) {
-            throw new Error('User not found');
+            throw new common_1.NotFoundException('User not found');
         }
         const token = (0, uuid_1.v4)();
         await this.prisma.passwordReset.deleteMany({
-            where: {
-                userId: user.id,
-            },
+            where: { userId: user.id },
         });
         await this.prisma.passwordReset.create({
             data: {
                 token,
                 userId: user.id,
                 email: user.email,
+                validUntil: new Date(Date.now() + this.TOKEN_EXPIRATION),
             },
         });
-        await this.mailer.sendWithMailgun(mailer_constants_1.EmailTemplates.RESET_PASSWORD, {
+        const clientUrl = this.config.get('CLIENT_URL');
+        const link = `${clientUrl}/reset-password?token=${token}`;
+        await this.mailer.sendHTML(mailer_constants_1.EmailTemplates.RESET_PASSWORD, {
             to: user.email,
             subject: 'Reset password at Jirafy',
-        }, { email: user.email, token });
+        }, { email: user.email, link });
         return 'Check your email for the reset password link';
+    }
+    async verifyToken(dto) {
+        const reset = await this.prisma.passwordReset.findUnique({
+            where: { token: dto.token },
+        });
+        if (!reset) {
+            throw new common_1.BadRequestException('Invalid token');
+        }
+        if (Date.now() > reset.validUntil.getTime()) {
+            throw new common_1.BadRequestException('Token expired');
+        }
+        return 'Token is valid';
+    }
+    async resetPassword(dto) {
+        const reset = await this.prisma.passwordReset.findUnique({
+            where: { token: dto.token },
+        });
+        if (!reset) {
+            throw new common_1.BadRequestException('Invalid token');
+        }
+        const hash = await this.hashPassword(dto.password);
+        await this.prisma.user.update({
+            where: { id: reset.userId },
+            data: { hash },
+        });
+        await this.prisma.passwordReset.delete({
+            where: { id: reset.id },
+        });
+        return 'Password reset successfully';
+    }
+    async hashPassword(password) {
+        const salt = await bcrypt.genSalt(10);
+        return bcrypt.hash(password, salt);
     }
 };
 exports.PasswordService = PasswordService;
 exports.PasswordService = PasswordService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [typeof (_a = typeof prisma_1.PrismaService !== "undefined" && prisma_1.PrismaService) === "function" ? _a : Object, typeof (_b = typeof mailer_1.MailerService !== "undefined" && mailer_1.MailerService) === "function" ? _b : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof prisma_1.PrismaService !== "undefined" && prisma_1.PrismaService) === "function" ? _a : Object, typeof (_b = typeof mailer_1.MailerService !== "undefined" && mailer_1.MailerService) === "function" ? _b : Object, typeof (_c = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _c : Object])
 ], PasswordService);
 
 
@@ -1677,6 +2166,16 @@ module.exports = require("@nestjs/core");
 
 /***/ }),
 
+/***/ "@nestjs/jwt":
+/*!******************************!*\
+  !*** external "@nestjs/jwt" ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/jwt");
+
+/***/ }),
+
 /***/ "@nestjs/passport":
 /*!***********************************!*\
   !*** external "@nestjs/passport" ***!
@@ -1854,16 +2353,6 @@ module.exports = require("passport-google-oauth20");
 /***/ ((module) => {
 
 module.exports = require("passport-local");
-
-/***/ }),
-
-/***/ "react":
-/*!************************!*\
-  !*** external "react" ***!
-  \************************/
-/***/ ((module) => {
-
-module.exports = require("react");
 
 /***/ }),
 

@@ -46,13 +46,16 @@ export class PasswordService {
       },
     });
 
+    const clientUrl = this.config.get<string>('CLIENT_URL');
+    const link = `${clientUrl}/reset-password?token=${token}`
+
     await this.mailer.sendHTML(
       EmailTemplates.RESET_PASSWORD,
       {
         to: user.email,
         subject: 'Reset password at Jirafy',
       },
-      { email: user.email, token },
+      { email: user.email, link },
     );
 
     return 'Check your email for the reset password link';

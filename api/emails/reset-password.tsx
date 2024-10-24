@@ -2,10 +2,10 @@ import { Button, Container, Html, Text } from '@react-email/components';
 
 type Props = {
   email: string;
-  token: string;
+  link: string;
 };
 
-const ResetPassword = ({ email, token }: Props) => {
+const ResetPassword = ({ email, link }: Props) => {
   return (
     <Html>
       <Container>
@@ -14,7 +14,7 @@ const ResetPassword = ({ email, token }: Props) => {
           You have requested to reset your password. Please click the link below
           to reset your password.
         </Text>
-        <Button href={`http://localhost:3000/reset-password?token=${token}`}>
+        <Button href={link}>
           Reset password
         </Button>
       </Container>
