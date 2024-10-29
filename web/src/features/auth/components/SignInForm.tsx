@@ -1,6 +1,6 @@
 'use client'
 
-import { AuthApi, SignInInput, signInSchema, useSignInMutation } from '@/api'
+import { AuthApi, SignInInput, signInSchema } from '@/api'
 import {
 	BottomGradientButton,
 	Form,
@@ -9,9 +9,10 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-	Input,
+	Input
 } from '@/components/ui'
 import { Routes } from '@/constants'
+import { useSignInMutation } from '@/features/auth'
 import { cn } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react'
@@ -23,9 +24,9 @@ export const SignInForm = () => {
 		resolver: zodResolver(signInSchema),
 		defaultValues: {
 			email: '',
-			password: '',
+			password: ''
 		},
-		mode: 'onBlur',
+		mode: 'onBlur'
 	})
 
 	const { handleSubmit, control } = form
@@ -35,25 +36,25 @@ export const SignInForm = () => {
 	const onSubmit = (values: SignInInput) => signIn(values)
 	return (
 		<div>
-			<h2 className='font-bold text-xl text-neutral-800 dark:text-neutral-200'>
+			<h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
 				Welcome back to Jirafy
 			</h2>
-			<p className='text-sm max-w-sm mt-2 text-neutral-300'>
+			<p className="text-sm max-w-sm mt-2 text-neutral-300">
 				Sign in to your account
 			</p>
 			<Form {...form}>
-				<form className='my-8 flex flex-col ' onSubmit={handleSubmit(onSubmit)}>
+				<form className="my-8 flex flex-col " onSubmit={handleSubmit(onSubmit)}>
 					<FormField
 						control={control}
-						name='email'
+						name="email"
 						render={({ field }) => (
-							<FormItem className='mb-4'>
+							<FormItem className="mb-4">
 								<FormLabel>Email Address</FormLabel>
 								<FormControl>
 									<Input
 										{...field}
-										placeholder='example@gmail.com'
-										type='email'
+										placeholder="example@gmail.com"
+										type="email"
 										disabled={isPending}
 									/>
 								</FormControl>
@@ -63,15 +64,15 @@ export const SignInForm = () => {
 					/>
 					<FormField
 						control={control}
-						name='password'
+						name="password"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Password</FormLabel>
 								<FormControl>
 									<Input
 										{...field}
-										placeholder='••••••••'
-										type='password'
+										placeholder="••••••••"
+										type="password"
 										disabled={isPending}
 									/>
 								</FormControl>
@@ -90,11 +91,11 @@ export const SignInForm = () => {
 						Forgot password?
 					</Link>
 
-					<BottomGradientButton type='submit' isDisabled={isPending}>
+					<BottomGradientButton type="submit" isDisabled={isPending}>
 						Sign In &rarr;
 					</BottomGradientButton>
 
-					<p className='my-2 text-sm font-medium'>
+					<p className="my-2 text-sm font-medium">
 						Do not have an account?{' '}
 						<Link
 							href={Routes.SIGN_UP}
@@ -107,26 +108,26 @@ export const SignInForm = () => {
 						</Link>
 					</p>
 
-					<div className='bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full' />
+					<div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
 
-					<div className='flex flex-col space-y-4'>
+					<div className="flex flex-col space-y-4">
 						<BottomGradientButton
-							className='flex items-center justify-start'
-							type='button'
+							className="flex items-center justify-start"
+							type="button"
 							onClick={AuthApi.githubOAuth}
 							isDisabled={isPending}
 						>
-							<IconBrandGithub className='h-4 w-4 text-neutral-800 dark:text-neutral-300' />
-							<span className='text-neutral-300 text-sm'>GitHub</span>
+							<IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+							<span className="text-neutral-300 text-sm">GitHub</span>
 						</BottomGradientButton>
 						<BottomGradientButton
-							className='flex items-center justify-start'
-							type='button'
+							className="flex items-center justify-start"
+							type="button"
 							onClick={AuthApi.googleOAuth}
 							isDisabled={isPending}
 						>
-							<IconBrandGoogle className='h-4 w-4 text-neutral-800 dark:text-neutral-300' />
-							<span className='text-neutral-300 text-sm'>Google</span>
+							<IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+							<span className="text-neutral-300 text-sm">Google</span>
 						</BottomGradientButton>
 					</div>
 				</form>

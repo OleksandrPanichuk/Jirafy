@@ -1,38 +1,53 @@
+import { currentUser } from '@/api'
 import { Notifications } from '@/features/notifications'
 import { AuthProvider, QueryProvider } from '@/providers'
+import '@/styles/globals.scss'
 import { NextUIProvider } from '@nextui-org/react'
 import type { Metadata } from 'next'
-import localFont from 'next/font/local'
-import './globals.css'
+import { Inter } from 'next/font/google'
+import { ReactNode } from 'react'
 
-const geistSans = localFont({
-	src: './fonts/GeistVF.woff',
-	variable: '--font-geist-sans',
-	weight: '100 900',
-})
-const geistMono = localFont({
-	src: './fonts/GeistMonoVF.woff',
-	variable: '--font-geist-mono',
-	weight: '100 900',
+const inter = Inter({
+	display: 'swap',
+	weight: ['400', '500'],
+	variable: '--font-inter',
+	subsets: ['latin']
 })
 
 export const metadata: Metadata = {
-	title: 'Chatify',
+	title: 'Jirafy'
 }
 
-export default function RootLayout({
-	children,
+export default async function RootLayout({
+	children
 }: Readonly<{
-	children: React.ReactNode
+	children: ReactNode
 }>) {
+	const user = await currentUser()
 	return (
-		<html lang='en' className='dark'>
+		<html lang="en" className={'dark'} suppressHydrationWarning>
+			<head>
+				<link
+					rel="icon"
+					type="image/png"
+					href="/favicon-48x48.png"
+					sizes="48x48"
+				/>
+				<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+				<link rel="shortcut icon" href="/favicon.ico" />
+				<link
+					rel="apple-touch-icon"
+					sizes="180x180"
+					href="/apple-touch-icon.png"
+				/>
+				<link rel="manifest" href="/site.webmanifest" />
+			</head>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${inter.variable} ${inter.className} antialiased bg-tw-bg-90 min-h-screen`}
 			>
 				<Notifications />
 				<QueryProvider>
-					<AuthProvider>
+					<AuthProvider initialUser={user}>
 						<NextUIProvider>{children}</NextUIProvider>
 					</AuthProvider>
 				</QueryProvider>

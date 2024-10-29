@@ -23,7 +23,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       avatar: {
         url: photos[0].value,
       },
-      displayName,
+      username: displayName,
       firstName: name?.givenName,
       lastName: name?.familyName,
     };

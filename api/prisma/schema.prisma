@@ -80,12 +80,12 @@ model User {
 
   email String @unique
 
-  firstName   String?
-  lastName    String?
-  displayName String?
-  avatar      File?
-  hash        String? @db.String
-  coverImage  File?
+  firstName  String
+  lastName   String
+  username   String  @unique
+  avatar     File?
+  hash       String? @db.String
+  coverImage File?
 
   verified Boolean @default(false)
 
@@ -101,6 +101,7 @@ model User {
   comments   Comment[]
   reactions  Reaction[]
   mentions   Mention[]
+  messages   Message[]
 
   @@map("users")
 }
@@ -143,7 +144,7 @@ model Member {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @db.ObjectId
 
-  role MemberRole
+  role MemberRole?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -157,11 +158,14 @@ model Member {
   page   Document? @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId String?   @db.ObjectId
 
-  defaultAssignee Boolean @default(false)
-  isLead          Boolean @default(false)
+  defaultAssignee Boolean?
+  isLead          Boolean?
 
   createdIssues Issue[]
   assignements  Assignee[]
+
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String?       @db.ObjectId
 
   @@map("members")
 }
@@ -192,10 +196,12 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  invites  Invites[]
-  members  Member[]
-  projects Project[]
-  activity Activity[]
+  invites       Invites[]
+  members       Member[]
+  projects      Project[]
+  activity      Activity[]
+  channels      Channel[]
+  conversations Conversation[]
 
   @@map("workspaces")
 }
@@ -388,7 +394,7 @@ model Comment {
 model Reaction {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  type String
+  value String
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @db.ObjectId
@@ -398,6 +404,9 @@ model Reaction {
 
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?  @db.ObjectId
+
+  message   Message? @relation(fields: [messageId], references: [id])
+  messageId String?  @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -466,4 +475,58 @@ model Mention {
   updatedAt DateTime @updatedAt
 
   @@map("mentions")
+}
+
+model Channel {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  image File?
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String    @db.ObjectId
+
+  name        String
+  description String?
+
+  messages Message[]
+
+  @@map("channels")
+}
+
+model Conversation {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  image File?
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String    @db.ObjectId
+
+  members  Member[]
+  messages Message[]
+}
+
+model Message {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String?       @db.ObjectId
+
+  channel   Channel? @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channelId String?  @db.ObjectId
+
+  parentMessage   Message? @relation("submessages", fields: [parentMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentMessageId String?  @db.ObjectId
+
+  submessages Message[] @relation("submessages")
+
+  reactions Reaction[]
+
+  @@map("messages")
 }

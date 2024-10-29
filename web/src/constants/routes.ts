@@ -4,6 +4,8 @@ export const Routes = {
 	SIGN_UP: '/sign-up',
 	FORGET_PASSWORD: '/forget-password',
 	RESET_PASSWORD: '/reset-password',
+	VERIFY_EMAIL: '/verify-email',
+	CHANGE_EMAIL: '/change-email'
 } as const
 
 export const ApiRoutes = {
@@ -14,6 +16,15 @@ export const ApiRoutes = {
 		GITHUB: '/api/auth/sign-in/github',
 		FORGOT_PASSWORD: '/auth/forgot-password',
 		RESET_PASSWORD: '/auth/reset-password',
-		VERIFY: '/auth/verify',
+		SIGN_OUT: '/auth/sign-out',
+		VERIFY_IDENTITY: '/auth/verify-identity'
 	},
+	EMAIL: {
+		SEND_LINK: '/auth/email/send-link',
+		VERIFY: '/auth/email/verify'
+	},
+	USERS: {
+		ROOT: '/users',
+		CURRENT: '/users/current'
+	}
 } as const

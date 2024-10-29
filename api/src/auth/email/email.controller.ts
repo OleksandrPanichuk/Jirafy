@@ -1,6 +1,6 @@
 import { AuthenticatedGuard } from '@/common/guards';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { SendTokenInput, VerifyEmailInput } from './dto';
+import { SendVerificationLinkInput, VerifyEmailInput } from './dto';
 import { EmailService } from './email.service';
 
 @UseGuards(AuthenticatedGuard)
@@ -8,9 +8,9 @@ import { EmailService } from './email.service';
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
-  @Post('send-token')
-  public sendResetPasswordToken(@Body() dto: SendTokenInput) {
-    return this.emailService.sendVerifyEmailToken(dto);
+  @Post('send-link')
+  public sendVerificationLink(@Body() dto: SendVerificationLinkInput) {
+    return this.emailService.sendVerificationLink(dto);
   }
 
   @Post('verify')

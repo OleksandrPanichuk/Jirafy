@@ -27,7 +27,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       avatar: {
         url: photos[0].value,
       },
-      displayName,
+      username: displayName,
       firstName: name?.givenName,
       lastName: name?.familyName,
     };

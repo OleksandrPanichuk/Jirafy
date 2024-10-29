@@ -5,16 +5,13 @@ import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
-	const {user} = useAuth()
+	const user = useAuth((s) => s.user)
 
-	if(user) {
+	if (user?.verified) {
 		return redirect(Routes.ROOT)
 	}
-	return (
-		<div className='max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black'>
-			{children}
-		</div>
-	)
+
+	return <>{children}</>
 }
 
 export default AuthLayout

@@ -1,4 +1,4 @@
-import { PrismaService } from '@app/prisma';
+import { PrismaService } from '@app/prisma'
 import {
   BadRequestException,
   ConflictException,
@@ -6,13 +6,13 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
-} from '@nestjs/common';
-import { SignInInput, SignUpInput, VerifyInput } from './dto';
+} from '@nestjs/common'
+import { SignInInput, SignUpInput, VerifyIdentityInput } from './dto'
 
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { OAuthState } from './auth.constants';
-import { OAuthUser } from './auth.types';
+import { JwtService } from '@nestjs/jwt'
+import * as bcrypt from 'bcrypt'
+import { OAuthState } from './auth.constants'
+import { OAuthUser } from './auth.types'
 
 @Injectable()
 export class AuthService {
@@ -21,39 +21,56 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  public async verify(input: VerifyInput) {
+  public async verifyIdentity({ password }: VerifyIdentityInput, id: string) {
     const user = await this.prisma.user.findUnique({
-      where: input,
-    });
+      where: {
+        id,
+      },
+    })
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    return {
-      status: 'ok',
-    };
+    return await bcrypt.compare(password, user.hash);
   }
 
   public async signUp(dto: SignUpInput) {
-    const { email, firstName, lastName } = dto;
+    const { email, firstName, lastName, username, verified, avatar, password } =
+      dto;
 
-    const existingUser = await this.prisma.user.findUnique({
+    const existingUser = await this.prisma.user.findFirst({
       where: {
-        email: dto.email,
+        OR: [
+          {
+            email,
+          },
+          {
+            username,
+          },
+        ],
       },
     });
-    if (existingUser?.id) throw new ConflictException('Email already in use');
+
+    if (existingUser?.email === email) {
+      throw new ConflictException('Email already in use');
+    } else if (existingUser?.username === username) {
+      throw new ConflictException('Username already in use');
+    } else if (existingUser?.id) {
+      throw new ConflictException('User already exists');
+    }
 
     const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(dto.password, salt);
+    const hash = await bcrypt.hash(password, salt);
 
     return await this.prisma.user.create({
       data: {
         email,
         firstName,
         lastName,
-        displayName: this.extractDisplayNameFromEmail(dto.email),
+        username,
+        verified,
+        avatar,
         hash,
       },
     });
@@ -85,7 +102,7 @@ export class AuthService {
   public async signInWithOAuth(input: Partial<OAuthUser>) {
     if (!input) throw new UnauthorizedException('Unauthenticated');
 
-    const { email, displayName, firstName, lastName, avatar } = input;
+    const { email, username, firstName, lastName, avatar } = input;
 
     const user = await this.prisma.user.findUnique({
       where: {
@@ -94,14 +111,14 @@ export class AuthService {
     });
 
     if (!user) {
-      const [fn, ln] = displayName?.split(' ') ?? [undefined, undefined];
+      const [fn, ln] = username?.split(' ') ?? [undefined, undefined];
       const data = {
         state: OAuthState.NO_ACCOUNT,
         user: {
           email,
           firstName: firstName ?? fn,
           lastName: lastName ?? ln,
-          displayName: displayName ?? this.extractDisplayNameFromEmail(email),
+          username: username ?? this.extractDisplayNameFromEmail(email),
           avatar,
           verified: true,
         },

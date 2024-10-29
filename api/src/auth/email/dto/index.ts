@@ -1,2 +1,2 @@
-export * from './send-token.dto';
+export * from './send-verification-link.dto';
 export * from './verify-email.dto';

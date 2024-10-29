@@ -497,6 +497,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthController = void 0;
+const decorators_1 = __webpack_require__(/*! @/common/decorators */ "./src/common/decorators/index.ts");
 const guards_1 = __webpack_require__(/*! @/common/guards */ "./src/common/guards/index.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
@@ -511,13 +512,13 @@ let AuthController = class AuthController {
         this.authService = authService;
         this.CLIENT_URL = config.get('CLIENT_URL');
     }
+    async verifyIdentity(dto, id) {
+        return this.authService.verifyIdentity(dto, id);
+    }
     async signIn(session, body) {
         const user = await this.authService.signIn(body);
         session.passport = { user: user.id };
         return user;
-    }
-    verify(body) {
-        return this.authService.verify(body);
     }
     async signUp(dto, session) {
         const user = await this.authService.signUp(dto);
@@ -546,31 +547,33 @@ let AuthController = class AuthController {
             res.cookie('oauth_data', data.token, {
                 expires: new Date(Date.now() + 1000 * 60 * 10),
             });
-            return res.redirect(this.CLIENT_URL + '/onboarding');
+            return res.redirect(this.CLIENT_URL + '/oauth');
         }
         catch (err) {
+            console.log(err);
             return res.redirect(`${this.CLIENT_URL}/auth?error=${type}`);
         }
     }
 };
 exports.AuthController = AuthController;
 __decorate([
+    (0, common_1.Post)('verify-identity'),
+    (0, common_1.UseGuards)(guards_1.AuthenticatedGuard),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, decorators_1.CurrentUser)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.VerifyIdentityInput !== "undefined" && dto_1.VerifyIdentityInput) === "function" ? _c : Object, String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyIdentity", null);
+__decorate([
     (0, common_1.Post)('sign-in'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Session)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, typeof (_c = typeof dto_1.SignInInput !== "undefined" && dto_1.SignInInput) === "function" ? _c : Object]),
+    __metadata("design:paramtypes", [Object, typeof (_d = typeof dto_1.SignInInput !== "undefined" && dto_1.SignInInput) === "function" ? _d : Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signIn", null);
-__decorate([
-    (0, common_1.Post)('verify'),
-    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_d = typeof dto_1.VerifyInput !== "undefined" && dto_1.VerifyInput) === "function" ? _d : Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "verify", null);
 __decorate([
     (0, common_1.Post)('sign-up'),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
@@ -745,34 +748,50 @@ let AuthService = class AuthService {
         this.prisma = prisma;
         this.jwtService = jwtService;
     }
-    async verify(input) {
+    async verifyIdentity({ password }, id) {
         const user = await this.prisma.user.findUnique({
-            where: input,
+            where: {
+                id,
+            },
         });
         if (!user) {
             throw new common_1.NotFoundException('User not found');
         }
-        return {
-            status: 'ok',
-        };
+        return await bcrypt.compare(password, user.hash);
     }
     async signUp(dto) {
-        const { email, firstName, lastName } = dto;
-        const existingUser = await this.prisma.user.findUnique({
+        const { email, firstName, lastName, username, verified, avatar, password } = dto;
+        const existingUser = await this.prisma.user.findFirst({
             where: {
-                email: dto.email,
+                OR: [
+                    {
+                        email,
+                    },
+                    {
+                        username,
+                    },
+                ],
             },
         });
-        if (existingUser?.id)
+        if (existingUser?.email === email) {
             throw new common_1.ConflictException('Email already in use');
+        }
+        else if (existingUser?.username === username) {
+            throw new common_1.ConflictException('Username already in use');
+        }
+        else if (existingUser?.id) {
+            throw new common_1.ConflictException('User already exists');
+        }
         const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(dto.password, salt);
+        const hash = await bcrypt.hash(password, salt);
         return await this.prisma.user.create({
             data: {
                 email,
                 firstName,
                 lastName,
-                displayName: this.extractDisplayNameFromEmail(dto.email),
+                username,
+                verified,
+                avatar,
                 hash,
             },
         });
@@ -797,21 +816,21 @@ let AuthService = class AuthService {
     async signInWithOAuth(input) {
         if (!input)
             throw new common_1.UnauthorizedException('Unauthenticated');
-        const { email, displayName, firstName, lastName, avatar } = input;
+        const { email, username, firstName, lastName, avatar } = input;
         const user = await this.prisma.user.findUnique({
             where: {
                 email,
             },
         });
         if (!user) {
-            const [fn, ln] = displayName?.split(' ') ?? [undefined, undefined];
+            const [fn, ln] = username?.split(' ') ?? [undefined, undefined];
             const data = {
                 state: auth_constants_1.OAuthState.NO_ACCOUNT,
                 user: {
                     email,
                     firstName: firstName ?? fn,
                     lastName: lastName ?? ln,
-                    displayName: displayName ?? this.extractDisplayNameFromEmail(email),
+                    username: username ?? this.extractDisplayNameFromEmail(email),
                     avatar,
                     verified: true,
                 },
@@ -866,7 +885,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 __exportStar(__webpack_require__(/*! ./sign-in.dto */ "./src/auth/dto/sign-in.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./sign-up.dto */ "./src/auth/dto/sign-up.dto.ts"), exports);
-__exportStar(__webpack_require__(/*! ./verify.dto */ "./src/auth/dto/verify.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./verify-identity.dto */ "./src/auth/dto/verify-identity.dto.ts"), exports);
 
 
 /***/ }),
@@ -925,6 +944,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SignUpInput = void 0;
 const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class SignUpAvatar {
+}
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUrl)(),
+    __metadata("design:type", String)
+], SignUpAvatar.prototype, "url", void 0);
 class SignUpInput {
 }
 exports.SignUpInput = SignUpInput;
@@ -951,14 +977,30 @@ __decorate([
     (0, class_validator_1.MinLength)(2, { message: 'Last name is too short' }),
     __metadata("design:type", String)
 ], SignUpInput.prototype, "lastName", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(2, { message: 'Username is too short' }),
+    __metadata("design:type", String)
+], SignUpInput.prototype, "username", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], SignUpInput.prototype, "verified", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.ValidateNested)(),
+    __metadata("design:type", SignUpAvatar)
+], SignUpInput.prototype, "avatar", void 0);
 
 
 /***/ }),
 
-/***/ "./src/auth/dto/verify.dto.ts":
-/*!************************************!*\
-  !*** ./src/auth/dto/verify.dto.ts ***!
-  \************************************/
+/***/ "./src/auth/dto/verify-identity.dto.ts":
+/*!*********************************************!*\
+  !*** ./src/auth/dto/verify-identity.dto.ts ***!
+  \*********************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -972,15 +1014,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.VerifyInput = void 0;
+exports.VerifyIdentityInput = void 0;
 const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
-class VerifyInput {
+class VerifyIdentityInput {
 }
-exports.VerifyInput = VerifyInput;
+exports.VerifyIdentityInput = VerifyIdentityInput;
 __decorate([
-    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(8),
     __metadata("design:type", String)
-], VerifyInput.prototype, "email", void 0);
+], VerifyIdentityInput.prototype, "password", void 0);
 
 
 /***/ }),
@@ -1007,16 +1051,16 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(/*! ./send-token.dto */ "./src/auth/email/dto/send-token.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./send-verification-link.dto */ "./src/auth/email/dto/send-verification-link.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./verify-email.dto */ "./src/auth/email/dto/verify-email.dto.ts"), exports);
 
 
 /***/ }),
 
-/***/ "./src/auth/email/dto/send-token.dto.ts":
-/*!**********************************************!*\
-  !*** ./src/auth/email/dto/send-token.dto.ts ***!
-  \**********************************************/
+/***/ "./src/auth/email/dto/send-verification-link.dto.ts":
+/*!**********************************************************!*\
+  !*** ./src/auth/email/dto/send-verification-link.dto.ts ***!
+  \**********************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1030,15 +1074,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SendTokenInput = void 0;
+exports.SendVerificationLinkInput = void 0;
 const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
-class SendTokenInput {
+class SendVerificationLinkInput {
 }
-exports.SendTokenInput = SendTokenInput;
+exports.SendVerificationLinkInput = SendVerificationLinkInput;
 __decorate([
     (0, class_validator_1.IsEmail)(undefined, { message: 'Invalid email' }),
     __metadata("design:type", String)
-], SendTokenInput.prototype, "email", void 0);
+], SendVerificationLinkInput.prototype, "email", void 0);
 
 
 /***/ }),
@@ -1095,6 +1139,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EmailController = void 0;
+const guards_1 = __webpack_require__(/*! @/common/guards */ "./src/common/guards/index.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const dto_1 = __webpack_require__(/*! ./dto */ "./src/auth/email/dto/index.ts");
 const email_service_1 = __webpack_require__(/*! ./email.service */ "./src/auth/email/email.service.ts");
@@ -1102,8 +1147,8 @@ let EmailController = class EmailController {
     constructor(emailService) {
         this.emailService = emailService;
     }
-    sendResetPasswordToken(dto) {
-        return this.emailService.sendVerifyEmailToken(dto);
+    sendVerificationLink(dto) {
+        return this.emailService.sendVerificationLink(dto);
     }
     verifyEmail(dto) {
         return this.emailService.verify(dto);
@@ -1111,12 +1156,12 @@ let EmailController = class EmailController {
 };
 exports.EmailController = EmailController;
 __decorate([
-    (0, common_1.Post)('send-token'),
+    (0, common_1.Post)('send-link'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.SendTokenInput !== "undefined" && dto_1.SendTokenInput) === "function" ? _b : Object]),
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.SendVerificationLinkInput !== "undefined" && dto_1.SendVerificationLinkInput) === "function" ? _b : Object]),
     __metadata("design:returntype", void 0)
-], EmailController.prototype, "sendResetPasswordToken", null);
+], EmailController.prototype, "sendVerificationLink", null);
 __decorate([
     (0, common_1.Post)('verify'),
     __param(0, (0, common_1.Body)()),
@@ -1125,6 +1170,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], EmailController.prototype, "verifyEmail", null);
 exports.EmailController = EmailController = __decorate([
+    (0, common_1.UseGuards)(guards_1.AuthenticatedGuard),
     (0, common_1.Controller)('/auth/email'),
     __metadata("design:paramtypes", [typeof (_a = typeof email_service_1.EmailService !== "undefined" && email_service_1.EmailService) === "function" ? _a : Object])
 ], EmailController);
@@ -1197,7 +1243,7 @@ let EmailService = class EmailService {
         this.config = config;
         this.TOKEN_EXPIRATION = this.config.get('TOKEN_EXPIRATION') || 1000 * 60 * 60;
     }
-    async sendVerifyEmailToken(dto) {
+    async sendVerificationLink(dto) {
         const user = await this.prisma.user.findUnique({
             where: { email: dto.email },
         });
@@ -1221,7 +1267,7 @@ let EmailService = class EmailService {
         await this.mailer.sendHTML(mailer_constants_1.EmailTemplates.VERIFY_EMAIL, {
             to: user.email,
             subject: 'Verify email at Jirafy',
-        }, { name: user.displayName || user.firstName || 'Dear Customer', link });
+        }, { name: user.firstName || 'Dear Customer', link });
         return 'Check your email for the email verification link';
     }
     async verify(dto) {
@@ -1725,7 +1771,7 @@ let GithubStrategy = class GithubStrategy extends (0, passport_1.PassportStrateg
             avatar: {
                 url: photos[0].value,
             },
-            displayName,
+            username: displayName,
             firstName: name?.givenName,
             lastName: name?.familyName,
         };
@@ -1781,7 +1827,7 @@ let GoogleStrategy = class GoogleStrategy extends (0, passport_1.PassportStrateg
             avatar: {
                 url: photos[0].value,
             },
-            displayName,
+            username: displayName,
             firstName: name?.givenName,
             lastName: name?.familyName,
         };
@@ -1923,6 +1969,52 @@ exports.SessionSerializer = SessionSerializer = __decorate([
 
 /***/ }),
 
+/***/ "./src/common/decorators/current-user.decorator.ts":
+/*!*********************************************************!*\
+  !*** ./src/common/decorators/current-user.decorator.ts ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CurrentUser = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+exports.CurrentUser = (0, common_1.createParamDecorator)(async (data, ctx) => {
+    const req = ctx.switchToHttp().getRequest();
+    const user = req.user;
+    return data ? user?.[data] : user;
+});
+
+
+/***/ }),
+
+/***/ "./src/common/decorators/index.ts":
+/*!****************************************!*\
+  !*** ./src/common/decorators/index.ts ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./current-user.decorator */ "./src/common/decorators/current-user.decorator.ts"), exports);
+
+
+/***/ }),
+
 /***/ "./src/common/guards/authenticated.guard.ts":
 /*!**************************************************!*\
   !*** ./src/common/guards/authenticated.guard.ts ***!
@@ -2038,17 +2130,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const users_service_1 = __webpack_require__(/*! ./users.service */ "./src/users/users.service.ts");
+const guards_1 = __webpack_require__(/*! @/common/guards */ "./src/common/guards/index.ts");
+const decorators_1 = __webpack_require__(/*! @/common/decorators */ "./src/common/decorators/index.ts");
+const client_1 = __webpack_require__(/*! @prisma/client */ "@prisma/client");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
+    currentUser(user) {
+        return user;
+    }
 };
 exports.UsersController = UsersController;
+__decorate([
+    (0, common_1.Get)('/current'),
+    (0, common_1.UseGuards)(guards_1.AuthenticatedGuard),
+    __param(0, (0, decorators_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _b : Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "currentUser", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [typeof (_a = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _a : Object])

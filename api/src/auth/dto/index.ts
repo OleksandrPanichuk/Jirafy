@@ -1,3 +1,3 @@
 export * from './sign-in.dto';
 export * from './sign-up.dto';
-export * from './verify.dto';
+export * from './verify-identity.dto';

@@ -3,16 +3,12 @@ import { zRequired } from '@/lib/validators'
 import { isStrongPassword } from 'validator'
 import { z } from 'zod'
 
-export const verifySchema = z.object({ email: z.string().email() })
-
-export type VerifyInput = z.infer<typeof verifySchema>
-
 export const signInSchema = z.object({
 	email: zRequired(FormErrors.required.email).email(FormErrors.invalid.email),
 	password: zRequired(FormErrors.required.password).min(
 		8,
 		FormErrors.length.password
-	),
+	)
 })
 
 export type SignInInput = z.infer<typeof signInSchema>
@@ -24,18 +20,37 @@ export const signUpSchema = z
 			.min(8, FormErrors.length.password)
 			.refine(isStrongPassword, FormErrors.invalid.password),
 		confirmPassword: zRequired(FormErrors.required.confirmPassword),
+		username: zRequired(FormErrors.required.username).min(
+			2,
+			FormErrors.length.username
+		),
 		firstName: zRequired(FormErrors.required.firstName).min(
 			2,
 			FormErrors.length.firstName
 		),
+		avatar: z
+			.object({
+				url: z.string().url()
+			})
+			.optional(),
 		lastName: zRequired(FormErrors.required.lastName).min(
 			2,
 			FormErrors.length.lastName
 		),
+		verified: z.boolean().optional()
 	})
-	.refine(data => data.password === data.confirmPassword, {
+	.refine((data) => data.password === data.confirmPassword, {
 		message: FormErrors.match.passwords,
-		path: ['confirmPassword'],
+		path: ['confirmPassword']
 	})
 
 export type SignUpInput = z.infer<typeof signUpSchema>
+
+export const verifyIdentitySchema = z.object({
+	password: zRequired(FormErrors.required.password).min(
+		8,
+		FormErrors.length.password
+	)
+})
+
+export type VerifyIdentityInput = z.infer<typeof verifyIdentitySchema>

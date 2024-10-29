@@ -1,0 +1,19 @@
+$minWidth: 320;
+$maxWidth: 1440;
+$maxWidthContainer: 1200;
+$containerPadding: 20;
+$containerWidth: calc($maxWidthContainer + $containerPadding * 2);
+
+
+
+:root {
+	--dark: #131313;
+	--gray: #2e333d;
+	--blue: #6b8afd;
+
+
+
+	--bg-100: rgb(25,25,25);
+	--bg-90: rgb(32,32,32);
+	--bg-80: rgb(44,44,44)
+}

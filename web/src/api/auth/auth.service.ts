@@ -6,8 +6,8 @@ import {
 	signInSchema,
 	SignUpInput,
 	signUpSchema,
-	VerifyInput,
-	verifySchema,
+	VerifyIdentityInput,
+	verifyIdentitySchema
 } from './auth.dto'
 
 const signIn = async (input: SignInInput) => {
@@ -16,13 +16,11 @@ const signIn = async (input: SignInInput) => {
 }
 const signUp = async (input: SignUpInput) => {
 	signUpSchema.parse(input)
-
 	return await axios.post<TypeUser>(ApiRoutes.AUTH.SIGN_UP, input)
 }
 
-const verify = async (input: VerifyInput) => {
-	verifySchema.parse(input)
-	return await axios.post(ApiRoutes.AUTH.VERIFY, input)
+const signOut = async () => {
+	return await axios.post(ApiRoutes.AUTH.SIGN_OUT)
 }
 
 const googleOAuth = () => {
@@ -35,10 +33,16 @@ const githubOAuth = () => {
 	window.location.href = ApiRoutes.AUTH.GITHUB
 }
 
+const verifyIdentity = async (input: VerifyIdentityInput) => {
+	verifyIdentitySchema.parse(input)
+	return await axios.post<boolean>(ApiRoutes.AUTH.VERIFY_IDENTITY, input)
+}
+
 export const AuthApi = {
 	signIn,
 	signUp,
+	signOut,
 	googleOAuth,
 	githubOAuth,
-	verify
+	verifyIdentity
 } as const

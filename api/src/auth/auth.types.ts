@@ -3,7 +3,7 @@ export type OAuthUser = {
   avatar: {
     url?: string;
   };
-  displayName?: string;
+  username?: string;
   firstName?: string;
   lastName?: string;
   verified?: boolean;

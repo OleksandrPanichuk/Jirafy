@@ -1,3 +1,4 @@
+import { CurrentUser } from '@/common/decorators';
 import { AuthenticatedGuard } from '@/common/guards';
 import {
   Body,
@@ -16,7 +17,7 @@ import { Request, Response } from 'express';
 import { OAuthState } from './auth.constants';
 import { AuthService } from './auth.service';
 import { OAuthUser } from './auth.types';
-import { SignInInput, SignUpInput, VerifyInput } from './dto';
+import { SignInInput, SignUpInput, VerifyIdentityInput } from './dto';
 import { GithubOAuthGuard, GoogleOAuthGuard } from './guards';
 
 @Controller('auth')
@@ -30,18 +31,21 @@ export class AuthController {
     this.CLIENT_URL = config.get<string>('CLIENT_URL');
   }
 
+  @Post('verify-identity')
+  @UseGuards(AuthenticatedGuard)
+  async verifyIdentity(
+    @Body() dto: VerifyIdentityInput,
+    @CurrentUser('id') id: string,
+  ) {
+    return this.authService.verifyIdentity(dto, id);
+  }
+
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   async signIn(@Session() session, @Body() body: SignInInput) {
     const user = await this.authService.signIn(body);
     session.passport = { user: user.id };
     return user;
-  }
-
-  @Post('verify')
-  @HttpCode(HttpStatus.OK)
-  verify(@Body() body: VerifyInput) {
-    return this.authService.verify(body);
   }
 
   @Post('sign-up')
@@ -103,13 +107,14 @@ export class AuthController {
         session.passport = { user: data.userId };
         return res.redirect(this.CLIENT_URL);
       }
-      
+
       res.cookie('oauth_data', data.token, {
         expires: new Date(Date.now() + 1000 * 60 * 10),
       });
 
-      return res.redirect(this.CLIENT_URL + '/onboarding');
+      return res.redirect(this.CLIENT_URL + '/oauth');
     } catch (err) {
+      console.log(err);
       return res.redirect(`${this.CLIENT_URL}/auth?error=${type}`);
     }
   }

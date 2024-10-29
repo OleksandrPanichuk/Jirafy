@@ -6,7 +6,7 @@ import { PluginAPI } from 'tailwindcss/types/config'
 const config: Config = {
 	content: [
 		'./src/**/*.{js,ts,jsx,tsx,mdx}',
-		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
 	],
 	darkMode: 'class',
 	theme: {
@@ -15,11 +15,14 @@ const config: Config = {
 				'tw-dark': 'var(--dark)',
 				'tw-gray': 'var(--gray)',
 				'tw-blue': 'var(--blue)',
+				'tw-bg-100': 'var(--bg-100)',
+				'tw-bg-90': 'var(--bg-90)',
+				'tw-bg-80': 'var(--bg-80)'
 			},
 			boxShadow: {
-				input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
-			},
-		},
+				input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`
+			}
+		}
 	},
 	plugins: [
 		addVariablesForColors,
@@ -29,14 +32,14 @@ const config: Config = {
 					colors: {
 						primary: {
 							DEFAULT: '#6b8afd',
-							foreground: '#ffffff',
+							foreground: '#ffffff'
 						},
-						focus: '#7492fc',
-					},
-				},
-			},
-		}),
-	],
+						focus: '#7492fc'
+					}
+				}
+			}
+		})
+	]
 }
 
 function addVariablesForColors({ addBase, theme }: PluginAPI) {
@@ -46,7 +49,7 @@ function addVariablesForColors({ addBase, theme }: PluginAPI) {
 	) as unknown as string[]
 
 	addBase({
-		':root': newVars,
+		':root': newVars
 	})
 }
 

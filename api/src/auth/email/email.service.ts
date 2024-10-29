@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SendTokenInput, VerifyEmailInput } from './dto';
+import { SendVerificationLinkInput, VerifyEmailInput } from './dto';
 
 import { EmailTemplates } from '@app/mailer/mailer.constants';
 import { v4 as uuid } from 'uuid';
@@ -21,7 +21,9 @@ export class EmailService {
     private readonly config: ConfigService,
   ) {}
 
-  public async sendVerifyEmailToken(dto: SendTokenInput): Promise<string> {
+  public async sendVerificationLink(
+    dto: SendVerificationLinkInput,
+  ): Promise<string> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -47,14 +49,14 @@ export class EmailService {
 
     const clientUrl = this.config.get<string>('CLIENT_URL');
     const link = `${clientUrl}/verify-email?token=${token}`;
-    
+
     await this.mailer.sendHTML(
       EmailTemplates.VERIFY_EMAIL,
       {
         to: user.email,
         subject: 'Verify email at Jirafy',
       },
-      { name: user.displayName || user.firstName || 'Dear Customer', link },
+      { name: user.firstName || 'Dear Customer', link },
     );
 
     return 'Check your email for the email verification link';

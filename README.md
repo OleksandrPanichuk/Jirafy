@@ -1,3 +1,24 @@
+# Jirafy
+
+Jirafy is a Jira clone designed to streamline project management and team collaboration. Below are the key features and functionalities of the application:
+
+## Key Features
+
+- **Workspaces**: 
+  - Each workspace has its own chat functionality similar to Slack.
+  - Supports channels and one-to-one conversations between workspace members.
+  - Multiple projects can be created within a single workspace.
+
+- **Projects**:
+  - Each project includes features such as issues, cycles, and pages.
+  - **Issues**: 
+    - Users can view all tasks for a project in various formats:
+      - Table view
+      - List view
+      - Board view
+      - Calendar view
+  - **Pages**: 
+    - Pages within a project function similarly to pages in Notion, allowing for rich content creation and organization.
 
 ## Backend (API)
 
@@ -80,5 +101,6 @@ Environment variables are managed using a `.env` file located in the root direct
 
 1. Clone the repository:
 
-```sh
-git clone https://github.com/OleksandrPanichuk/Jirafy.git
+    ```sh
+    git clone https://github.com/OleksandrPanichuk/Jirafy.git
+    ```
