@@ -26,7 +26,7 @@ export const VerifyIdentityForm = () => {
 			password: ''
 		}
 	})
-	const { isIdentityVerified } = useVerifyIdentityStore()
+	const { isIdentityVerified } = useVerifyIdentityStore(s => s)
 
 	const { mutate: verifyIdentity, isPending } = useVerifyIdentityMutation()
 

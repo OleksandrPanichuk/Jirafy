@@ -2,14 +2,21 @@ import { MailerService } from '@app/mailer';
 import { PrismaService } from '@app/prisma';
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SendVerificationLinkInput, VerifyEmailInput } from './dto';
+import {
+  ChangeEmailInput,
+  SendVerificationLinkInput,
+  VerifyEmailInput,
+} from './dto';
 
 import { EmailTemplates } from '@app/mailer/mailer.constants';
 import { v4 as uuid } from 'uuid';
+
+import { omit } from 'lodash';
 
 @Injectable()
 export class EmailService {
@@ -20,6 +27,29 @@ export class EmailService {
     private readonly prisma: PrismaService,
     private readonly config: ConfigService,
   ) {}
+
+  public async changeEmail(dto: ChangeEmailInput, userId: string) {
+    const existingUser = await this.prisma.user.findUnique({
+      where: {
+        email: dto.newEmail,
+      }
+    })
+
+    if (existingUser) {
+      throw new ConflictException('Email already in use');
+    }
+    
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        email: dto.newEmail,
+      },
+    });
+
+    return omit(updatedUser, 'hash');
+  }
 
   public async sendVerificationLink(
     dto: SendVerificationLinkInput,

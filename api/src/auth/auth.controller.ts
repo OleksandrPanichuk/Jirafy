@@ -36,8 +36,15 @@ export class AuthController {
   async verifyIdentity(
     @Body() dto: VerifyIdentityInput,
     @CurrentUser('id') id: string,
+    @Res() res: Response,
   ) {
-    return this.authService.verifyIdentity(dto, id);
+    const identityToken = await this.authService.verifyIdentity(dto, id);
+
+    res.cookie('identity_verified', identityToken, {
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+    });
+
+    return res.send(true);
   }
 
   @Post('sign-in')

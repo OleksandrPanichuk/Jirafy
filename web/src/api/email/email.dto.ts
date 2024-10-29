@@ -15,3 +15,9 @@ export const verifyEmailSchema = z.object({
 })
 
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>
+
+export const changeEmailSchema = z.object({
+	newEmail: zRequired().email(FormErrors.invalid.email)
+})
+
+export type ChangeEmailInput = z.infer<typeof changeEmailSchema>

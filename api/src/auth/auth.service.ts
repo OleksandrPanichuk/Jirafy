@@ -32,7 +32,15 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    return await bcrypt.compare(password, user.hash);
+    const verified = await bcrypt.compare(password, user.hash);
+
+    if (!verified) {
+      throw new ForbiddenException('Invalid password');
+    }
+
+    const identityToken = this.jwtService.sign({ id, verified }, { expiresIn: '1d' });
+
+    return identityToken;
   }
 
   public async signUp(dto: SignUpInput) {

@@ -1,8 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { AuthenticatedGuard } from '@/common/guards';
 import { CurrentUser } from '@/common/decorators';
+import { AuthenticatedGuard } from '@/common/guards';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {

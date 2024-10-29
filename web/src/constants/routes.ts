@@ -21,7 +21,8 @@ export const ApiRoutes = {
 	},
 	EMAIL: {
 		SEND_LINK: '/auth/email/send-link',
-		VERIFY: '/auth/email/verify'
+		VERIFY: '/auth/email/verify',
+		CHANGE: '/auth/email/change'
 	},
 	USERS: {
 		ROOT: '/users',

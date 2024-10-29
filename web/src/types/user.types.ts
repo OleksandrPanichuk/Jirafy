@@ -6,7 +6,6 @@ export type TypeUser = {
 	firstName?: string
 	lastName?: string
 	username?: string
-	hash?: string
 	avatar?: TypeFile
 	coverImage?: TypeFile
 

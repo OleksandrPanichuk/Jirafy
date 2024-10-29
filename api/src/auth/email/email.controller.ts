@@ -1,7 +1,12 @@
-import { AuthenticatedGuard } from '@/common/guards';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { SendVerificationLinkInput, VerifyEmailInput } from './dto';
+import { AuthenticatedGuard, IdentityVerifiedGuard } from '@/common/guards';
+import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  ChangeEmailInput,
+  SendVerificationLinkInput,
+  VerifyEmailInput,
+} from './dto';
 import { EmailService } from './email.service';
+import { CurrentUser } from '@/common/decorators'
 
 @UseGuards(AuthenticatedGuard)
 @Controller('/auth/email')
@@ -16,5 +21,15 @@ export class EmailController {
   @Post('verify')
   public verifyEmail(@Body() dto: VerifyEmailInput) {
     return this.emailService.verify(dto);
+  }
+
+  @Patch('change')
+  @UseGuards(AuthenticatedGuard)
+  @UseGuards(IdentityVerifiedGuard)
+  changeEmail(
+    @Body() dto: ChangeEmailInput,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.emailService.changeEmail(dto, userId);
   }
 }
