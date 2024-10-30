@@ -45,6 +45,14 @@ enum Priority {
   URGENT
 }
 
+enum MemberType {
+  WORKSPACE
+  PROKECT
+  CHAT
+  CONVERSATION
+  PAGE
+}
+
 enum ActivityType {
   CREATE_ISSUE
   UPDATE_ISSUE
@@ -145,6 +153,7 @@ model Member {
   userId String @db.ObjectId
 
   role MemberRole?
+  type MemberType @default(WORKSPACE)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -158,8 +167,9 @@ model Member {
   page   Document? @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId String?   @db.ObjectId
 
-  defaultAssignee Boolean?
-  isLead          Boolean?
+  defaultAssignee     Boolean?
+  isLead              Boolean?
+  isWorkspaceSelected Boolean?
 
   createdIssues Issue[]
   assignements  Assignee[]
@@ -192,6 +202,7 @@ model Workspace {
   slug String @unique
   size Int
   logo File?
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

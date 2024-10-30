@@ -1,7 +1,7 @@
 'use client'
 
 import { Routes } from '@/constants'
-import { useAuth } from '@/providers'
+import { useAuth } from '@/features/auth'
 import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 

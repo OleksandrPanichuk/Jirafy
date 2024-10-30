@@ -3,7 +3,7 @@
 import { AuthApi } from '@/api'
 import { toast } from '@/features/notifications'
 import { useMutation } from '@/hooks'
-import { useAuth } from '@/providers'
+import { useAuth } from '@/features/auth'
 
 export const useSignOutMutation = () => {
 	const setUser = useAuth((s) => s.setUser)

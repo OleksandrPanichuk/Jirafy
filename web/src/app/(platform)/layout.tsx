@@ -1,13 +1,11 @@
 'use client'
-
 import { Routes } from '@/constants'
-import { useAuth } from '@/providers'
+import { useAuth } from '@/features/auth'
 import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 
-export default function PlatformLayout({ children }: PropsWithChildren) {
+export default function Layout({ children }: PropsWithChildren) {
 	const user = useAuth((s) => s.user)
-
 	if (!user) {
 		return redirect(Routes.SIGN_IN)
 	}

@@ -3,19 +3,25 @@
 import { cn } from '@/lib'
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
 
-const Label = forwardRef<
-	ElementRef<'label'>,
-	ComponentPropsWithoutRef<'label'>
->(({ className, ...props }, ref) => (
-	<label
-		ref={ref}
-		className={cn(
-			'text-sm font-medium text-black dark:text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-			className
-		)}
-		{...props}
-	/>
-))
+export interface ILabelProps extends ComponentPropsWithoutRef<'label'> {
+	withAsterisk?: boolean
+}
+
+const Label = forwardRef<ElementRef<'label'>, ILabelProps>(
+	({ className, withAsterisk, children, ...props }, ref) => (
+		<label
+			ref={ref}
+			className={cn(
+				'text-sm font-medium text-black dark:text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+				className
+			)}
+			{...props}
+		>
+			{children}
+			{withAsterisk && <span className="text-red-500 ml-1">*</span>}
+		</label>
+	)
+)
 Label.displayName = 'Label'
 
 const LabelInputContainer = forwardRef<

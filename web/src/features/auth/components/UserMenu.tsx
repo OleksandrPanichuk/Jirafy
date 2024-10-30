@@ -1,8 +1,7 @@
 'use client'
 
 import { Routes } from '@/constants'
-import { useSignOutMutation } from '@/features/auth'
-import { useAuth } from '@/providers'
+import { useAuth, useSignOutMutation } from '@/features/auth'
 import {
 	Dropdown,
 	DropdownItem,

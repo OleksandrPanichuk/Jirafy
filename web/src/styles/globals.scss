@@ -1,12 +1,24 @@
+@use './base/mixins.scss';
+@use './base/variables.scss';
+@use './base/functions.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import './base/mixins.scss';
-@import './base/variables.scss';
-@import './base/functions.scss';
+:root {
+	--dark: #131313;
+	--gray: #2e333d;
+	--blue: rgb(107, 138, 253);
 
+	--bg-100: rgb(25, 25, 25);
+	--bg-90: rgb(32, 32, 32);
+	--bg-80: rgb(44, 44, 44);
 
+	--border-200: rgb(38, 38, 38);
+
+	--primary-100: #3f76ff; // rgb(63, 118, 255)
+	--primary-200: #396ae6; // rgb(57, 106, 230)
+}
 
 .no-scroll {
 	&::-webkit-scrollbar {

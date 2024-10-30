@@ -8,7 +8,7 @@ import {
 	VerificationProcess
 } from '@/features/auth'
 import { toast } from '@/features/notifications'
-import { useAuth } from '@/providers'
+import { useAuth } from '@/features/auth'
 import { redirect, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 

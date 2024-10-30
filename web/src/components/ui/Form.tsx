@@ -11,7 +11,7 @@ import {
 	useFormContext,
 } from 'react-hook-form'
 
-import { Label, LabelInputContainer } from '@/components/ui'
+import { ILabelProps, Label, LabelInputContainer } from '@/components/ui'
 import { cn } from '@/lib'
 import { IconAlertTriangle } from '@tabler/icons-react'
 
@@ -88,7 +88,7 @@ FormItem.displayName = 'FormItem'
 
 const FormLabel = React.forwardRef<
 	React.ElementRef<'label'>,
-	React.ComponentPropsWithoutRef<'label'>
+	ILabelProps
 >(({ className, ...props }, ref) => {
 	const { error, formItemId } = useFormField()
 

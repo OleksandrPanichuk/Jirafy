@@ -5,7 +5,10 @@ export const Routes = {
 	FORGET_PASSWORD: '/forget-password',
 	RESET_PASSWORD: '/reset-password',
 	VERIFY_EMAIL: '/verify-email',
-	CHANGE_EMAIL: '/change-email'
+	CHANGE_EMAIL: '/change-email',
+	CREATE_WORKSPACE: '/create-workspace',
+
+	WORKSPACE_BY_SLUG: (slug: string) => `/${slug}`
 } as const
 
 export const ApiRoutes = {
@@ -27,5 +30,9 @@ export const ApiRoutes = {
 	USERS: {
 		ROOT: '/users',
 		CURRENT: '/users/current'
+	},
+	WORKSPACES: {
+		ROOT: '/workspaces',
+		ALL: '/workspaces/all'
 	}
 } as const

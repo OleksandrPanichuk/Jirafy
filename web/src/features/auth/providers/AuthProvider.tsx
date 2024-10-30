@@ -1,9 +1,9 @@
 'use client'
 
+import { useSafeContext } from '@/hooks'
+import { TypeUser } from '@/types'
 import { createContext, PropsWithChildren, useState } from 'react'
 import { createStore, StoreApi, useStore } from 'zustand'
-import { TypeUser } from '@/types'
-import { useSafeContext } from '@/hooks'
 
 interface IAuthStore {
 	user: TypeUser | null
@@ -31,7 +31,9 @@ export const AuthProvider = ({
 	return <AuthContext.Provider value={store}>{children}</AuthContext.Provider>
 }
 
-export const useAuth = <T,>(selector: (store: IAuthStore) => T): T => {
+const defaultSelector = (state: IAuthStore) => state
+
+export const useAuth = <T = IAuthStore>(selector: (store: IAuthStore) => T = defaultSelector as () => T): T => {
 	const context = useSafeContext(AuthContext)
 	return useStore(context, selector)
 }

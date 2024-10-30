@@ -6,18 +6,24 @@ export const FormErrors = {
 		email: 'Email is required',
 		password: 'Password is required',
 		confirmPassword: 'Please, confirm your password',
-		username: 'Display name is required'
+		username: 'Display name is required',
+		workspaceName: 'Workspace name is required',
+		workspaceSlug: 'Workspace slug is required',
+		workspaceSize: 'Workspace size is required'
 	},
 	length: {
 		firstName: 'First name is too short',
 		lastName: 'Last name is too short',
 		password: 'Password is too short',
-		username: 'Display name is too short'
+		username: 'Display name is too short',
+		workspaceName: 'Workspace name is too short',
+		workspaceSlug: 'Workspace slug is too short'
 	},
 	invalid: {
 		email: 'Invalid email address',
 		password: 'Password is too weak',
-		verificationToken:"Invalid token"
+		verificationToken: 'Invalid token',
+		workspaceSize: 'Workspace size cannot be negative'
 	},
 	match: {
 		passwords: 'Passwords do not match'

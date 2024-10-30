@@ -17,7 +17,10 @@ const config: Config = {
 				'tw-blue': 'var(--blue)',
 				'tw-bg-100': 'var(--bg-100)',
 				'tw-bg-90': 'var(--bg-90)',
-				'tw-bg-80': 'var(--bg-80)'
+				'tw-bg-80': 'var(--bg-80)',
+				'tw-border-200': 'var(--border-200)',
+				'tw-primary-100': 'var(--primary-100)',
+				'tw-primary-200': 'var(--primary-200)'
 			},
 			boxShadow: {
 				input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`
@@ -31,10 +34,12 @@ const config: Config = {
 				dark: {
 					colors: {
 						primary: {
-							DEFAULT: '#6b8afd',
+							DEFAULT: '#3f76ff',
 							foreground: '#ffffff'
 						},
-						focus: '#7492fc'
+						focus: {
+							DEFAULT:'#396ae6'
+						}
 					}
 				}
 			}
