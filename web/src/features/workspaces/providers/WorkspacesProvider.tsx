@@ -1,5 +1,6 @@
 'use client'
 
+import { useSelectWorkspaceMutation } from '@/features/workspaces'
 import { useSafeContext } from '@/hooks'
 import { MemberRole, TypeWorkspace, TypeWorkspaceWithMembers } from '@/types'
 import { createContext, PropsWithChildren, useState } from 'react'
@@ -11,7 +12,9 @@ interface IWorkspacesStore {
 	addWorkspace: (workspace: TypeWorkspace) => void
 	removeWorkspace: (workspace: TypeWorkspaceWithMembers) => void
 	updateWorkspace: (workspace: Partial<TypeWorkspaceWithMembers>) => void
-	selectWorkspace: (id: string) => void
+	selectWorkspace: (slug: string) => void
+	getCurrentWorkspace: () => TypeWorkspaceWithMembers | undefined
+	getWorkspaceBySlug: (slug: string) => TypeWorkspaceWithMembers | undefined
 }
 
 type WorkspacesContext = StoreApi<IWorkspacesStore>
@@ -28,8 +31,10 @@ export const WorkspacesProvider = ({
 	children,
 	initialWorkspaces
 }: PropsWithChildren<IWorkspacesProviderProps>) => {
+	const { mutate: selectWorkspaceServer } = useSelectWorkspaceMutation()
+
 	const [store] = useState(
-		createStore<IWorkspacesStore>((set) => ({
+		createStore<IWorkspacesStore>((set, get) => ({
 			workspaces: initialWorkspaces || [],
 			setWorkspaces: (data) => set({ workspaces: data }),
 			addWorkspace: (data) =>
@@ -64,16 +69,29 @@ export const WorkspacesProvider = ({
 						w.id === data.id ? { ...w, ...data } : w
 					)
 				})),
-			selectWorkspace: (id) =>
-				set((state) => ({
-					workspaces: state.workspaces.map((w) => ({
-						...w,
-						members: w.members.map((m) => ({
-							...m,
-							isWorkspaceSelected: w.id === id
+			getCurrentWorkspace: () => {
+				return get().workspaces.find((w) => {
+					return w.members.find((m) => m.isWorkspaceSelected)
+				})
+			},
+			selectWorkspace: (slug) => {
+				const workspace = get().workspaces.find((w) => w.slug === slug)
+				if (workspace) {
+					set((state) => ({
+						workspaces: state.workspaces.map((w) => ({
+							...w,
+							members: w.members.map((m) => ({
+								...m,
+								isWorkspaceSelected: w.id === workspace.id
+							}))
 						}))
 					}))
-				}))
+					selectWorkspaceServer({ workspaceId: workspace.id })
+				}
+			},
+			getWorkspaceBySlug: (slug) => {
+				return get().workspaces.find((w) => w.slug === slug)
+			}
 		}))
 	)
 	return (

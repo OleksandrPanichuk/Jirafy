@@ -7,9 +7,15 @@ export const Routes = {
 	VERIFY_EMAIL: '/verify-email',
 	CHANGE_EMAIL: '/change-email',
 	CREATE_WORKSPACE: '/create-workspace',
+	INVITATIONS: '/invitations',
 
-	WORKSPACE_BY_SLUG: (slug: string) => `/${slug}`
+	PROFILE_SETTINGS: '/profile/settings',
+
+	WORKSPACE_BY_SLUG: (slug: string) => `/${slug}`,
+	WORKSPACE_SETTINGS: (slug: string) => `/${slug}/settings`
 } as const
+
+export type Routes = (typeof Routes)[keyof typeof Routes]
 
 export const ApiRoutes = {
 	AUTH: {
@@ -33,6 +39,7 @@ export const ApiRoutes = {
 	},
 	WORKSPACES: {
 		ROOT: '/workspaces',
-		ALL: '/workspaces/all'
+		ALL: '/workspaces/all',
+		SELECT: '/workspaces/select'
 	}
 } as const

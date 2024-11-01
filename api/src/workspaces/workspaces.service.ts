@@ -1,7 +1,11 @@
 import { PrismaService } from '@app/prisma';
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MemberRole, MemberType } from '@prisma/client';
-import { CreateWorkspaceInput } from './dto';
+import { CreateWorkspaceInput, SelectWorkspaceInput } from './dto';
 
 @Injectable()
 export class WorkspacesService {
@@ -80,5 +84,54 @@ export class WorkspacesService {
     return workspace;
   }
 
-  public async selectWorkspace() {}
+  public async selectWorkspace(dto: SelectWorkspaceInput, userId: string) {
+    const { workspaceId } = dto;
+
+    const workspace = await this.prisma.workspace.findUnique({
+      where: {
+        id: workspaceId,
+      },
+      include: {
+        members: {
+          where: {
+            userId,
+          },
+        },
+      },
+    });
+
+    if (!workspace) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    if (!workspace.members.length) {
+      throw new NotFoundException('User is not a member of this workspace');
+    }
+
+    await this.prisma.member.updateMany({
+      where: {
+        userId,
+        type: MemberType.WORKSPACE,
+        NOT: {
+          workspaceId,
+        },
+      },
+      data: {
+        isWorkspaceSelected: false,
+      },
+    });
+
+    await this.prisma.member.updateMany({
+      where: {
+        userId,
+        workspaceId,
+        type: MemberType.WORKSPACE,
+      },
+      data: {
+        isWorkspaceSelected: true,
+      },
+    });
+
+    return { success: true };
+  }
 }

@@ -36,7 +36,6 @@ export const CreateWorkspaceForm = () => {
 
 	const {
 		control,
-		reset,
 		handleSubmit,
 		formState: { isValid }
 	} = form
@@ -44,7 +43,6 @@ export const CreateWorkspaceForm = () => {
 	const onSubmit = (values: CreateWorkspaceInput) => createWorkspace(values)
 
 	const onReset = () => {
-		reset()
 		router.back()
 	}
 
@@ -123,7 +121,7 @@ export const CreateWorkspaceForm = () => {
 							Create workspace
 						</Button>
 						<Button
-							type="reset"
+							type="button"
 							className="rounded-md"
 							color="default"
 							variant="light"

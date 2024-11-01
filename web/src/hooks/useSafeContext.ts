@@ -1,9 +1,5 @@
 import { Context, useContext } from 'react'
 
-type AdditionalProps = {
-	hookName?: string
-}
-
 export const useSafeContext = <T>(
 	context: Context<T>,
 	hookName: string = 'useSafeContext'

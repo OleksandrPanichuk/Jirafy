@@ -54,7 +54,7 @@ export default async function RootLayout({
 				<QueryProvider>
 					<AuthProvider initialUser={user}>
 						<WorkspacesProvider initialWorkspaces={workspaces}>
-							<NextUIProvider >{children}</NextUIProvider>
+							<NextUIProvider>{children}</NextUIProvider>
 						</WorkspacesProvider>
 					</AuthProvider>
 				</QueryProvider>

@@ -153,7 +153,7 @@ model Member {
   userId String @db.ObjectId
 
   role MemberRole?
-  type MemberType @default(WORKSPACE)
+  type MemberType  @default(WORKSPACE)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -161,8 +161,9 @@ model Member {
   workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String?    @db.ObjectId
 
-  project   Project? @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  projectId String?  @db.ObjectId
+  project      Project? @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  projectId    String?  @db.ObjectId
+  projectOrder Int?
 
   page   Document? @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId String?   @db.ObjectId
@@ -202,7 +203,6 @@ model Workspace {
   slug String @unique
   size Int
   logo File?
-
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

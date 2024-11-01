@@ -1,5 +1,5 @@
 import { FormErrors } from '@/constants'
-import { zRequired } from '@/lib'
+import { zMongoId, zRequired } from '@/lib'
 import { z } from 'zod'
 
 export const createWorkspaceSchema = z.object({
@@ -17,3 +17,9 @@ export const createWorkspaceSchema = z.object({
 })
 
 export type CreateWorkspaceInput = z.infer<typeof createWorkspaceSchema>
+
+export const selectWorkspaceSchema = z.object({
+	workspaceId: zMongoId()
+})
+
+export type SelectWorkspaceInput = z.infer<typeof selectWorkspaceSchema>
