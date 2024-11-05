@@ -7,7 +7,7 @@ interface IWorkspaceSidebarStore {
 
 export const useWorkspaceSidebarStore = create<IWorkspaceSidebarStore>(
 	(set) => ({
-		isCollapsed: false,
+		isCollapsed: true,
 		setIsCollapsed: (isCollapsed) => set({ isCollapsed })
 	})
 )

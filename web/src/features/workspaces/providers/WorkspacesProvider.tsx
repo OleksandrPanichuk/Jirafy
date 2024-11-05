@@ -111,3 +111,12 @@ export const useWorkspacesStore = <T = IWorkspacesStore,>(
 	const context = useSafeContext(WorkspacesContext)
 	return useStore(context, selector)
 }
+
+export const useCurrentWorkspace = () => {
+	const workspace = useWorkspacesStore((s) => s.getCurrentWorkspace)()
+	if (!workspace) {
+		throw new Error('No workspace selected')
+	}
+
+	return workspace
+}

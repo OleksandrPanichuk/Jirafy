@@ -36,7 +36,7 @@ export const UserMenu = () => {
 		>
 			<DropdownTrigger>
 				<Button
-					className="rounded-md !p-1 !size-8 min-w-8"
+					className="rounded-md !p-0 !size-8 min-w-8"
 					variant="light"
 					isIconOnly
 				>
@@ -44,7 +44,7 @@ export const UserMenu = () => {
 						src={user.avatar?.url}
 						size="sm"
 						radius="sm"
-						className="size-6"
+						className="size-8"
 					/>
 				</Button>
 			</DropdownTrigger>
@@ -53,7 +53,7 @@ export const UserMenu = () => {
 					<p className="text-xs text-tw-text-400">{user.email}</p>
 				</DropdownItem>
 				<DropdownItem
-					variant="faded"
+					variant="flat"
 					className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
 					onPress={() => {
 						router.push(Routes.PROFILE_SETTINGS)
@@ -67,7 +67,7 @@ export const UserMenu = () => {
 				</DropdownItem>
 				<DropdownItem
 					color="danger"
-					variant="faded"
+					variant="flat"
 					className="text-danger rounded-md hover:!bg-tw-bg-80"
 					startContent={<IconLogout className="size-4" />}
 					onPress={() => signOut({})}

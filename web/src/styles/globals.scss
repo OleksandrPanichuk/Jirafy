@@ -55,8 +55,6 @@
 	--editor-purple-background: #3d325a;
 }
 
-.no-scroll {
-	&::-webkit-scrollbar {
-		display: none;
-	}
+.no-scroll::-webkit-scrollbar {
+	display: none;
 }

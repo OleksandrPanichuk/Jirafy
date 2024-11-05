@@ -11,8 +11,14 @@ export const Routes = {
 
 	PROFILE_SETTINGS: '/profile/settings',
 
+	YOUR_WORK: (slug: string, userId: string) => `/${slug}/profile/${userId}`,
+	NOTIFICATIONS: (slug: string) => `/${slug}/notifications`,
+
 	WORKSPACE_BY_SLUG: (slug: string) => `/${slug}`,
-	WORKSPACE_SETTINGS: (slug: string) => `/${slug}/settings`
+	WORKSPACE_SETTINGS: (slug: string) => `/${slug}/settings`,
+	WORKSPACE_PROJECTS: (slug: string) => `/${slug}/projects`,
+	WORKSPACE_VIEWS_ALL: (slug: string) => `/${slug}/workspace-views/all-issues`,
+	WORKSPACE_ANALYTICS: (slug: string) => `/${slug}/analytics`,
 } as const
 
 export type Routes = (typeof Routes)[keyof typeof Routes]
