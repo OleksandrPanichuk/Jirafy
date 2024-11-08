@@ -11,7 +11,10 @@ interface IWorkspacesStore {
 	setWorkspaces: (workspaces: TypeWorkspaceWithMembers[]) => void
 	addWorkspace: (workspace: TypeWorkspace) => void
 	removeWorkspace: (workspace: TypeWorkspaceWithMembers) => void
-	updateWorkspace: (workspace: Partial<TypeWorkspaceWithMembers>) => void
+	updateWorkspace: (
+		id: string,
+		workspace: Partial<Omit<TypeWorkspaceWithMembers, 'id'>>
+	) => void
 	selectWorkspace: (slug: string) => void
 	getCurrentWorkspace: () => TypeWorkspaceWithMembers | undefined
 	getWorkspaceBySlug: (slug: string) => TypeWorkspaceWithMembers | undefined
@@ -63,10 +66,10 @@ export const WorkspacesProvider = ({
 				set((state) => ({
 					workspaces: state.workspaces.filter((w) => w.id !== data.id)
 				})),
-			updateWorkspace: (data) =>
+			updateWorkspace: (id, data) =>
 				set((state) => ({
 					workspaces: state.workspaces.map((w) =>
-						w.id === data.id ? { ...w, ...data } : w
+						w.id === id ? { ...w, ...data } : w
 					)
 				})),
 			getCurrentWorkspace: () => {

@@ -2,7 +2,9 @@
 
 import { Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
-import { useWorkspacesStore } from '@/features/workspaces'
+import {
+	useWorkspacesStore
+} from '@/features/workspaces'
 import { useDisclosure } from '@/hooks'
 import { cn } from '@/lib'
 import { TypeWorkspace } from '@/types'
@@ -25,7 +27,6 @@ import {
 import { useRouter } from 'next/navigation'
 import randomColor from 'randomcolor'
 import { useWorkspaceSidebarStore } from '../store'
-
 
 // TODO: when adding a subscription check whether user can create new workspace or not
 export const WorkspaceSwitcher = () => {

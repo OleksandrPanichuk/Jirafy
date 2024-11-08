@@ -3,5 +3,6 @@ declare namespace NodeJS {
 		NEXT_PUBLIC_APP_URL: string
 		NEXT_PUBLIC_API_URL: string
 		NEXT_PUBLIC_APP_DOMAIN: string
+		UNSPLASH_ACCESS_KEY: string
 	}
 }

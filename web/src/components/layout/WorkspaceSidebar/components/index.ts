@@ -1,4 +1,6 @@
 export * from './SidebarGroup'
 export * from './SidebarItem'
+export * from './SidebarProjects'
 export * from './UserMenu'
+export * from './WorkspaceActions'
 export * from './WorkspaceSwitcher'

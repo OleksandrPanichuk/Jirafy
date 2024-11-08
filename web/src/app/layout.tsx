@@ -2,7 +2,7 @@ import { currentUser, getAllWorkspaces } from '@/api'
 import { AuthProvider } from '@/features/auth'
 import { Notifications } from '@/features/notifications'
 import { WorkspacesProvider } from '@/features/workspaces'
-import { QueryProvider } from '@/providers'
+import { ModalsProvider, QueryProvider } from '@/providers'
 import '@/styles/globals.scss'
 import { NextUIProvider } from '@nextui-org/react'
 import type { Metadata } from 'next'
@@ -54,6 +54,7 @@ export default async function RootLayout({
 				<QueryProvider>
 					<AuthProvider initialUser={user}>
 						<WorkspacesProvider initialWorkspaces={workspaces}>
+							<ModalsProvider />
 							<NextUIProvider>{children}</NextUIProvider>
 						</WorkspacesProvider>
 					</AuthProvider>

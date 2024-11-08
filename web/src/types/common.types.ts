@@ -1,4 +1,4 @@
-import { TypeUser } from "./user.types"
+import { TypeUser } from './user.types'
 
 export type DecodedIdentityToken = {
 	id: string
@@ -6,3 +6,8 @@ export type DecodedIdentityToken = {
 }
 
 export type DecodedOAuthDataToken = { user: Partial<TypeUser> }
+
+export enum Network {
+	PUBLIC = 'PUBLIC',
+	PRIVATE = 'PRIVATE'
+}

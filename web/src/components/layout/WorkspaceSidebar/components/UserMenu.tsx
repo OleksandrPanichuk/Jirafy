@@ -2,6 +2,7 @@
 
 import { Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
+import {} from '@/features/workspaces'
 import {
 	Avatar,
 	Button,

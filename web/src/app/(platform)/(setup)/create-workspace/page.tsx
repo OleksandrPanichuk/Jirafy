@@ -5,6 +5,7 @@ import { useAuth } from '@/features/auth'
 import { CreateWorkspaceForm, useWorkspacesStore } from '@/features/workspaces'
 import Link from 'next/link'
 
+// TODO: check for invites for this user. If there is an invite, show a вибір to join the workspace or create a new one
 const CreateWorkspacePage = () => {
 	const user = useAuth((s) => s.user)
 	const workspaces = useWorkspacesStore((s) => s.workspaces)

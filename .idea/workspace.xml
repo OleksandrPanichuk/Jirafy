@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1a363602-2642-4ffb-ac94-9c72f6370b36" name="Changes" comment="" />
+    <list default="true" id="1a363602-2642-4ffb-ac94-9c72f6370b36" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/api/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bun.lockb" beforeDir="false" afterPath="$PROJECT_DIR$/web/bun.lockb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/env.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/env.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/api/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/api/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/(main)/[slug]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/(platform)/(main)/[slug]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/(main)/layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/(main)/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/(platform)/(main)/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/(setup)/create-workspace/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/(platform)/(setup)/create-workspace/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/NewIssueModal.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/WorkspaceSidebar/components/SidebarGroup.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/WorkspaceSidebar/components/SidebarItem.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/WorkspaceSidebar/components/SidebarProjects.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/WorkspaceSidebar/components/SidebarProjectsItem.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/WorkspaceSidebar/components/UserMenu.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/WorkspaceSidebar/components/WorkspaceSwitcher.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/WorkspaceSidebar/components/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/WorkspaceSidebar/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/WorkspaceSidebar/store/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/common/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/common/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/constants/env.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/constants/env.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/constants/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/constants/routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/constants/variables.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/constants/variables.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/providers/WorkspacesProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/providers/WorkspacesProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/hooks/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/hooks/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/lib/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/lib/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/providers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/providers/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/types/common.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/types/common.types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/types/member.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/types/member.types.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,23 +43,23 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2oGBMUSvIl6U7VCgkBx3b7r27U6" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -43,6 +76,7 @@
       <option name="presentableId" value="Default" />
       <updated>1730485994184</updated>
       <workItem from="1730486001355" duration="68000" />
+      <workItem from="1731095113319" duration="213000" />
     </task>
     <servers />
   </component>

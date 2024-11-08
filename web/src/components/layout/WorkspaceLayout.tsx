@@ -1,12 +1,12 @@
 'use client'
 
-import { WorkspaceSidebar } from '@/components/common'
+import { WorkspaceSidebar } from '@/components/layout'
 import { Routes } from '@/constants'
 import { useWorkspacesStore } from '@/features/workspaces'
 import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 
-const Layout = ({ children }: PropsWithChildren) => {
+export const WorkspaceLayout = ({ children }: PropsWithChildren) => {
 	const workspaces = useWorkspacesStore((s) => s.workspaces)
 
 	if (!workspaces.length) {
@@ -22,5 +22,3 @@ const Layout = ({ children }: PropsWithChildren) => {
 		</div>
 	)
 }
-
-export default Layout

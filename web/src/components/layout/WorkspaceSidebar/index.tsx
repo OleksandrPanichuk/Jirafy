@@ -2,18 +2,19 @@
 
 import { Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
-import { useCurrentWorkspace } from '@/features/workspaces'
+import {
+	useCurrentWorkspace,
+} from '@/features/workspaces'
 import { cn } from '@/lib'
 import { Button, Tooltip } from '@nextui-org/react'
 import {
 	IconArrowRight,
 	IconBriefcase,
 	IconChartBar,
-	IconDots,
 	IconHeart,
 	IconHome,
 	IconInbox,
-	IconPlus,
+	IconMessage,
 	IconStack2,
 	IconUserBolt
 } from '@tabler/icons-react'
@@ -22,7 +23,9 @@ import { useLocalStorage } from 'react-use'
 import {
 	SidebarGroup,
 	SidebarItem,
+	SidebarProjects,
 	UserMenu,
+	WorkspaceActions,
 	WorkspaceSwitcher
 } from './components'
 import { useWorkspaceSidebarStore } from './store'
@@ -72,21 +75,7 @@ export const WorkspaceSidebar = () => {
 							icon={<IconInbox className="size-4" />}
 						/>
 					</div>
-					<SidebarGroup
-						title="Workspace"
-						className={cn(!isCollapsed && 'mt-2.5')}
-						action={
-							<Button
-								variant="light"
-								size="sm"
-								className="!size-6 !min-w-0 text-inherit"
-								as="div"
-								isIconOnly
-							>
-								<IconDots className="size-4" />
-							</Button>
-						}
-					>
+					<SidebarGroup title="Workspace" action={<WorkspaceActions />}>
 						<SidebarItem
 							href={Routes.WORKSPACE_PROJECTS(workspace.slug)}
 							text="Projects"
@@ -98,29 +87,17 @@ export const WorkspaceSidebar = () => {
 							icon={<IconStack2 className="size-4" />}
 						/>
 						<SidebarItem
+							href={Routes.WORKSPACE_CHAT(workspace.slug)}
+							text="Chat"
+							icon={<IconMessage className="size-4" />}
+						/>
+						<SidebarItem
 							href={Routes.WORKSPACE_ANALYTICS(workspace.slug)}
 							text="Analytics"
 							icon={<IconChartBar className="size-4" />}
 						/>
 					</SidebarGroup>
-					<SidebarGroup
-						title="Your projects"
-						action={
-							<Tooltip
-								content={<span className="text-sm">Create project</span>}
-							>
-								<Button
-									variant="light"
-									size="sm"
-									className="!size-6 !min-w-0 text-inherit"
-									as="div"
-									isIconOnly
-								>
-									<IconPlus className="size-4" />
-								</Button>
-							</Tooltip>
-						}
-					></SidebarGroup>
+					<SidebarProjects />
 				</div>
 				<div
 					className={cn(

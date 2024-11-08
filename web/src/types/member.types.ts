@@ -1,3 +1,5 @@
+import { TypeFile } from './file.types'
+
 export enum MemberRole {
 	OWNER = 'OWNER',
 	ADMIN = 'ADMIN',
@@ -22,4 +24,12 @@ export type TypeMember = {
 	isLead?: boolean
 
 	isWorkspaceSelected?: boolean
+}
+
+export type TypeMemberWithUser = TypeMember & {
+	user: {
+		id: string
+		username: string
+		avatar?: TypeFile
+	}
 }

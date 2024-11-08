@@ -1,5 +1,6 @@
 'use client'
 
+import {  } from '@/features/workspaces'
 import { cn } from '@/lib'
 import { Accordion, AccordionItem } from '@nextui-org/react'
 import { PropsWithChildren, ReactNode } from 'react'
@@ -25,7 +26,7 @@ export const SidebarGroup = ({
 			itemClasses={{
 				trigger: cn(
 					' data-[hover=true]:bg-tw-bg-90 rounded sticky top-0 py-0 px-2 ',
-					isCollapsed && 'hidden'
+					isCollapsed ? 'hidden' : 'mt-2.5'
 				),
 				content: '!p-0 flex flex-col items-center gap-0.5'
 			}}
