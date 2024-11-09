@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 
 import { getSessionConfig } from '@config/session.config';
 import { ValidationPipe } from '@nestjs/common';
-import  CookieParser from 'cookie-parser';
+import CookieParser from 'cookie-parser';
 import session from 'express-session';
 import passport from 'passport';
 
@@ -24,7 +24,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   app.use(CookieParser());
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.use(session(getSessionConfig(config)));
 

@@ -40,12 +40,12 @@ const config: Config = {
 				'tw-primary-700': 'var(--primary-700)',
 				'tw-primary-800': 'var(--primary-800)',
 				'tw-primary-900': 'var(--primary-900)',
-				"tw-text-100":"var(--text-100)",
-				"tw-text-200":"var(--text-200)",
-				"tw-text-300":"var(--text-300)",
-				"tw-text-350":"var(--text-350)",
-				"tw-text-400":"var(--text-400)",
-				"tw-scrollbar":"var(--scrollbar)"
+				'tw-text-100': 'var(--text-100)',
+				'tw-text-200': 'var(--text-200)',
+				'tw-text-300': 'var(--text-300)',
+				'tw-text-350': 'var(--text-350)',
+				'tw-text-400': 'var(--text-400)',
+				'tw-scrollbar': 'var(--scrollbar)'
 			},
 			boxShadow: {
 				input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`
@@ -62,8 +62,11 @@ const config: Config = {
 							DEFAULT: '#3f76ff',
 							foreground: '#ffffff'
 						},
+						default: {
+							DEFAULT: '#191919'
+						},
 						focus: {
-							DEFAULT:'#396ae6'
+							DEFAULT: '#396ae6'
 						}
 					}
 				}

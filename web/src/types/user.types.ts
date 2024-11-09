@@ -5,7 +5,7 @@ export type TypeUser = {
 	email: string
 	firstName?: string
 	lastName?: string
-	username?: string
+	username: string
 	avatar?: TypeFile
 	coverImage?: TypeFile
 

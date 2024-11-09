@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsMongoId,
   IsNotEmpty,
@@ -8,6 +9,8 @@ import {
 } from 'class-validator';
 
 export class FindAllMembersQuery {
+  // Transfrom values from type string to type number
+  @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @IsPositive()
   @IsOptional()

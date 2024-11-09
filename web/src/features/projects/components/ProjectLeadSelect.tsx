@@ -1,8 +1,9 @@
 'use client'
 
 import { useAuth } from '@/features/auth'
-import { useInfiniteMembersQuery } from '@/features/projects'
+import { useInfiniteMembersQuery } from '@/features/members'
 import { useCurrentWorkspaceSlug, useDebounce } from '@/hooks'
+import { TypeMemberWithUser } from '@/types'
 import {
 	Avatar,
 	Button,
@@ -12,14 +13,21 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-	Skeleton
+	Skeleton,
+	User
 } from '@nextui-org/react'
 import { IconSearch } from '@tabler/icons-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { ControllerRenderProps } from 'react-hook-form'
 
 const DEFAULT_TAKE = 20
 
-export const ProjectLeadSelect = () => {
+interface IProjectLeadSelectProps extends ControllerRenderProps {}
+
+export const ProjectLeadSelect = ({
+	onChange,
+	value
+}: IProjectLeadSelectProps) => {
 	const [searchValue, setSearchValue] = useState('')
 	const debouncedSearchValue = useDebounce(searchValue)
 
@@ -35,28 +43,62 @@ export const ProjectLeadSelect = () => {
 
 	const members = data?.pages.flatMap((page) => page.members)
 
-	const selectedValue = useMemo(
-		() =>
-			members?.find((member) => member.user.id === Array.from(selectedKeys)[0]),
-		[selectedKeys, members]
-	)
+	const [selectedValue, setSelectedValue] =
+		useState<TypeMemberWithUser['user']>()
+
+	const handleSelectionChange = (key: Set<string>) => {
+		const keyId = [...key][0]
+
+		const selectedMember =
+			user!.id === keyId
+				? user
+				: members?.find((member) => member.user.id === keyId)?.user
+
+		if (selectedMember) {
+			setSelectedKeys(key)
+			setSelectedValue(selectedMember)
+			onChange(selectedMember.id)
+		}
+	}
+
+	useEffect(() => {
+		if (value && !selectedValue) {
+			const selectedMember =
+				user!.id === value
+					? user
+					: members?.find((member) => member.user.id === value)?.user
+
+			if (selectedMember) {
+				setSelectedValue(selectedMember)
+				setSelectedKeys(new Set([selectedMember.id]))
+			}
+		}
+	}, [members, value, selectedValue, user])
 
 	return (
-		<Popover>
+		<Popover
+			classNames={{
+				content: 'rounded-md border border-tw-border-400 bg-tw-bg-100'
+			}}
+		>
 			<PopoverTrigger>
-				<Button variant="light" size="sm">
+				<Button
+					className="w-min rounded-md bg-tw-bg-100 border-tw-border-300 border-[0.5px] px-2 py-0.5 hover:bg-tw-border-300"
+					variant="bordered"
+					size="sm"
+				>
 					{selectedValue && (
 						<Avatar
 							size="sm"
-							src={selectedValue.user.avatar?.url}
-							className="size-4"
+							src={selectedValue.avatar?.url}
+							className="!size-6"
 						/>
 					)}
 					Lead
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent>
-				<div>
+			<PopoverContent className="p-2">
+				<div className="mb-2">
 					<Input
 						value={searchValue}
 						onChange={(e) => setSearchValue(e.target.value)}
@@ -68,41 +110,63 @@ export const ProjectLeadSelect = () => {
 				<div className="w-full">
 					<Listbox
 						aria-label="Single selection example"
-						className="max-h-[200px] overflow-y-auto"
+						className="max-h-[200px] overflow-y-auto p-0"
 						disallowEmptySelection
 						disabledKeys={['next']}
 						selectionMode="single"
 						selectedKeys={selectedKeys}
-						onSelectionChange={(key) => setSelectedKeys(key as Set<string>)}
+						onSelectionChange={(key) =>
+							handleSelectionChange(key as Set<string>)
+						}
 					>
 						{user ? (
-							<ListboxItem variant="flat" key={user.id}>
-								{user.username}
+							<ListboxItem
+								className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
+								variant="flat"
+								key={user.id}
+							>
+								<User
+									name={user.username}
+									className="flex items-center justify-start"
+									avatarProps={{
+										src: user.avatar?.url,
+										className: '!size-6'
+									}}
+								/>
 							</ListboxItem>
 						) : (
 							<></>
 						)}
-						{members ? (
+						{members?.length ? (
 							<>
-								{members
-									.filter((m) => m.userId !== user?.id)
-									.map((member) => (
-										<ListboxItem variant="flat" key={member.user.id}>
-											{member.user.username}
-										</ListboxItem>
-									))}
+								{members.map((member) => (
+									<ListboxItem
+										className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
+										variant="flat"
+										key={member.user.id}
+									>
+										<User
+											name={member.user.username}
+											className="flex items-center justify-start"
+											avatarProps={{
+												src: member.user.avatar?.url,
+												className: '!size-6'
+											}}
+										/>
+									</ListboxItem>
+								))}
 							</>
-						) : !isFetching ? (
+						) : isFetching ? (
 							<>
 								{Array.from({ length: 4 }).map((_, i) => (
 									<ListboxItem
 										variant="solid"
-										className="relative h-8 mt-2"
+										className="relative h-9 mt-2"
 										key={i}
 										isDisabled
 									>
 										<Skeleton className="w-full rounded-md absolute top-0 left-0">
-											<div className="h-8 w-full rounded-md bg-default-200" />
+											<div className="h-9 w-full rounded-md bg-tw-bg-80" />
 										</Skeleton>
 									</ListboxItem>
 								))}

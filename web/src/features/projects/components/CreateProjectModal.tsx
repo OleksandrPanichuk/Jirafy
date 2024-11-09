@@ -11,9 +11,15 @@ export const CreateProjectModal = () => {
 
 	return (
 		<Modal size="3xl" isOpen={isOpen} onClose={close}>
-			<ModalContent className="min-h-[50vh]">
+			<ModalContent className="min-h-[50vh] bg-tw-bg-100">
 				<div>Content here</div>
-				<ProjectLeadSelect />
+				<ProjectLeadSelect
+					name="name"
+					onBlur={() => {}}
+					onChange={() => {}}
+					value=""
+					ref={{} as any}
+				/>
 			</ModalContent>
 		</Modal>
 	)
