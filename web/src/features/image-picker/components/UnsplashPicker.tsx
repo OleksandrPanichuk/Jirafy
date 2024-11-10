@@ -1,0 +1,69 @@
+'use client'
+
+import { Input } from '@/components/ui'
+import { useDebounce } from '@/hooks'
+import { Button, Skeleton } from '@nextui-org/react'
+import Image from 'next/image'
+import { useState } from 'react'
+import { useGetUnsplashImagesQuery } from '../api'
+
+interface IUnsplashPickerProps {
+	onChange: (url: string) => void
+}
+
+export const UnsplashPicker = ({ onChange }: IUnsplashPickerProps) => {
+	const [searchValue, setSearchValue] = useState('')
+
+	const debouncedSearchValue = useDebounce(searchValue)
+
+	const { data: images, isFetching } = useGetUnsplashImagesQuery({
+		query: debouncedSearchValue,
+		count: 20
+	})
+
+	return (
+		<div className="flex w-full gap-4 flex-col">
+			<div className="w-full flex gap-2 flex-col md:flex-row">
+				<Input
+					classNames={{
+						wrapper: 'w-full',
+						container: 'h-7'
+					}}
+					value={searchValue}
+					onChange={(e) => setSearchValue(e.target.value)}
+					placeholder="Search for images"
+				/>
+				<Button size="sm" color="primary">
+					Search
+				</Button>
+			</div>
+			<ul className="w-full grid grid-cols-4 gap-4 max-h-[200px] overflow-auto">
+				{images?.map((image) => (
+					<li
+						className="relative col-span-2 aspect-video md:col-span-1 cursor-pointer overflow-hidden"
+						onClick={() => onChange(image.urls.full)}
+						key={image.id}
+					>
+						<div className="hover:bg-zinc-800  hover:bg-opacity-20 bg-transparent absolute w-full h-full transition-all left-0 top-0 z-10 " />
+						<Image
+							src={image.urls.small}
+							alt={image.alt_description ?? 'unsplash-image'}
+							objectFit="cover"
+							fill
+						/>
+					</li>
+				))}
+				{isFetching &&
+					Array.from({ length: 20 }).map((_, i) => (
+						<Skeleton
+							key={i}
+							className="aspect-video col-span-2 md:col-span-1"
+							as="li"
+						>
+							<div className=" bg-default-200" />
+						</Skeleton>
+					))}
+			</ul>
+		</div>
+	)
+}

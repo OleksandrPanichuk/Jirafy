@@ -2,9 +2,7 @@
 
 import { Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
-import {
-	useWorkspacesStore
-} from '@/features/workspaces'
+import { useWorkspacesStore } from '@/features/workspaces'
 import { useDisclosure } from '@/hooks'
 import { cn } from '@/lib'
 import { TypeWorkspace } from '@/types'
@@ -123,7 +121,7 @@ export const WorkspaceSwitcher = () => {
 				<DropdownSection aria-label="Workspace select" showDivider>
 					{workspaces.map((workspace) => (
 						<DropdownItem
-							className={'rounded-md p-1'}
+							className={' hover:!bg-tw-bg-80 rounded-md p-1'}
 							variant="flat"
 							key={`select-workspace-${workspace.slug}`}
 							onPress={() => handleSelectWorkspace(workspace)}

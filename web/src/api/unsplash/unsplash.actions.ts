@@ -9,7 +9,7 @@ const unsplashClient = createApi({
 	fetch: fetch
 })
 
-export async function getRandomPhoto(count: number = 20) {
+export async function getRandomPhotos(count: number = 20) {
 	const { response } = await unsplashClient.photos.getRandom({
 		query: 'nature',
 		orientation: 'landscape',
