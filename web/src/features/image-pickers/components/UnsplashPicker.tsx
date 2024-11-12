@@ -37,10 +37,10 @@ export const UnsplashPicker = ({ onChange }: IUnsplashPickerProps) => {
 					Search
 				</Button>
 			</div>
-			<ul className="w-full grid grid-cols-4 gap-4 max-h-[200px] overflow-auto">
+			<ul className="w-full grid grid-cols-4 gap-4  overflow-auto">
 				{images?.map((image) => (
 					<li
-						className="relative col-span-2 aspect-video md:col-span-1 cursor-pointer overflow-hidden"
+						className="relative col-span-4 xs:col-span-2 aspect-video md:col-span-1 cursor-pointer overflow-hidden"
 						onClick={() => onChange(image.urls.full)}
 						key={image.id}
 					>

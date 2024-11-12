@@ -1,5 +1,5 @@
-import { CurrentUser } from '@/common/decorators'
-import { AuthenticatedGuard } from '@/common/guards'
+import { CurrentUser } from '@/shared/decorators';
+import { AuthenticatedGuard } from '@/shared/guards';
 import {
   Body,
   Controller,
@@ -8,9 +8,9 @@ import {
   HttpStatus,
   Post,
   UseGuards,
-} from '@nestjs/common'
-import { CreateWorkspaceInput, SelectWorkspaceInput } from './dto'
-import { WorkspacesService } from './workspaces.service'
+} from '@nestjs/common';
+import { CreateWorkspaceInput, SelectWorkspaceInput } from './dto';
+import { WorkspacesService } from './workspaces.service';
 
 @UseGuards(AuthenticatedGuard)
 @Controller('workspaces')
@@ -30,7 +30,10 @@ export class WorkspacesController {
   }
 
   @Post('select')
-  selectWorkspace(@Body() dto: SelectWorkspaceInput, @CurrentUser('id') userId:string) {
+  selectWorkspace(
+    @Body() dto: SelectWorkspaceInput,
+    @CurrentUser('id') userId: string,
+  ) {
     return this.workspacesService.selectWorkspace(dto, userId);
   }
 }

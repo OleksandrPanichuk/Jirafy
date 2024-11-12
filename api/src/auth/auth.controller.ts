@@ -1,5 +1,5 @@
-import { CurrentUser } from '@/common/decorators';
-import { AuthenticatedGuard } from '@/common/guards';
+import { CurrentUser } from '@/shared/decorators';
+import { AuthenticatedGuard } from '@/shared/guards';
 import {
   Body,
   Controller,

@@ -10,4 +10,9 @@ export const envSchema = Joi.object({
   MAILGUN_API_KEY: Joi.string().required(),
   TOKEN_EXPIRATION: Joi.number().optional(),
   JWT_SECRET: Joi.string().required(),
+
+  CLOUDINARY_CLOUD_NAME: Joi.string().required(),
+  CLOUDINARY_API_KEY: Joi.string().required(),
+  CLOUDINARY_API_SECRET: Joi.string().required(),
+  CLOUDINARY_FOLDER: Joi.string().required(),
 });

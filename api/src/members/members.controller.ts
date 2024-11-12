@@ -1,5 +1,5 @@
-import { CurrentUser } from '@/common/decorators';
-import { AuthenticatedGuard } from '@/common/guards';
+import { CurrentUser } from '@/shared/decorators';
+import { AuthenticatedGuard } from '@/shared/guards';
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { FindAllMembersQuery } from './dto';
 import { MembersService } from './members.service';

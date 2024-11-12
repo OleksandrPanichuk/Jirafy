@@ -1,4 +1,5 @@
-import { AuthenticatedGuard, IdentityVerifiedGuard } from '@/common/guards';
+import { CurrentUser } from '@/shared/decorators';
+import { AuthenticatedGuard, IdentityVerifiedGuard } from '@/shared/guards';
 import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
 import {
   ChangeEmailInput,
@@ -6,7 +7,6 @@ import {
   VerifyEmailInput,
 } from './dto';
 import { EmailService } from './email.service';
-import { CurrentUser } from '@/common/decorators'
 
 @UseGuards(AuthenticatedGuard)
 @Controller('/auth/email')

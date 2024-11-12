@@ -3,10 +3,11 @@ import { envSchema } from '@config/env.config';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { MembersModule } from './members/members.module';
+import { ProjectsModule } from './projects/projects.module';
+import { StorageModule } from './storage/storage.module';
 import { UsersModule } from './users/users.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
-import { ProjectsModule } from './projects/projects.module';
-import { MembersModule } from './members/members.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MembersModule } from './members/members.module';
     WorkspacesModule,
     ProjectsModule,
     MembersModule,
+    StorageModule,
   ],
 })
 export class AppModule {}

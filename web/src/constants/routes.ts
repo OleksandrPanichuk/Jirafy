@@ -53,6 +53,11 @@ export const ApiRoutes = {
 		ROOT: '/projects',
 		BY_WORKSPACE_SLUG: (slug: string) => `/projects/by-workspace-slug/${slug}`
 	},
+	STORAGE: {
+		ROOT: '/storage',
+		UPLOAD: '/storage/upload',
+		DELETE: (key:string) => `/storage/delete/${key}`
+	},
 	MEMBERS: {
 		ROOT: '/members',
 		BY_WORKSPACE_SLUG: (slug: string) => `/members/by-workspace-slug/${slug}`

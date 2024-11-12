@@ -8,9 +8,12 @@ const config: Config = {
 		'./src/**/*.{js,ts,jsx,tsx,mdx}',
 		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
 	],
-	darkMode: 'class',
+	darkMode: 'class',		
 	theme: {
 		extend: {
+			screens: {
+       "xs":"440px",
+			},
 			colors: {
 				'tw-dark': 'var(--dark)',
 				'tw-gray': 'var(--gray)',
