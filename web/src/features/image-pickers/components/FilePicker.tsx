@@ -6,7 +6,7 @@ import { Button } from '@nextui-org/react'
 import { useRef, useState } from 'react'
 import Dropzone, { DropzoneRef } from 'react-dropzone'
 
-interface IFileUploadProps {
+interface IFilePickerProps {
 	onFileChange?: (file: File) => void
 	onCancel?: () => void
 	value?: TypeFile | File | null
@@ -16,13 +16,13 @@ interface IFileUploadProps {
 
 const ImageMimeTypes = ['.jpg', '.webp', '.png', '.jpeg']
 
-export const FileUpload = ({
+export const FilePicker = ({
 	onFileChange,
 	onCancel,
 	value,
 	name,
 	disabled
-}: IFileUploadProps) => {
+}: IFilePickerProps) => {
 	const [url, setUrl] = useState<string | null>(
 		value instanceof File ? URL.createObjectURL(value) : value?.url || null
 	)

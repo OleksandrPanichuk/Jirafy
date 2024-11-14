@@ -69,7 +69,7 @@ export const NetworkSelect = ({ onChange, value }: INetworkSelectProps) => {
 		>
 			<DropdownTrigger>
 				<Button
-					className="w-min rounded-md bg-tw-bg-100 border-tw-border-300 border-[0.5px] px-2 py-0.5 hover:bg-tw-border-300"
+					className="w-[90px] rounded-md bg-tw-bg-100 border-tw-border-300 border-[0.5px] px-2 py-0.5 hover:bg-tw-border-300"
 					variant="bordered"
 					size="sm"
 				>

@@ -20,7 +20,7 @@ const Page = () => {
 		if (currentWorkspace?.slug !== params.slug) {
 			selectWorkspace(params.slug)
 		}
-	}, [selectWorkspace, currentWorkspace.slug, params.slug])
+	}, [selectWorkspace, currentWorkspace?.slug, params.slug])
 
 	if (!getWorkspace(params.slug)) {
 		return notFound()

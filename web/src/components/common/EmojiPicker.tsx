@@ -1,4 +1,5 @@
 'use client'
+import { useDisclosure } from '@/hooks'
 import {
 	Button,
 	Popover,
@@ -13,23 +14,31 @@ interface IEmojiPickerProps {
 	value?: string
 }
 
+// TODO: test open state
+
 export const EmojiPicker = ({ onChange, value }: IEmojiPickerProps) => {
 	const [emoji, setEmoji] = useState(value ?? '🙂')
+	const {isOpen, close, toggle} = useDisclosure()
 
 	const handleSelect = (data: EmojiClickData) => {
 		setEmoji(data.emoji)
 		onChange?.(data.emoji)
+		close()
 	}
 
 	return (
-		<Popover>
+		<Popover onClose={close} onOpenChange={toggle}>
 			<PopoverTrigger>
-				<Button className="text-lg" isIconOnly>
+				<Button className="text-lg bg-tw-bg-80" isIconOnly>
 					{emoji}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="p-0">
-				<Picker theme={Theme.DARK} onEmojiClick={handleSelect} />
+			<PopoverContent className="p-0  max-h-[21.875rem]">
+				<Picker
+					theme={Theme.DARK}
+					className="!w-[17.5rem] xs:!w-[21.875rem]"
+					onEmojiClick={handleSelect}
+				/>
 			</PopoverContent>
 		</Popover>
 	)

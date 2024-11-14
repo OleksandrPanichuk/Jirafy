@@ -1,6 +1,7 @@
 import { CurrentUser } from '@/shared/decorators';
 import { AuthenticatedGuard } from '@/shared/guards';
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { CreateProjectInput } from './dto';
 import { ProjectsService } from './projects.service';
 
 @UseGuards(AuthenticatedGuard)
@@ -14,5 +15,10 @@ export class ProjectsController {
     @CurrentUser('id') userId: string,
   ) {
     return this.projectsService.findAllByWorkspaceSlug(slug, userId);
+  }
+
+  @Post('')
+  create(@Body() dto: CreateProjectInput, @CurrentUser('id') userId: string) {
+    return this.projectsService.create(dto, userId);
   }
 }

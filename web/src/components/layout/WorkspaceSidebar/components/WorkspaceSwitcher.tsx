@@ -5,7 +5,7 @@ import { useAuth, useSignOutMutation } from '@/features/auth'
 import { useWorkspacesStore } from '@/features/workspaces'
 import { useDisclosure } from '@/hooks'
 import { cn } from '@/lib'
-import { TypeWorkspace } from '@/types'
+import { MemberRole, TypeWorkspace } from '@/types'
 import {
 	Button,
 	Dropdown,
@@ -64,6 +64,11 @@ export const WorkspaceSwitcher = () => {
 	if (!user || !workspaces.length) {
 		return null
 	}
+
+	const currentMember = currentWorkspace.members[0]
+	const hasAccess =
+		currentMember.role === MemberRole.ADMIN ||
+		currentMember.role === MemberRole.OWNER
 
 	return (
 		<Dropdown
@@ -193,19 +198,25 @@ export const WorkspaceSwitcher = () => {
 					>
 						Workspace invites
 					</DropdownItem>
-					<DropdownItem
-						variant="faded"
-						className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
-						onPress={() => {
-							close()
-							router.push(Routes.WORKSPACE_SETTINGS(currentWorkspace.slug))
-						}}
-						key="workspace-settings"
-						href={Routes.WORKSPACE_SETTINGS(currentWorkspace.slug)}
-						startContent={<IconSettings className="size-4 text-tw-text-200" />}
-					>
-						Workspace settings
-					</DropdownItem>
+					<>
+						{hasAccess && (
+							<DropdownItem
+								variant="faded"
+								className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
+								onPress={() => {
+									close()
+									router.push(Routes.WORKSPACE_SETTINGS(currentWorkspace.slug))
+								}}
+								key="workspace-settings"
+								href={Routes.WORKSPACE_SETTINGS(currentWorkspace.slug)}
+								startContent={
+									<IconSettings className="size-4 text-tw-text-200" />
+								}
+							>
+								Workspace settings
+							</DropdownItem>
+						)}
+					</>
 				</DropdownSection>
 				<DropdownItem
 					color="danger"

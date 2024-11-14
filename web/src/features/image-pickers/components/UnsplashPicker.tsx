@@ -57,7 +57,7 @@ export const UnsplashPicker = ({ onChange }: IUnsplashPickerProps) => {
 					Array.from({ length: 20 }).map((_, i) => (
 						<Skeleton
 							key={i}
-							className="aspect-video col-span-2 md:col-span-1"
+							className="aspect-video col-span-4 xs:col-span-2 md:col-span-1"
 							as="li"
 						>
 							<div className=" bg-default-200" />

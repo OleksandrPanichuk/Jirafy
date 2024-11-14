@@ -1,22 +1,25 @@
-"use client"
+'use client'
 
 import { useSafeContext } from '@/hooks'
-import { TypeProject } from '@/types'
+import { TypeProjectWithMembers } from '@/types'
 import { createContext, PropsWithChildren, useState } from 'react'
 import { createStore, StoreApi, useStore } from 'zustand'
 
 interface IProjectsStore {
-	projects: TypeProject[]
-	setProjects: (data: TypeProject[]) => void
-	addProject: (data: TypeProject) => void
+	projects: TypeProjectWithMembers[]
+	setProjects: (data: TypeProjectWithMembers[]) => void
+	addProject: (data: TypeProjectWithMembers) => void
 	removeProject: (id: string) => void
-	updateProject: (id: string, data: Partial<Omit<TypeProject, 'id'>>) => void
+	updateProject: (
+		id: string,
+		data: Partial<Omit<TypeProjectWithMembers, 'id'>>
+	) => void
 }
 
 type ProjectsContext = StoreApi<IProjectsStore>
 
 interface IProjectsProviderProps {
-	initialProjects?: TypeProject[]
+	initialProjects?: TypeProjectWithMembers[]
 }
 
 const ProjectsContext = createContext<ProjectsContext>({} as ProjectsContext)

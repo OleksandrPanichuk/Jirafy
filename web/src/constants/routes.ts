@@ -14,6 +14,10 @@ export const Routes = {
 	YOUR_WORK: (slug: string, userId: string) => `/${slug}/profile/${userId}`,
 	NOTIFICATIONS: (slug: string) => `/${slug}/notifications`,
 
+	
+
+	PROJECT_ISSUES: (slug: string, projectId: string) => `/${slug}/projects/${projectId}/issues`,
+
 	WORKSPACE_BY_SLUG: (slug: string) => `/${slug}`,
 	WORKSPACE_SETTINGS: (slug: string) => `/${slug}/settings`,
 	WORKSPACE_PROJECTS: (slug: string) => `/${slug}/projects`,

@@ -1,6 +1,6 @@
 'use client'
 import { Routes } from '@/constants'
-import { useCurrentWorkspace } from '@/features/workspaces'
+import { useCurrentWorkspaceSlug } from '@/hooks'
 import {
 	Button,
 	Dropdown,
@@ -12,11 +12,11 @@ import { IconDots, IconSettings } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 
 export const WorkspaceActions = () => {
-	const workspace = useCurrentWorkspace()
+	const workspaceSlug = useCurrentWorkspaceSlug()
 	const router = useRouter()
 
 	const handleSettings = () => {
-		router.push(Routes.WORKSPACE_SETTINGS(workspace.slug))
+		router.push(Routes.WORKSPACE_SETTINGS(workspaceSlug))
 	}
 
 	return (
@@ -41,7 +41,7 @@ export const WorkspaceActions = () => {
 					className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
 					variant="flat"
 					onClick={handleSettings}
-					href={Routes.WORKSPACE_SETTINGS(workspace.slug)}
+					href={Routes.WORKSPACE_SETTINGS(workspaceSlug)}
 					startContent={<IconSettings className="size-4 text-tw-text-200" />}
 				>
 					Settings

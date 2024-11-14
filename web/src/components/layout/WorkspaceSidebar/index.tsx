@@ -2,9 +2,7 @@
 
 import { Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
-import {
-	useCurrentWorkspace,
-} from '@/features/workspaces'
+import { useCurrentWorkspaceSlug } from '@/hooks'
 import { cn } from '@/lib'
 import { Button, Tooltip } from '@nextui-org/react'
 import {
@@ -34,7 +32,7 @@ export const WorkspaceSidebar = () => {
 	const [storageIsOpen, setIsOpen] = useLocalStorage('workspace-sidebar', false)
 	const { isCollapsed, setIsCollapsed } = useWorkspaceSidebarStore()
 
-	const workspace = useCurrentWorkspace()
+	const workspaceSlug = useCurrentWorkspaceSlug()
 	const user = useAuth((s) => s.user)
 
 	useEffect(() => {
@@ -60,39 +58,39 @@ export const WorkspaceSidebar = () => {
 				<div className="overflow-x-hidden  h-full w-full overflow-y-auto py-0.5 px-4 flex-1">
 					<div className="flex flex-col gap-0.5 mt-2.5">
 						<SidebarItem
-							href={Routes.WORKSPACE_BY_SLUG(workspace.slug)}
+							href={Routes.WORKSPACE_BY_SLUG(workspaceSlug)}
 							text="Home"
 							icon={<IconHome className="size-4" />}
 						/>
 						<SidebarItem
-							href={Routes.YOUR_WORK(workspace.slug, user!.id)}
+							href={Routes.YOUR_WORK(workspaceSlug, user!.id)}
 							text="Your work"
 							icon={<IconUserBolt className="size-4" />}
 						/>
 						<SidebarItem
-							href={Routes.NOTIFICATIONS(workspace.slug)}
+							href={Routes.NOTIFICATIONS(workspaceSlug)}
 							text="Inbox"
 							icon={<IconInbox className="size-4" />}
 						/>
 					</div>
 					<SidebarGroup title="Workspace" action={<WorkspaceActions />}>
 						<SidebarItem
-							href={Routes.WORKSPACE_PROJECTS(workspace.slug)}
+							href={Routes.WORKSPACE_PROJECTS(workspaceSlug)}
 							text="Projects"
 							icon={<IconBriefcase className="size-4" />}
 						/>
 						<SidebarItem
-							href={Routes.WORKSPACE_VIEWS_ALL(workspace.slug)}
+							href={Routes.WORKSPACE_VIEWS_ALL(workspaceSlug)}
 							text="Views"
 							icon={<IconStack2 className="size-4" />}
 						/>
 						<SidebarItem
-							href={Routes.WORKSPACE_CHAT(workspace.slug)}
+							href={Routes.WORKSPACE_CHAT(workspaceSlug)}
 							text="Chat"
 							icon={<IconMessage className="size-4" />}
 						/>
 						<SidebarItem
-							href={Routes.WORKSPACE_ANALYTICS(workspace.slug)}
+							href={Routes.WORKSPACE_ANALYTICS(workspaceSlug)}
 							text="Analytics"
 							icon={<IconChartBar className="size-4" />}
 						/>

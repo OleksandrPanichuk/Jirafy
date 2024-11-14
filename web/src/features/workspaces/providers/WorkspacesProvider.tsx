@@ -18,6 +18,7 @@ interface IWorkspacesStore {
 	selectWorkspace: (slug: string) => void
 	getCurrentWorkspace: () => TypeWorkspaceWithMembers | undefined
 	getWorkspaceBySlug: (slug: string) => TypeWorkspaceWithMembers | undefined
+	getWorkspaceById: (id: string) => TypeWorkspaceWithMembers | undefined
 }
 
 type WorkspacesContext = StoreApi<IWorkspacesStore>
@@ -94,6 +95,9 @@ export const WorkspacesProvider = ({
 			},
 			getWorkspaceBySlug: (slug) => {
 				return get().workspaces.find((w) => w.slug === slug)
+			},
+			getWorkspaceById: (id) => {
+				return get().workspaces.find((w) => w.id === id)
 			}
 		}))
 	)
@@ -116,10 +120,5 @@ export const useWorkspacesStore = <T = IWorkspacesStore,>(
 }
 
 export const useCurrentWorkspace = () => {
-	const workspace = useWorkspacesStore((s) => s.getCurrentWorkspace)()
-	if (!workspace) {
-		throw new Error('No workspace selected')
-	}
-
-	return workspace
+	return useWorkspacesStore((s) => s.getCurrentWorkspace)()
 }
