@@ -43,6 +43,8 @@ export const ProjectLeadSelect = ({
 
 	const members = data?.pages.flatMap((page) => page.members)
 
+	console.log({ pages: data?.pages, members })
+
 	const [selectedValue, setSelectedValue] =
 		useState<TypeMemberWithUser['user']>()
 
@@ -90,7 +92,7 @@ export const ProjectLeadSelect = ({
 					{selectedValue && (
 						<Avatar
 							size="sm"
-							src={selectedValue.avatar?.url}
+							src={selectedValue?.avatar?.url}
 							className="!size-6"
 						/>
 					)}
@@ -119,61 +121,65 @@ export const ProjectLeadSelect = ({
 							handleSelectionChange(key as Set<string>)
 						}
 					>
-						{user ? (
-							<ListboxItem
-								className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
-								variant="flat"
-								key={user.id}
-							>
-								<User
-									name={user.username}
-									className="flex items-center justify-start"
-									avatarProps={{
-										src: user.avatar?.url,
-										className: '!size-6'
-									}}
-								/>
-							</ListboxItem>
-						) : (
-							<></>
-						)}
-						{members?.length ? (
-							<>
-								{members.map((member) => (
-									<ListboxItem
-										className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
-										variant="flat"
-										key={member.user.id}
-									>
-										<User
-											name={member.user.username}
-											className="flex items-center justify-start"
-											avatarProps={{
-												src: member.user.avatar?.url,
-												className: '!size-6'
-											}}
-										/>
-									</ListboxItem>
-								))}
-							</>
-						) : isFetching ? (
-							<>
-								{Array.from({ length: 4 }).map((_, i) => (
-									<ListboxItem
-										variant="solid"
-										className="relative h-9 mt-2"
-										key={i}
-										isDisabled
-									>
-										<Skeleton className="w-full rounded-md absolute top-0 left-0">
-											<div className="h-9 w-full rounded-md bg-tw-bg-80" />
-										</Skeleton>
-									</ListboxItem>
-								))}
-							</>
-						) : (
-							<></>
-						)}
+						<>
+							{user && (
+								<ListboxItem
+									className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
+									variant="flat"
+									key={user!.id}
+								>
+									<User
+										name={user!.username}
+										className="flex items-center justify-start"
+										avatarProps={{
+											src: user!.avatar?.url,
+											className: '!size-6'
+										}}
+									/>
+								</ListboxItem>
+							)}
+						</>
+
+						<>
+							{members?.length ? (
+								<>
+									{members?.map((member) => (
+										<ListboxItem
+											className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
+											variant="flat"
+											key={member.user.id}
+										>
+											<User
+												name={member.user.username}
+												className="flex items-center justify-start"
+												avatarProps={{
+													src: member.user.avatar?.url,
+													className: '!size-6'
+												}}
+											/>
+										</ListboxItem>
+									))}
+								</>
+							) : (
+								isFetching && (
+									<>
+										{Array.from({ length: 4 }).map((_, i) => (
+											<ListboxItem
+												variant="solid"
+												className="relative h-9 mt-2"
+												key={i}
+												isDisabled
+											>
+												<Skeleton className="w-full rounded-md absolute top-0 left-0">
+													<div className="h-9 w-full rounded-md bg-tw-bg-80" />
+												</Skeleton>
+											</ListboxItem>
+										))}
+									</>
+								)
+							)}
+						</>
+
 						<>
 							{hasNextPage && (
 								<ListboxItem key={'next'}>

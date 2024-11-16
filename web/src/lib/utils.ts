@@ -10,6 +10,10 @@ export function absoluteApiUrl(url: string = '') {
 	return APP_URL + '/api' + url
 }
 
+export function absoluteUrl(url: string = '') {
+	return APP_URL + url
+}
+
 export function mergeRefs<T = unknown>(...refs: React.Ref<T>[]) {
 	return (value: T) => {
 		refs.forEach((ref) => {

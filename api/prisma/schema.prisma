@@ -47,7 +47,7 @@ enum Priority {
 
 enum MemberType {
   WORKSPACE
-  PROKECT
+  PROJECT
   CHAT
   CONVERSATION
   PAGE

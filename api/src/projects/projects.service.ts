@@ -4,8 +4,8 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { MemberRole } from '@prisma/client';
-import { CreateProjectInput } from './dto';
+import { MemberRole, MemberType } from '@prisma/client';
+import { CreateProjectInput, ReorderProjectInput } from './dto';
 
 @Injectable()
 export class ProjectsService {
@@ -27,6 +27,7 @@ export class ProjectsService {
         members: {
           where: {
             userId,
+            type: MemberType.PROJECT,
           },
           select: {
             projectOrder: true,
@@ -80,18 +81,89 @@ export class ProjectsService {
       data,
     });
 
-    if (dto.leadId !== userId) {
+    if (leadId && leadId !== userId) {
       await this.createFirstMember(dto.workspaceId, userId, project.id);
     }
-    await this.createFirstMember(dto.workspaceId, leadId ?? userId, project.id);
+    await this.createFirstMember(
+      dto.workspaceId,
+      leadId ?? userId,
+      project.id,
+      true,
+    );
 
     return project;
+  }
+
+  public async reorder(input: ReorderProjectInput, userId: string) {
+    const currentMember = await this.prisma.member.findFirst({
+      where: {
+        userId,
+        workspaceId: input.workspaceId,
+      },
+    });
+
+    if (!currentMember) {
+      throw new ForbiddenException(
+        'You do not have permission to reorder projects in this workspace',
+      );
+    }
+
+    const projects = await this.prisma.project.findMany({
+      where: {
+        workspaceId: input.workspaceId,
+        members: {
+          some: {
+            userId,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const projectIds = projects.map((project) => project.id);
+
+    const reorderedProjects = input.data.map((data) => ({
+      id: data.projectId,
+      order: data.order,
+    }));
+
+    const reorderedProjectIds = reorderedProjects.map((project) => project.id);
+
+    if (projectIds.length !== reorderedProjectIds.length) {
+      throw new ConflictException('Invalid project count');
+    }
+
+    const isInvalid = reorderedProjectIds.some(
+      (projectId) => !projectIds.includes(projectId),
+    );
+
+    if (isInvalid) {
+      throw new ConflictException(
+        'You are not a member of some projects in the list',
+      );
+    }
+
+    for (const el of reorderedProjects) {
+      await this.prisma.member.updateMany({
+        where: {
+          projectId: el.id,
+          userId,
+          type: MemberType.PROJECT,
+        },
+        data: {
+          projectOrder: el.order,
+        },
+      });
+    }
   }
 
   private async createFirstMember(
     workspaceId: string,
     userId: string,
     projectId: string,
+    isLead: boolean = false,
   ) {
     const projectsCount = await this.prisma.project.count({
       where: {
@@ -108,7 +180,9 @@ export class ProjectsService {
       data: {
         userId,
         role: MemberRole.ADMIN,
+        type: MemberType.PROJECT,
         projectId,
+        isLead,
         projectOrder: projectsCount + 1,
       },
     });

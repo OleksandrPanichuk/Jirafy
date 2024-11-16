@@ -1,6 +1,6 @@
 'use client'
 
-import { WorkspaceSidebar } from '@/components/layout'
+import { WorkspaceSidebar } from '@/features/sidebars'
 import { Routes } from '@/constants'
 import { useWorkspacesStore } from '@/features/workspaces'
 import { redirect } from 'next/navigation'

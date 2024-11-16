@@ -120,5 +120,5 @@ export const useWorkspacesStore = <T = IWorkspacesStore,>(
 }
 
 export const useCurrentWorkspace = () => {
-	return useWorkspacesStore((s) => s.getCurrentWorkspace)()
+	return useWorkspacesStore((s) => s.getCurrentWorkspace)()!
 }

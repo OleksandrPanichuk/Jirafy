@@ -14,9 +14,10 @@ export const Routes = {
 	YOUR_WORK: (slug: string, userId: string) => `/${slug}/profile/${userId}`,
 	NOTIFICATIONS: (slug: string) => `/${slug}/notifications`,
 
-	
-
-	PROJECT_ISSUES: (slug: string, projectId: string) => `/${slug}/projects/${projectId}/issues`,
+	PROJECT_ISSUES: (slug: string, projectId: string) =>
+		`/${slug}/projects/${projectId}/issues`,
+	PROJECT_SETTINGS: (slug: string, projectId: string) =>
+		`/${slug}/projects/${projectId}/settings`,
 
 	WORKSPACE_BY_SLUG: (slug: string) => `/${slug}`,
 	WORKSPACE_SETTINGS: (slug: string) => `/${slug}/settings`,
@@ -55,12 +56,13 @@ export const ApiRoutes = {
 	},
 	PROJECTS: {
 		ROOT: '/projects',
-		BY_WORKSPACE_SLUG: (slug: string) => `/projects/by-workspace-slug/${slug}`
+		BY_WORKSPACE_SLUG: (slug: string) => `/projects/by-workspace-slug/${slug}`,
+		REORDER: '/projects/reorder'
 	},
 	STORAGE: {
 		ROOT: '/storage',
 		UPLOAD: '/storage/upload',
-		DELETE: (key:string) => `/storage/delete/${key}`
+		DELETE: (key: string) => `/storage/delete/${key}`
 	},
 	MEMBERS: {
 		ROOT: '/members',

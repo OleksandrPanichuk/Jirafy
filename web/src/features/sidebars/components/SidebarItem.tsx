@@ -1,12 +1,12 @@
 'use client'
 
-import {  } from '@/features/workspaces'
+import { useWorkspaceSidebarStore } from '@/features/sidebars'
+
 import { cn } from '@/lib'
 import { Tooltip } from '@nextui-org/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode, useMemo } from 'react'
-import { useWorkspaceSidebarStore } from '../store'
 
 interface ISidebarItemProps {
 	icon: ReactNode

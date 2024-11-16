@@ -30,7 +30,7 @@ export const ProjectsProvider = ({
 }: PropsWithChildren<IProjectsProviderProps>) => {
 	const [store] = useState(
 		createStore<IProjectsStore>((set) => ({
-			projects: initialProjects || [],
+			projects: initialProjects?.sort((a, b) => a.members[0].projectOrder - b.members[0].projectOrder) || [],
 			setProjects: (data) => set({ projects: data }),
 			addProject: (data) =>
 				set((state) => ({ projects: [...state.projects, data] })),

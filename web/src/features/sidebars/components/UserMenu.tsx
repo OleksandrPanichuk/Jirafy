@@ -13,7 +13,7 @@ import {
 } from '@nextui-org/react'
 import { IconLogout, IconSettings } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
-import { useWorkspaceSidebarStore } from '../store'
+import { useWorkspaceSidebarStore } from '@/features/sidebars'
 
 export const UserMenu = () => {
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)

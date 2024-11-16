@@ -2,6 +2,7 @@
 
 import { Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
+import { useWorkspaceSidebarStore } from '@/features/sidebars'
 import { useWorkspacesStore } from '@/features/workspaces'
 import { useDisclosure } from '@/hooks'
 import { cn } from '@/lib'
@@ -24,7 +25,6 @@ import {
 } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import randomColor from 'randomcolor'
-import { useWorkspaceSidebarStore } from '../store'
 
 // TODO: when adding a subscription check whether user can create new workspace or not
 export const WorkspaceSwitcher = () => {
@@ -66,6 +66,7 @@ export const WorkspaceSwitcher = () => {
 	}
 
 	const currentMember = currentWorkspace.members[0]
+
 	const hasAccess =
 		currentMember.role === MemberRole.ADMIN ||
 		currentMember.role === MemberRole.OWNER

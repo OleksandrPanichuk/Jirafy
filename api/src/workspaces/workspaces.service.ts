@@ -61,8 +61,6 @@ export class WorkspacesService {
         userId,
         workspaceId: workspace.id,
         role: MemberRole.OWNER,
-        isLead: true,
-        defaultAssignee: true,
         isWorkspaceSelected: true,
         type: MemberType.WORKSPACE,
       },

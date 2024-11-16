@@ -1,7 +1,12 @@
 import { ApiRoutes } from '@/constants'
 import { axios } from '@/lib'
 import { TypeProject, TypeProjectWithMembers } from '@/types'
-import { CreateProjectInput, createProjectSchema } from './projects.dto'
+import {
+	CreateProjectInput,
+	createProjectSchema,
+	ReorderProjectsInput,
+	reorderProjectsSchema
+} from './projects.dto'
 
 const findAllByWorkspaceSlug = async (slug: string) => {
 	return (
@@ -16,7 +21,13 @@ const create = async (input: CreateProjectInput) => {
 	return await axios.post<TypeProject>(ApiRoutes.PROJECTS.ROOT, input)
 }
 
+const reorder = async (input: ReorderProjectsInput) => {
+	reorderProjectsSchema.parse(input)
+	return await axios.put(ApiRoutes.PROJECTS.REORDER, input)
+}
+
 export const ProjectsApi = {
 	findAllByWorkspaceSlug,
-	create
+	create,
+	reorder
 } as const

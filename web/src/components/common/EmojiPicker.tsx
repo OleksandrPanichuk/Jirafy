@@ -27,7 +27,7 @@ export const EmojiPicker = ({ onChange, value }: IEmojiPickerProps) => {
 	}
 
 	return (
-		<Popover onClose={close} onOpenChange={toggle}>
+		<Popover isOpen={isOpen} onClose={close} onOpenChange={toggle}>
 			<PopoverTrigger>
 				<Button className="text-lg bg-tw-bg-80" isIconOnly>
 					{emoji}

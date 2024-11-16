@@ -1,16 +1,21 @@
 'use client'
 
+import { ReorderProjectsInput } from '@/api'
 import {
 	CreateProjectModal,
 	useCreateProjectModalStore,
-	useProjectsStore
+	useProjectsStore,
+	useReorderProjectsMutation
 } from '@/features/projects'
+import {
+	SidebarGroup,
+	SidebarProjectsItem,
+	useWorkspaceSidebarStore
+} from '@/features/sidebars'
+import { useCurrentWorkspace } from '@/features/workspaces'
 import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd'
 import { Button, Tooltip } from '@nextui-org/react'
 import { IconPlus } from '@tabler/icons-react'
-import { useWorkspaceSidebarStore } from '../store'
-import { SidebarGroup } from './SidebarGroup'
-import { SidebarProjectsItem } from './SidebarProjectsItem'
 
 function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 	const result = Array.from(list)
@@ -24,8 +29,11 @@ export const SidebarProjects = () => {
 	const projects = useProjectsStore((s) => s.projects)
 	const setProjects = useProjectsStore((s) => s.setProjects)
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
+	const currentWorkspace = useCurrentWorkspace()
 
 	const open = useCreateProjectModalStore((s) => s.open)
+
+	const { mutate: executeReorder } = useReorderProjectsMutation()
 
 	const onDragEnd = (result: DropResult) => {
 		const { destination, source, type } = result
@@ -45,15 +53,20 @@ export const SidebarProjects = () => {
 			const items = reorder(projects, source.index, destination.index).map(
 				(item, index) => ({
 					...item,
-					members: item.members.map((m) => ({ ...m, projectOrder: index }))
+					members: item.members.map((m) => ({ ...m, projectOrder: index + 1 }))
 				})
 			)
 			setProjects(items)
-			/* updateOrder({
-				workspaceId:string
-				userId:string
-				projects:items
-			}) */
+
+			const data = items.map((item) => ({
+				projectId: item.id,
+				order: item.members[0].projectOrder
+			})) satisfies ReorderProjectsInput['data']
+
+			executeReorder({
+				workspaceId: currentWorkspace.id,
+				data
+			})
 		}
 	}
 

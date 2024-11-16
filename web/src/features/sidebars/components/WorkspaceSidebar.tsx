@@ -2,6 +2,15 @@
 
 import { Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
+import {
+	SidebarGroup,
+	SidebarItem,
+	SidebarProjects,
+	UserMenu,
+	useWorkspaceSidebarStore,
+	WorkspaceActions,
+	WorkspaceSwitcher
+} from '@/features/sidebars'
 import { useCurrentWorkspaceSlug } from '@/hooks'
 import { cn } from '@/lib'
 import { Button, Tooltip } from '@nextui-org/react'
@@ -18,15 +27,6 @@ import {
 } from '@tabler/icons-react'
 import { useEffect } from 'react'
 import { useLocalStorage } from 'react-use'
-import {
-	SidebarGroup,
-	SidebarItem,
-	SidebarProjects,
-	UserMenu,
-	WorkspaceActions,
-	WorkspaceSwitcher
-} from './components'
-import { useWorkspaceSidebarStore } from './store'
 
 export const WorkspaceSidebar = () => {
 	const [storageIsOpen, setIsOpen] = useLocalStorage('workspace-sidebar', false)

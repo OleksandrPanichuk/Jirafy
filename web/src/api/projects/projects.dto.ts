@@ -38,3 +38,13 @@ export type CreateProjectInput = Omit<
 > & {
 	cover?: TypeFile
 }
+
+export const reorderProjectsSchema = z.object({
+	workspaceId: zMongoId(),
+	data: z.array(z.object({
+		projectId: zMongoId(),
+		order: z.number().nonnegative()
+	}))
+})
+
+export type ReorderProjectsInput = z.infer<typeof reorderProjectsSchema>

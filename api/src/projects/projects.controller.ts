@@ -1,7 +1,15 @@
 import { CurrentUser } from '@/shared/decorators';
 import { AuthenticatedGuard } from '@/shared/guards';
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { CreateProjectInput } from './dto';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import { CreateProjectInput, ReorderProjectInput } from './dto';
 import { ProjectsService } from './projects.service';
 
 @UseGuards(AuthenticatedGuard)
@@ -20,5 +28,10 @@ export class ProjectsController {
   @Post('')
   create(@Body() dto: CreateProjectInput, @CurrentUser('id') userId: string) {
     return this.projectsService.create(dto, userId);
+  }
+
+  @Put('reorder')
+  reorder(@Body() dto: ReorderProjectInput, @CurrentUser('id') userId: string) {
+    return this.projectsService.reorder(dto, userId);
   }
 }

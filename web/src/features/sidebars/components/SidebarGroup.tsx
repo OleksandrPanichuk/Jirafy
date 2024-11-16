@@ -1,10 +1,9 @@
 'use client'
 
-import {} from '@/features/workspaces'
+import { useWorkspaceSidebarStore } from '@/features/sidebars'
 import { cn } from '@/lib'
 import { Accordion, AccordionItem } from '@nextui-org/react'
 import { PropsWithChildren, ReactNode } from 'react'
-import { useWorkspaceSidebarStore } from '../store'
 
 interface ISidebarGroupProps extends PropsWithChildren {
 	title: string
@@ -19,9 +18,9 @@ interface ISidebarGroupProps extends PropsWithChildren {
 		title?: string
 		emoji?: string
 		action?: string
-		indicator?:string
+		indicator?: string
 	}
-	uppercase?:boolean
+	uppercase?: boolean
 }
 
 export const SidebarGroup = ({
@@ -41,7 +40,7 @@ export const SidebarGroup = ({
 			className={cn('!px-0', className)}
 			itemClasses={{
 				trigger: cn(
-					' data-[hover=true]:bg-tw-bg-90 rounded sticky top-0 py-0 px-2 ',
+					' data-[hover=true]:bg-tw-bg-90 rounded sticky top-0 py-0 px-2  gap-1',
 					isCollapsed ? 'hidden' : 'mt-2.5',
 					classNames?.trigger
 				),
@@ -50,7 +49,6 @@ export const SidebarGroup = ({
 					classNames?.content
 				),
 				indicator: classNames?.indicator
-				
 			}}
 			defaultSelectedKeys={[title]}
 			selectedKeys={isCollapsed ? [title] : undefined}
@@ -67,7 +65,11 @@ export const SidebarGroup = ({
 					>
 						{emoji && <span className={cn(classNames?.emoji)}>{emoji}</span>}
 						<span
-							className={cn('text-[0.675rem]', uppercase && 'uppercase', classNames?.title)}
+							className={cn(
+								'text-[0.675rem]',
+								uppercase && 'uppercase',
+								classNames?.title
+							)}
 						>
 							{title}
 						</span>
