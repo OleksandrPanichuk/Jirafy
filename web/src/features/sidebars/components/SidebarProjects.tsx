@@ -1,6 +1,7 @@
 'use client'
 
 import { ReorderProjectsInput } from '@/api'
+import { DragHandle, SortableItem, SortableList } from '@/components/ui'
 import {
 	CreateProjectModal,
 	useCreateProjectModalStore,
@@ -13,17 +14,9 @@ import {
 	useWorkspaceSidebarStore
 } from '@/features/sidebars'
 import { useCurrentWorkspace } from '@/features/workspaces'
-import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd'
+import { TypeProjectWithMembers } from '@/types'
 import { Button, Tooltip } from '@nextui-org/react'
 import { IconPlus } from '@tabler/icons-react'
-
-function reorder<T>(list: T[], startIndex: number, endIndex: number) {
-	const result = Array.from(list)
-	const [removed] = result.splice(startIndex, 1)
-	result.splice(endIndex, 0, removed)
-
-	return result
-}
 
 export const SidebarProjects = () => {
 	const projects = useProjectsStore((s) => s.projects)
@@ -35,39 +28,22 @@ export const SidebarProjects = () => {
 
 	const { mutate: executeReorder } = useReorderProjectsMutation()
 
-	const onDragEnd = (result: DropResult) => {
-		const { destination, source, type } = result
+	const onDragEnd = (items: TypeProjectWithMembers[]) => {
+		const projects = items.map((item, index) => ({
+			...item,
+			members: item.members.map((m) => ({ ...m, projectOrder: index + 1 }))
+		}))
+		setProjects(projects)
 
-		if (!destination) {
-			return
-		}
+		const data = projects.map((item) => ({
+			projectId: item.id,
+			order: item.members[0].projectOrder
+		})) satisfies ReorderProjectsInput['data']
 
-		if (
-			destination.droppableId === source.droppableId &&
-			destination.index === source.index
-		) {
-			return
-		}
-
-		if (type === 'list') {
-			const items = reorder(projects, source.index, destination.index).map(
-				(item, index) => ({
-					...item,
-					members: item.members.map((m) => ({ ...m, projectOrder: index + 1 }))
-				})
-			)
-			setProjects(items)
-
-			const data = items.map((item) => ({
-				projectId: item.id,
-				order: item.members[0].projectOrder
-			})) satisfies ReorderProjectsInput['data']
-
-			executeReorder({
-				workspaceId: currentWorkspace.id,
-				data
-			})
-		}
+		executeReorder({
+			workspaceId: currentWorkspace.id,
+			data
+		})
 	}
 
 	return (
@@ -91,25 +67,22 @@ export const SidebarProjects = () => {
 				}
 			>
 				{projects.length ? (
-					<DragDropContext onDragEnd={onDragEnd}>
-						<Droppable droppableId="projects" type="list" direction="vertical">
-							{(provided) => (
-								<ul
-									{...provided.droppableProps}
-									className="flex flex-col gap-1 w-full"
-									ref={provided.innerRef}
-								>
-									{projects.map((project, i) => (
-										<SidebarProjectsItem
-											key={project.id}
-											index={i}
-											data={project}
-										/>
-									))}
-								</ul>
-							)}
-						</Droppable>
-					</DragDropContext>
+					<SortableList
+						items={projects}
+						className="w-full flex flex-col gap-0.5"
+						onChange={onDragEnd}
+						renderItem={(item) => (
+							<SortableItem className="relative" id={item.id}>
+								{!isCollapsed && (
+									<DragHandle className="absolute top-[13.5px] left-[-12px] translate-y-[-50%]" />
+								)}
+								<SidebarProjectsItem data={item} />
+							</SortableItem>
+						)}
+						renderPreview={(item) => (
+							<SidebarProjectsItem.DndPreview data={item} />
+						)}
+					/>
 				) : isCollapsed ? (
 					<Tooltip
 						content={<span className="text-sm">Add project</span>}

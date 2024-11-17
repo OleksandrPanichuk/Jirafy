@@ -21,6 +21,7 @@ interface ISidebarGroupProps extends PropsWithChildren {
 		indicator?: string
 	}
 	uppercase?: boolean
+	shouldBeOpenWhenCollapsed?: boolean
 }
 
 export const SidebarGroup = ({
@@ -31,7 +32,8 @@ export const SidebarGroup = ({
 	classNames,
 	onTitleClick,
 	emoji,
-	uppercase = true
+	uppercase = true,
+	shouldBeOpenWhenCollapsed = true
 }: ISidebarGroupProps) => {
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
 
@@ -50,10 +52,11 @@ export const SidebarGroup = ({
 				),
 				indicator: classNames?.indicator
 			}}
-			defaultSelectedKeys={[title]}
-			selectedKeys={isCollapsed ? [title] : undefined}
+			defaultSelectedKeys={undefined}
+			selectedKeys={isCollapsed && shouldBeOpenWhenCollapsed ? [title] : undefined}
 		>
 			<AccordionItem
+			
 				key={title}
 				title={
 					<div

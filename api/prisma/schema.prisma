@@ -172,6 +172,7 @@ model Member {
   isLead              Boolean?
   isWorkspaceSelected Boolean?
 
+  favorites     Favorites[]
   createdIssues Issue[]
   assignements  Assignee[]
 
@@ -238,6 +239,18 @@ model Invites {
   @@map("invites")
 }
 
+model Favorites {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String @db.ObjectId
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String  @db.ObjectId
+
+  @@map("favorites")
+}
+
 model Project {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -262,6 +275,8 @@ model Project {
   activity  Activity[]
   cycles    Cycle[]
   documents Document[]
+
+  favorites Favorites[]
 
   @@map("projects")
 }
@@ -554,4 +569,4 @@ model Subscription {
   updatedAt DateTime @updatedAt
 
   @@map("subscriptions")
-} 
+}

@@ -1,7 +1,6 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-
+import { useState } from 'react'
 
 export const useDisclosure = (defaultValue: boolean = false) => {
 	const [isOpen, setIsOpen] = useState(defaultValue)
@@ -10,5 +9,5 @@ export const useDisclosure = (defaultValue: boolean = false) => {
 	const close = () => setIsOpen(false)
 	const toggle = () => setIsOpen((prev) => !prev)
 
-	return { isOpen, open, close, toggle }
+	return { isOpen, open, close, toggle, setIsOpen }
 }

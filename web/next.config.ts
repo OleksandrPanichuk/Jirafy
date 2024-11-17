@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {
 	},
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'src/styles')]
+	},
+	experimental: {
+		reactCompiler: true
 	}
 }
 

@@ -43,8 +43,6 @@ export const ProjectLeadSelect = ({
 
 	const members = data?.pages.flatMap((page) => page.members)
 
-	console.log({ pages: data?.pages, members })
-
 	const [selectedValue, setSelectedValue] =
 		useState<TypeMemberWithUser['user']>()
 
