@@ -1,12 +1,14 @@
 'use client'
 
 import { DragHandle } from '@/components/ui'
+import { Routes } from '@/constants'
 import {
 	ProjectMenu,
 	SidebarGroup,
 	SidebarItem,
 	useWorkspaceSidebarStore
 } from '@/features/sidebars'
+import { useCurrentWorkspaceSlug } from '@/hooks'
 import { cn } from '@/lib'
 import type { TypeProject } from '@/types'
 import {
@@ -22,6 +24,7 @@ interface ISidebarProjectsItemProps {
 
 export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
+	const slug = useCurrentWorkspaceSlug()
 
 	return (
 		<div className="w-full relative">
@@ -47,7 +50,7 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 						<>
 							<SidebarItem
 								icon={<IconSquares className="size-4" />}
-								href=""
+								href={Routes.PROJECT_ISSUES(slug, data.id)}
 								text="Issues"
 								classNames={{
 									content: 'pl-3'
@@ -55,7 +58,7 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 							/>
 							<SidebarItem
 								icon={<IconInnerShadowRight className="size-4" />}
-								href=""
+								href={Routes.PROJECT_CYCLES(slug, data.id)}
 								text="Cycles"
 								classNames={{
 									content: 'pl-3'
@@ -63,7 +66,7 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 							/>
 							<SidebarItem
 								icon={<IconStack2 className="size-4" />}
-								href=""
+								href={Routes.PROJECT_VIEWS(slug, data.id)}
 								text="Views"
 								classNames={{
 									content: 'pl-3'
@@ -71,7 +74,7 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 							/>
 							<SidebarItem
 								icon={<IconFileText className="size-4" />}
-								href=""
+								href={Routes.PROJECT_PAGES(slug, data.id)}
 								text="Pages"
 								classNames={{
 									content: 'pl-3'

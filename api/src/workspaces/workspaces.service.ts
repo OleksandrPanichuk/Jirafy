@@ -26,6 +26,7 @@ export class WorkspacesService {
             userId,
           },
           select: {
+            id: true,
             role: true,
             isLead: true,
             defaultAssignee: true,

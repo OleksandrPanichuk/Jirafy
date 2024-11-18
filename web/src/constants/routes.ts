@@ -18,6 +18,12 @@ export const Routes = {
 		`/${slug}/projects/${projectId}/issues`,
 	PROJECT_SETTINGS: (slug: string, projectId: string) =>
 		`/${slug}/projects/${projectId}/settings`,
+	PROJECT_CYCLES: (slug: string, projectId: string) =>
+		`/${slug}/projects/${projectId}/cycles`,
+	PROJECT_VIEWS: (slug: string, projectId: string) =>
+		`/${slug}/projects/${projectId}/views`,
+	PROJECT_PAGES: (slug: string, projectId: string) =>
+		`/${slug}/projects/${projectId}/pages`,
 
 	WORKSPACE_BY_SLUG: (slug: string) => `/${slug}`,
 	WORKSPACE_SETTINGS: (slug: string) => `/${slug}/settings`,
@@ -67,5 +73,9 @@ export const ApiRoutes = {
 	MEMBERS: {
 		ROOT: '/members',
 		BY_WORKSPACE_SLUG: (slug: string) => `/members/by-workspace-slug/${slug}`
+	},
+	FAVORITES: {
+		ROOT: '/favorites',
+		BY_WORKSPACE_SLUG: (slug: string) => `/favorites/by-workspace-slug/${slug}`
 	}
 } as const

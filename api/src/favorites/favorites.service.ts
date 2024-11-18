@@ -61,8 +61,17 @@ export class FavoritesService {
       throw new ForbiddenException('You are not allowed to add favorites');
     }
 
-    return this.prisma.favorites.create({
+    return await this.prisma.favorites.create({
       data: dto,
+      include: {
+        project: {
+          select: {
+            id: true,
+            name: true,
+            emoji: true,
+          },
+        },
+      },
     });
   }
 
@@ -91,7 +100,7 @@ export class FavoritesService {
       throw new NotFoundException('Favorite not found');
     }
 
-    return this.prisma.favorites.delete({
+    return await this.prisma.favorites.delete({
       where: {
         id: dto.favoriteId,
       },

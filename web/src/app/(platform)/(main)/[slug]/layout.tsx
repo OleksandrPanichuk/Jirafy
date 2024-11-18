@@ -1,5 +1,9 @@
-import { getAllProjectsByWorkspaceSlug } from '@/api'
+import {
+	getAllFavoritesByWorkspaceSlug,
+	getAllProjectsByWorkspaceSlug
+} from '@/api'
 import { WorkspaceLayout } from '@/components/layout'
+import { FavoritesProvider } from '@/features/favorites'
 import { ProjectsProvider } from '@/features/projects'
 import { PropsWithChildren } from 'react'
 
@@ -11,11 +15,17 @@ interface ILayoutProps extends PropsWithChildren {
 
 const Layout = async ({ children, params }: ILayoutProps) => {
 	const { slug } = await params
-	const projects = await getAllProjectsByWorkspaceSlug(slug)
+	
+	const [projects, favorites] = await Promise.all([
+		getAllProjectsByWorkspaceSlug(slug),
+		getAllFavoritesByWorkspaceSlug(slug)
+	])
 
 	return (
 		<ProjectsProvider initialProjects={projects}>
-			<WorkspaceLayout>{children}</WorkspaceLayout>
+			<FavoritesProvider initialData={favorites}>
+				<WorkspaceLayout>{children}</WorkspaceLayout>
+			</FavoritesProvider>
 		</ProjectsProvider>
 	)
 }

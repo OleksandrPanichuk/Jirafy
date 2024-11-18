@@ -3,6 +3,7 @@
 import { Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
 import {
+	SidebarFavorites,
 	SidebarGroup,
 	SidebarItem,
 	SidebarProjects,
@@ -95,6 +96,7 @@ export const WorkspaceSidebar = () => {
 							icon={<IconChartBar className="size-4" />}
 						/>
 					</SidebarGroup>
+					<SidebarFavorites />
 					<SidebarProjects />
 				</div>
 				<div

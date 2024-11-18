@@ -1,3 +1,4 @@
+export * from './useCurrentMember'
 export * from './useCurrentWorkspaceSlug'
 export * from './useDebounce'
 export * from './useDisclosure'

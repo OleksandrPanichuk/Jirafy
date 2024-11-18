@@ -12,6 +12,7 @@ interface ISidebarItemProps {
 	icon: ReactNode
 	text: string
 	href: string
+	action?: ReactNode
 	classNames?: {
 		base?: string
 		container?: string
@@ -24,7 +25,8 @@ export const SidebarItem = ({
 	text,
 	classNames,
 	href,
-	icon
+	icon,
+	action
 }: ISidebarItemProps) => {
 	const pathname = usePathname()
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
@@ -61,14 +63,17 @@ export const SidebarItem = ({
 					>
 						{icon}
 						{!isCollapsed && (
-							<p
-								className={cn(
-									'text-xs leading-5 font-medium',
-									classNames?.text
-								)}
-							>
-								{text}
-							</p>
+							<>
+								<p
+									className={cn(
+										'text-xs leading-5 font-medium',
+										classNames?.text
+									)}
+								>
+									{text}
+								</p>
+								{action}
+							</>
 						)}
 					</div>
 				</div>

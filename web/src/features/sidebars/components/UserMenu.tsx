@@ -1,7 +1,8 @@
 'use client'
 
-import { Routes } from '@/constants'
+import { breakpoints, Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
+import { useWorkspaceSidebarStore } from '@/features/sidebars'
 import {} from '@/features/workspaces'
 import {
 	Avatar,
@@ -13,10 +14,11 @@ import {
 } from '@nextui-org/react'
 import { IconLogout, IconSettings } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
-import { useWorkspaceSidebarStore } from '@/features/sidebars'
+import { useMedia } from 'react-use'
 
 export const UserMenu = () => {
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
+	const isMobile = useMedia(breakpoints['max-sm'])
 	const user = useAuth((s) => s.user)
 
 	const router = useRouter()
@@ -29,7 +31,7 @@ export const UserMenu = () => {
 
 	return (
 		<Dropdown
-			placement="right"
+			placement={isMobile ? 'bottom-end' : 'right'}
 			classNames={{
 				content: 'rounded-md border border-tw-border-400 bg-tw-bg-100'
 			}}

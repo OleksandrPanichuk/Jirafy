@@ -1,4 +1,5 @@
 export * from './common.types'
+export * from './favorites.types'
 export * from './file.types'
 export * from './member.types'
 export * from './project.types'

@@ -1,7 +1,12 @@
 'use client'
 
 import { Routes } from '@/constants'
-import { useCurrentWorkspaceSlug } from '@/hooks'
+import { useFavoritesStore } from '@/features/favorites'
+import {
+	useAddToFavoritesMutation,
+	useRemoveFromFavoritesMutation
+} from '@/features/favorites/api'
+import { useCurrentMember, useCurrentWorkspaceSlug } from '@/hooks'
 import { absoluteUrl } from '@/lib'
 import {
 	Button,
@@ -10,8 +15,15 @@ import {
 	DropdownMenu,
 	DropdownTrigger
 } from '@nextui-org/react'
-import { IconDots, IconLink, IconSettings, IconStar } from '@tabler/icons-react'
+import {
+	IconDots,
+	IconLink,
+	IconSettings,
+	IconStar,
+	IconStarFilled
+} from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
+import { useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
 
 interface IProjectMenuProps {
@@ -22,9 +34,19 @@ interface IProjectMenuProps {
 export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 	const router = useRouter()
 	const slug = useCurrentWorkspaceSlug()
+	const currentMember = useCurrentMember()
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_, copy] = useCopyToClipboard()
+
+	const favorites = useFavoritesStore((s) => s.favorites)
+
+	const favorite = useMemo(() => {
+		return favorites?.find((f) => f.projectId === projectId)
+	}, [favorites, projectId])
+
+	const { mutate: addToFavorites } = useAddToFavoritesMutation()
+	const { mutate: removeFromFavorites } = useRemoveFromFavoritesMutation()
 
 	const handleLinkCopy = () => {
 		copy(absoluteUrl(Routes.PROJECT_ISSUES(slug, projectId)))
@@ -32,6 +54,17 @@ export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 
 	const handleSettings = () => {
 		router.push(Routes.PROJECT_SETTINGS(slug, projectId))
+	}
+
+	const handleToggleFavorite = () => {
+		if (favorite) {
+			removeFromFavorites({
+				favoriteId: favorite.id,
+				memberId: currentMember.id
+			})
+		} else {
+			addToFavorites({ projectId, memberId: currentMember.id })
+		}
 	}
 
 	return (
@@ -55,10 +88,17 @@ export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 			<DropdownMenu>
 				<DropdownItem
 					variant="flat"
+					onPress={handleToggleFavorite}
 					className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
-					startContent={<IconStar className="size-4 text-tw-text-200" />}
+					startContent={
+						favorite ? (
+							<IconStarFilled className="size-4 text-yellow-400" />
+						) : (
+							<IconStar className="size-4 text-tw-text-200" />
+						)
+					}
 				>
-					Add to favorites
+					{favorite ? "Remove from favorites" : "Add to favorites"}
 				</DropdownItem>
 				<DropdownItem
 					variant="flat"
@@ -73,7 +113,7 @@ export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 					className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
 					startContent={<IconSettings className="size-4 text-tw-text-200" />}
 					onPress={handleSettings}
-					href={Routes.PROJECT_ISSUES(slug, projectId)}
+					href={Routes.PROJECT_SETTINGS(slug, projectId)}
 				>
 					Settings
 				</DropdownItem>
