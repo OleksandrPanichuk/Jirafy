@@ -13,7 +13,9 @@ export const useGetRandomImageQuery = ({onSuccess}:Props = {}) => {
 	return useQuery({
 		queryKey: ['random-image', id],
 		queryFn: async () => {
-			const data = await getRandomPhotos()
+			const data = await getRandomPhotos({
+				count:1
+			})
 			if(!data) throw new Error('No data')
 			
 			onSuccess?.(data[0].urls.full)

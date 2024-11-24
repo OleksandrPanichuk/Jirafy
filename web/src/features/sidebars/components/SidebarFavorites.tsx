@@ -2,11 +2,11 @@
 
 import { Routes } from '@/constants'
 import { useFavoritesStore } from '@/features/favorites'
+import { useWorkspaceSidebarStore } from '@/features/sidebars'
 import { useCurrentWorkspaceSlug } from '@/hooks'
-import { useWorkspaceSidebarStore } from '../store'
+import { FavoritesItemMenu } from './FavoritesItemMenu'
 import { SidebarGroup } from './SidebarGroup'
 import { SidebarItem } from './SidebarItem'
-import { FavoritesItemMenu } from './FavoritesItemMenu'
 
 export const SidebarFavorites = () => {
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
@@ -23,8 +23,8 @@ export const SidebarFavorites = () => {
 				<SidebarItem
 					classNames={{
 						content:
-							'w-full flex items-center text-tw-text-400 text-xs font-semibold min-h-[30px] justify-start gap-1.5',
-						text: 'truncate text-sm font-medium text-tw-text-200 flex-1',
+							'w-full flex items-center text-xs font-semibold min-h-[30px] justify-start gap-1.5',
+						text: 'truncate flex-1',
 						container: 'py-0'
 					}}
 					key={favorite.id}

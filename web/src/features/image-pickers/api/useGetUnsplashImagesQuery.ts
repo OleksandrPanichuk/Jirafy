@@ -1,7 +1,8 @@
 'use client'
 
-import { getRandomPhotos, searchPhotos } from '@/api'
-import { useQuery } from '@tanstack/react-query'
+import { getRandomPhotos } from '@/api'
+import { useEffect, useState } from 'react'
+import { Random } from 'unsplash-js/dist/methods/photos/types'
 
 interface IGetUnsplashImagesQuery {
 	query: string
@@ -12,13 +13,25 @@ export const useGetUnsplashImagesQuery = ({
 	query,
 	count
 }: IGetUnsplashImagesQuery) => {
-	return useQuery({
-		queryFn: () => {
-			if (query) {
-				return searchPhotos(query, count)
+	const [data, setData] = useState<Random[] | undefined>()
+	const [isLoading, setIsLoading] = useState(false)
+
+	useEffect(() => {
+		async function fetchPhotos() {
+			try {
+				setIsLoading(true)
+
+				const photos = await getRandomPhotos({
+					query,
+					count
+				})
+				setData(photos)
+			} finally {
+				setIsLoading(false)
 			}
-			return getRandomPhotos(count)
-		},
-		queryKey: ['unsplash', query, count]
-	})
+		}
+		fetchPhotos()
+	}, [count, query])
+
+	return { data, isLoading }
 }

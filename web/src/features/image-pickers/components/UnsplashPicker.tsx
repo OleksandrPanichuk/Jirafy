@@ -2,7 +2,8 @@
 
 import { Input } from '@/components/ui'
 import { useDebounce } from '@/hooks'
-import { Button, Skeleton } from '@nextui-org/react'
+import { Skeleton } from '@nextui-org/react'
+import { IconSearch } from '@tabler/icons-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useGetUnsplashImagesQuery } from '../api'
@@ -16,28 +17,29 @@ export const UnsplashPicker = ({ onChange }: IUnsplashPickerProps) => {
 
 	const debouncedSearchValue = useDebounce(searchValue)
 
-	const { data: images, isFetching } = useGetUnsplashImagesQuery({
+	const { data: images, isLoading } = useGetUnsplashImagesQuery({
 		query: debouncedSearchValue,
 		count: 20
 	})
 
 	return (
 		<div className="flex w-full gap-4 flex-col">
-			<div className="w-full flex gap-2 flex-col md:flex-row">
+			<div className="w-full">
 				<Input
 					classNames={{
 						wrapper: 'w-full',
 						container: 'h-7'
 					}}
+					startContent={<IconSearch className="size-4 mr-2 " />}
 					value={searchValue}
 					onChange={(e) => setSearchValue(e.target.value)}
 					placeholder="Search for images"
 				/>
-				<Button size="sm" color="primary">
-					Search
-				</Button>
 			</div>
-			<ul className="w-full grid grid-cols-4 gap-4  overflow-auto">
+			{!images && !isLoading && (
+				<div className="text-center w-full">No images found</div>
+			)}
+		{(images || isLoading) && 	<ul className="w-full grid grid-cols-4 gap-4  overflow-auto">
 				{images?.map((image) => (
 					<li
 						className="relative col-span-4 xs:col-span-2 aspect-video md:col-span-1 cursor-pointer overflow-hidden"
@@ -53,7 +55,8 @@ export const UnsplashPicker = ({ onChange }: IUnsplashPickerProps) => {
 						/>
 					</li>
 				))}
-				{isFetching &&
+
+				{isLoading &&
 					Array.from({ length: 20 }).map((_, i) => (
 						<Skeleton
 							key={i}
@@ -63,7 +66,7 @@ export const UnsplashPicker = ({ onChange }: IUnsplashPickerProps) => {
 							<div className=" bg-default-200" />
 						</Skeleton>
 					))}
-			</ul>
+			</ul>}
 		</div>
 	)
 }

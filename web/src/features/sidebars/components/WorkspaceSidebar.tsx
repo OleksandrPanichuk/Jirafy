@@ -10,6 +10,7 @@ import {
 	UserMenu,
 	useWorkspaceSidebarStore,
 	WorkspaceActions,
+	WorkspaceSidebarProvider,
 	WorkspaceSwitcher
 } from '@/features/sidebars'
 import { useCurrentWorkspaceSlug } from '@/hooks'
@@ -26,28 +27,31 @@ import {
 	IconStack2,
 	IconUserBolt
 } from '@tabler/icons-react'
-import { useEffect } from 'react'
-import { useLocalStorage } from 'react-use'
 
-export const WorkspaceSidebar = () => {
-	const [storageIsOpen, setIsOpen] = useLocalStorage('workspace-sidebar', false)
-	const { isCollapsed, setIsCollapsed } = useWorkspaceSidebarStore()
+interface IWorkspaceSidebarProps {
+	alwaysOpen?: boolean
+}
+
+export const WorkspaceSidebar = ({ alwaysOpen }: IWorkspaceSidebarProps) => {
+	return (
+		<WorkspaceSidebarProvider
+			alwaysOpen={alwaysOpen}
+		>
+			<SidebarContent alwaysOpen={alwaysOpen} />
+		</WorkspaceSidebarProvider>
+	)
+}
+
+function SidebarContent({ alwaysOpen }: IWorkspaceSidebarProps) {
+	const { isCollapsed, toggle } = useWorkspaceSidebarStore()
 
 	const workspaceSlug = useCurrentWorkspaceSlug()
 	const user = useAuth((s) => s.user)
 
-	useEffect(() => {
-		if (storageIsOpen !== undefined) {
-			setIsCollapsed(!storageIsOpen)
-		}
-	}, [storageIsOpen, setIsCollapsed])
-
-	const toggle = () => setIsOpen(isCollapsed)
-
 	return (
 		<aside
 			className={cn(
-				'border-tw-border-200 border-r bg-tw-bg-100 pt-4',
+				'border-tw-border-200 border-r bg-tw-bg-100 pt-4 h-full',
 				!isCollapsed && 'min-w-[240px]'
 			)}
 		>
@@ -114,7 +118,8 @@ export const WorkspaceSidebar = () => {
 							variant="flat"
 							className={cn(
 								'text-tw-primary-100 text-sm ',
-								!isCollapsed && 'min-w-24 rounded-2xl'
+								!isCollapsed && 'min-w-24 rounded-2xl',
+								alwaysOpen && 'w-full'
 							)}
 							size="sm"
 							color="primary"
@@ -125,23 +130,25 @@ export const WorkspaceSidebar = () => {
 						</Button>
 					</Tooltip>
 
-					<Tooltip
-						placement="right"
-						content={
-							<span className="text-sm">
-								{!isCollapsed ? 'Hide' : 'Expand'}
-							</span>
-						}
-					>
-						<Button variant="light" size="sm" onClick={toggle} isIconOnly>
-							<IconArrowRight
-								className={cn(
-									'transition duration-300',
-									!isCollapsed ? 'rotate-180' : 'rotate-0'
-								)}
-							/>
-						</Button>
-					</Tooltip>
+					{!alwaysOpen && (
+						<Tooltip
+							placement="right"
+							content={
+								<span className="text-sm">
+									{!isCollapsed ? 'Hide' : 'Expand'}
+								</span>
+							}
+						>
+							<Button variant="light" size="sm" onClick={toggle} isIconOnly>
+								<IconArrowRight
+									className={cn(
+										'transition duration-300',
+										!isCollapsed ? 'rotate-180' : 'rotate-0'
+									)}
+								/>
+							</Button>
+						</Tooltip>
+					)}
 				</div>
 			</div>
 		</aside>

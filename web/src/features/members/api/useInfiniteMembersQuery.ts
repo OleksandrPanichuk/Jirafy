@@ -1,4 +1,3 @@
-
 import { FindAllMembersInput, MembersApi } from '@/api'
 import { useInfiniteQueryRef } from '@/hooks'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -9,7 +8,7 @@ export const useInfiniteMembersQuery = (
 	const state = useInfiniteQuery({
 		queryFn: ({ pageParam }) =>
 			MembersApi.findAll({ ...dto, cursor: pageParam || undefined }),
-		queryKey: ['words', 'all', dto],
+		queryKey: ['members', 'all', dto],
 		getNextPageParam: (lastPage) => lastPage.nextCursor,
 		initialPageParam: ''
 	})

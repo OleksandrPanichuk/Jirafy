@@ -2,8 +2,9 @@
 import {
 	QueryClient,
 	QueryClientProvider,
-	isServer,
+	isServer
 } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PropsWithChildren } from 'react'
 
 function makeQueryClient() {
@@ -11,9 +12,9 @@ function makeQueryClient() {
 		defaultOptions: {
 			queries: {
 				refetchOnWindowFocus: false,
-				staleTime: 60 * 1000,
-			},
-		},
+				staleTime: 60 * 1000
+			}
+		}
 	})
 }
 
@@ -32,6 +33,7 @@ export const QueryProvider = ({ children }: PropsWithChildren) => {
 	const queryClient = getQueryClient()
 	return (
 		<QueryClientProvider client={queryClient}>
+			<ReactQueryDevtools />
 			{children}
 		</QueryClientProvider>
 	)

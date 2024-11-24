@@ -13,6 +13,7 @@ import {
 } from '@/components/ui'
 import { CoverPicker, useGetRandomImageQuery } from '@/features/image-pickers'
 import {
+	IdentifierInput,
 	NetworkSelect,
 	ProjectLeadSelect,
 	useCreateProjectModalStore,
@@ -30,6 +31,7 @@ import {
 	Tooltip
 } from '@nextui-org/react'
 import { IconInfoCircle, IconX } from '@tabler/icons-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -46,6 +48,7 @@ export const CreateProjectModal = () => {
 	const currentWorkspace = useCurrentWorkspace()
 
 	const { isOpen, close } = useCreateProjectModalStore()
+	const [isNameInputFocused, setIsNameInputFocused] = useState(false)
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(createProjectSchema),
@@ -161,10 +164,18 @@ export const CreateProjectModal = () => {
 							<FormField
 								control={control}
 								name="name"
-								render={({ field }) => (
+								render={({ field: { onBlur, ...rest } }) => (
 									<FormItem className="sm:flex-[4] md:flex-[5]">
 										<FormControl>
-											<Input placeholder={'Project'} {...field} />
+											<Input
+												placeholder={'Project'}
+												onFocus={() => setIsNameInputFocused(true)}
+												onBlur={() => {
+													setIsNameInputFocused(false)
+													onBlur()
+												}}
+												{...rest}
+											/>
 										</FormControl>
 										<FormError />
 									</FormItem>
@@ -177,9 +188,9 @@ export const CreateProjectModal = () => {
 									<FormItem className=" sm:flex-[2]">
 										<div className="relative">
 											<FormControl>
-												<Input
-													placeholder={'Project ID'}
-													className="pr-6"
+												<IdentifierInput
+													inferProjectName={isNameInputFocused}
+													control={control}
 													{...field}
 												/>
 											</FormControl>

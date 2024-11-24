@@ -1,7 +1,7 @@
 'use client'
 
-import { WorkspaceSidebar } from '@/features/sidebars'
 import { Routes } from '@/constants'
+import { WorkspaceSidebar } from '@/features/sidebars'
 import { useWorkspacesStore } from '@/features/workspaces'
 import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
