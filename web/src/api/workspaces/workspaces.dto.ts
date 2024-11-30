@@ -23,3 +23,6 @@ export const selectWorkspaceSchema = z.object({
 })
 
 export type SelectWorkspaceInput = z.infer<typeof selectWorkspaceSchema>
+
+export const deleteWorkspaceSchema = selectWorkspaceSchema
+export type DeleteWorkspaceInput = z.infer<typeof deleteWorkspaceSchema>

@@ -1,7 +1,7 @@
 'use client'
 
 import { Routes } from '@/constants'
-import { WorkspaceSidebar } from '@/features/sidebars'
+import { WorkspaceSidebarDesktop } from '@/features/sidebars'
 import { useWorkspacesStore } from '@/features/workspaces'
 import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
@@ -15,9 +15,9 @@ export const WorkspaceLayout = ({ children }: PropsWithChildren) => {
 
 	return (
 		<div className="h-screen w-full overflow-y-hidden">
-			<div className="flex h-full w-full overflow-y-hidden">
-				<WorkspaceSidebar />
-				<main>{children}</main>
+			<div className="flex h-full w-full overflow-y-hidden bg-tw-bg-100">
+				<WorkspaceSidebarDesktop />
+				<>{children}</>
 			</div>
 		</div>
 	)

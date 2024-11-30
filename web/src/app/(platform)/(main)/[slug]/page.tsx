@@ -16,7 +16,6 @@ interface IParams {
 
 const Page = () => {
 	const params = useParams<IParams>()
-	const { isOpen, open, setIsOpen, close } = useDisclosure()
 
 	const getWorkspace = useWorkspacesStore((s) => s.getWorkspaceBySlug)
 	const currentWorkspace = useCurrentWorkspace()
@@ -34,20 +33,7 @@ const Page = () => {
 
 	return (
 		<div>
-			<Button
-				className="size-8"
-				onPress={open}
-				isIconOnly
-				color="default"
-				variant="flat"
-			>
-				<IconMenu2 />
-			</Button>
-			<Drawer className='max-w-[280px]' isOpen={isOpen} onClose={close} onOpenChange={setIsOpen}>
-				<DrawerContent>
-					<WorkspaceSidebar alwaysOpen />
-				</DrawerContent>
-			</Drawer>
+			
 		</div>
 	)
 }

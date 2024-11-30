@@ -1,6 +1,8 @@
+import { CloudinaryService } from '@app/cloudinary';
 import { PrismaService } from '@app/prisma';
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -9,7 +11,10 @@ import { CreateWorkspaceInput, SelectWorkspaceInput } from './dto';
 
 @Injectable()
 export class WorkspacesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly storage: CloudinaryService,
+  ) {}
 
   public async findAll(userId: string) {
     return await this.prisma.workspace.findMany({
@@ -28,8 +33,6 @@ export class WorkspacesService {
           select: {
             id: true,
             role: true,
-            isLead: true,
-            defaultAssignee: true,
             isWorkspaceSelected: true,
           },
         },
@@ -57,13 +60,18 @@ export class WorkspacesService {
       },
     });
 
-    await this.prisma.member.create({
+    const member = await this.prisma.member.create({
       data: {
         userId,
         workspaceId: workspace.id,
         role: MemberRole.OWNER,
         isWorkspaceSelected: true,
         type: MemberType.WORKSPACE,
+      },
+      select: {
+        id: true,
+        role: true,
+        isWorkspaceSelected: true,
       },
     });
 
@@ -80,7 +88,7 @@ export class WorkspacesService {
       },
     });
 
-    return workspace;
+    return { ...workspace, members: [member] };
   }
 
   public async selectWorkspace(dto: SelectWorkspaceInput, userId: string) {
@@ -132,5 +140,178 @@ export class WorkspacesService {
     });
 
     return { success: true };
+  }
+
+  public async delete(workspaceId: string, userId: string) {
+    const workspace = await this.prisma.workspace.findUnique({
+      where: {
+        id: workspaceId,
+      },
+      include: {
+        members: {
+          where: {
+            userId,
+          },
+        },
+      },
+    });
+
+    if (!workspace || !workspace.members.length) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    if (
+      workspace.members[0].role !== MemberRole.OWNER &&
+      workspace.members[0].role !== MemberRole.ADMIN
+    ) {
+      throw new ForbiddenException(
+        'You are not allowed to delete this workspace',
+      );
+    }
+
+    const projects = await this.prisma.project.findMany({
+      where: {
+        workspaceId,
+      },
+    });
+
+    const documents = await this.prisma.document.findMany({
+      where: {
+        project: {
+          workspaceId,
+        },
+      },
+    });
+
+    await this.prisma.$transaction([
+      this.prisma.project.deleteMany({
+        where: {
+          workspaceId,
+        },
+      }),
+      this.prisma.document.deleteMany({
+        where: {
+          project: {
+            workspaceId,
+          },
+        },
+      }),
+      this.prisma.workspace.delete({
+        where: {
+          id: workspaceId,
+        },
+      }),
+      this.prisma.member.deleteMany({
+        where: {
+          workspaceId,
+          type: MemberType.WORKSPACE,
+        },
+      }),
+      this.prisma.invites.deleteMany({
+        where: {
+          workspaceId,
+        },
+      }),
+      this.prisma.member.deleteMany({
+        where: {
+          project: {
+            workspaceId,
+          },
+        },
+      }),
+      this.prisma.conversation.deleteMany({
+        where: {
+          workspaceId,
+        },
+      }),
+      this.prisma.channel.deleteMany({
+        where: {
+          workspaceId,
+        },
+      }),
+      this.prisma.message.deleteMany({
+        where: {
+          OR: [
+            {
+              conversation: {
+                workspaceId,
+              },
+            },
+            {
+              channel: {
+                workspaceId,
+              },
+            },
+          ],
+        },
+      }),
+      this.prisma.activity.deleteMany({
+        where: {
+          OR: [
+            {
+              workspaceId,
+            },
+            {
+              project: {
+                workspaceId,
+              },
+            },
+          ],
+        },
+      }),
+      this.prisma.comment.deleteMany({
+        where: {
+          issue: {
+            project: {
+              workspaceId,
+            },
+          },
+        },
+      }),
+      this.prisma.mention.deleteMany({
+        where: {
+          document: {
+            project: {
+              workspaceId,
+            },
+          },
+        },
+      }),
+      this.prisma.issue.deleteMany({
+        where: {
+          project: {
+            workspaceId,
+          },
+        },
+      }),
+      this.prisma.favorites.deleteMany({
+        where: {
+          project: {
+            workspaceId,
+          },
+        },
+      }),
+      this.prisma.cycle.deleteMany({
+        where: {
+          project: {
+            workspaceId,
+          },
+        },
+      }),
+    ]);
+
+    await Promise.all([
+      projects.flatMap(
+        (project) =>
+          project.cover.key && this.storage.delete(project.cover.key),
+      ),
+      documents.flatMap(
+        (document) =>
+          document.coverImage.key &&
+          this.storage.delete(document.coverImage.key),
+      ),
+    ]);
+
+    return workspace;
   }
 }

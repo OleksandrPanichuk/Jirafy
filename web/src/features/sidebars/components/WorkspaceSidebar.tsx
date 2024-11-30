@@ -1,6 +1,7 @@
 'use client'
 
-import { Routes } from '@/constants'
+import { Drawer, DrawerContent } from '@/components/ui'
+import { breakpoints, Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
 import {
 	SidebarFavorites,
@@ -13,7 +14,7 @@ import {
 	WorkspaceSidebarProvider,
 	WorkspaceSwitcher
 } from '@/features/sidebars'
-import { useCurrentWorkspaceSlug } from '@/hooks'
+import { useCurrentWorkspaceSlug, useDisclosure } from '@/hooks'
 import { cn } from '@/lib'
 import { Button, Tooltip } from '@nextui-org/react'
 import {
@@ -23,26 +24,68 @@ import {
 	IconHeart,
 	IconHome,
 	IconInbox,
+	IconMenu2,
 	IconMessage,
 	IconStack2,
 	IconUserBolt
 } from '@tabler/icons-react'
+import { useMedia } from 'react-use'
 
 interface IWorkspaceSidebarProps {
 	alwaysOpen?: boolean
+	className?: string
 }
 
-export const WorkspaceSidebar = ({ alwaysOpen }: IWorkspaceSidebarProps) => {
+const WorkspaceSidebar = ({
+	alwaysOpen,
+	className
+}: IWorkspaceSidebarProps) => {
 	return (
-		<WorkspaceSidebarProvider
-			alwaysOpen={alwaysOpen}
-		>
-			<SidebarContent alwaysOpen={alwaysOpen} />
+		<WorkspaceSidebarProvider alwaysOpen={alwaysOpen}>
+			<SidebarContent alwaysOpen={alwaysOpen} className={className} />
 		</WorkspaceSidebarProvider>
 	)
 }
 
-function SidebarContent({ alwaysOpen }: IWorkspaceSidebarProps) {
+export const WorkspaceSidebarDesktop = () => {
+	const isMobile = useMedia(breakpoints['max-md'], false)
+	if (isMobile) return null
+
+	return <WorkspaceSidebar className={'hidden md:block'} />
+}
+
+export const WorkspaceSidebarMobile = () => {
+	const { isOpen, open, setIsOpen, close } = useDisclosure()
+	const isMobile = useMedia(breakpoints['max-md'], true)
+
+	if (!isMobile) return null
+
+	return (
+		<WorkspaceSidebarProvider>
+			<Button
+				className="size-8 md:hidden"
+				onPress={open}
+				isIconOnly
+				color="default"
+				variant="flat"
+			>
+				<IconMenu2 />
+			</Button>
+			<Drawer
+				className="max-w-[280px]"
+				isOpen={isOpen}
+				onClose={close}
+				onOpenChange={setIsOpen}
+			>
+				<DrawerContent>
+					<WorkspaceSidebar alwaysOpen />
+				</DrawerContent>
+			</Drawer>
+		</WorkspaceSidebarProvider>
+	)
+}
+
+function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 	const { isCollapsed, toggle } = useWorkspaceSidebarStore()
 
 	const workspaceSlug = useCurrentWorkspaceSlug()
@@ -52,7 +95,8 @@ function SidebarContent({ alwaysOpen }: IWorkspaceSidebarProps) {
 		<aside
 			className={cn(
 				'border-tw-border-200 border-r bg-tw-bg-100 pt-4 h-full',
-				!isCollapsed && 'min-w-[240px]'
+				!isCollapsed && 'min-w-[240px]',
+				className
 			)}
 		>
 			<div className="flex flex-col h-full">

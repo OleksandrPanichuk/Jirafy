@@ -3,9 +3,11 @@ import { AuthenticatedGuard } from '@/shared/guards';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -35,5 +37,11 @@ export class WorkspacesController {
     @CurrentUser('id') userId: string,
   ) {
     return this.workspacesService.selectWorkspace(dto, userId);
+  }
+
+  @Delete(":id")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  deleteWorkspace(@Param('id') workspaceId:string,@CurrentUser('id') userId: string) {
+    return this.workspacesService.delete(workspaceId,userId);
   }
 }

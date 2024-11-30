@@ -16,8 +16,6 @@ export type TypeWorkspaceWithMembers = TypeWorkspace & {
 	members: {
 		id: string
 		role: MemberRole
-		isLead: boolean
-		defaultAssignee: boolean
 		isWorkspaceSelected: boolean
 	}[]
 }

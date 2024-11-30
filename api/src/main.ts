@@ -26,6 +26,7 @@ async function bootstrap() {
   app.use(CookieParser());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
+
   app.use(session(getSessionConfig(config)));
 
   app.use(passport.initialize());

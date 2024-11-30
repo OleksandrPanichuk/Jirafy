@@ -2,15 +2,15 @@
 
 import { useSelectWorkspaceMutation } from '@/features/workspaces'
 import { useSafeContext } from '@/hooks'
-import { MemberRole, TypeWorkspace, TypeWorkspaceWithMembers } from '@/types'
+import { TypeWorkspaceWithMembers } from '@/types'
 import { createContext, PropsWithChildren, useState } from 'react'
 import { createStore, StoreApi, useStore } from 'zustand'
 
 interface IWorkspacesStore {
 	workspaces: TypeWorkspaceWithMembers[]
 	setWorkspaces: (workspaces: TypeWorkspaceWithMembers[]) => void
-	addWorkspace: (workspace: TypeWorkspace) => void
-	removeWorkspace: (workspace: TypeWorkspaceWithMembers) => void
+	addWorkspace: (workspace: TypeWorkspaceWithMembers) => void
+	removeWorkspace: (id: string) => void
 	updateWorkspace: (
 		id: string,
 		workspace: Partial<Omit<TypeWorkspaceWithMembers, 'id'>>
@@ -50,22 +50,12 @@ export const WorkspacesProvider = ({
 								...w.members.map((m) => ({ ...m, isWorkspaceSelected: false }))
 							]
 						})),
-						{
-							...data,
-							members: [
-								{
-									defaultAssignee: true,
-									isLead: true,
-									isWorkspaceSelected: true,
-									role: MemberRole.OWNER
-								}
-							]
-						}
+						data
 					]
 				})),
-			removeWorkspace: (data) =>
+			removeWorkspace: (id) =>
 				set((state) => ({
-					workspaces: state.workspaces.filter((w) => w.id !== data.id)
+					workspaces: state.workspaces.filter((w) => w.id !== id)
 				})),
 			updateWorkspace: (id, data) =>
 				set((state) => ({

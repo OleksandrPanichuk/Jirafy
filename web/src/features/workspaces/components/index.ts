@@ -1,3 +1,6 @@
 export * from './CreateWorkspaceForm'
 export * from './SizeSelect'
 export * from './SlugInput'
+export * from './WorkspaceSettingsHeader'
+export * from './WorkspaceSettingsNavigation'
+export * from './DeleteWorkspaceAccordion'

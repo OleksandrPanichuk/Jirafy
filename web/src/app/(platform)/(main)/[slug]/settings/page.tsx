@@ -1,6 +1,11 @@
+import { DeleteWorkspaceAccordion } from '@/features/workspaces'
 
 const WorkspaceSettingsPage = () => {
-	return <div>WorkspaceSettingsPage</div>;
-};
+	return (
+		<div className={'h-[200vh]'}>
+			<DeleteWorkspaceAccordion />
+		</div>
+	)
+}
 
-export default WorkspaceSettingsPage;
+export default WorkspaceSettingsPage

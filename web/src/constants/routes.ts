@@ -27,6 +27,9 @@ export const Routes = {
 
 	WORKSPACE_BY_SLUG: (slug: string) => `/${slug}`,
 	WORKSPACE_SETTINGS: (slug: string) => `/${slug}/settings`,
+	WORKSPACE_EXPORTS: (slug: string) => `/${slug}/settings/exports`,
+	WORKSPACE_MEMBERS: (slug: string) => `/${slug}/settings/members`,
+	WORKSPACE_BILLING: (slug: string) => `/${slug}/settings/billing`,
 	WORKSPACE_PROJECTS: (slug: string) => `/${slug}/projects`,
 	WORKSPACE_VIEWS_ALL: (slug: string) => `/${slug}/workspace-views/all-issues`,
 	WORKSPACE_ANALYTICS: (slug: string) => `/${slug}/analytics`,
@@ -58,7 +61,8 @@ export const ApiRoutes = {
 	WORKSPACES: {
 		ROOT: '/workspaces',
 		ALL: '/workspaces/all',
-		SELECT: '/workspaces/select'
+		SELECT: '/workspaces/select',
+		BY_ID: (id: string) => `/workspaces/${id}`,
 	},
 	PROJECTS: {
 		ROOT: '/projects',

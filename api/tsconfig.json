@@ -20,36 +20,16 @@
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
     "paths": {
-      "@app/prisma": [
-        "libs/prisma/src"
-      ],
-      "@app/prisma/*": [
-        "libs/prisma/src/*"
-      ],
-      "@config/*": [
-        "config/*"
-      ],
-      "@config": [
-        "config"
-      ],
-      "@/*": [
-        "src/*"
-      ],
-      "@app/mailer": [
-        "libs/mailer/src"
-      ],
-      "@app/mailer/*": [
-        "libs/mailer/src/*"
-      ],
-      "@emails/*": [
-        "emails/*"
-      ],
-      "@app/cloudinary": [
-        "libs/cloudinary/src"
-      ],
-      "@app/cloudinary/*": [
-        "libs/cloudinary/src/*"
-      ]
+      "@app/prisma": ["libs/prisma/src"],
+      "@app/prisma/*": ["libs/prisma/src/*"],
+      "@config/*": ["config/*"],
+      "@config": ["config"],
+      "@/*": ["src/*"],
+      "@app/mailer": ["libs/mailer/src"],
+      "@app/mailer/*": ["libs/mailer/src/*"],
+      "@emails/*": ["emails/*"],
+      "@app/cloudinary": ["libs/cloudinary/src"],
+      "@app/cloudinary/*": ["libs/cloudinary/src/*"]
     }
   }
 }
