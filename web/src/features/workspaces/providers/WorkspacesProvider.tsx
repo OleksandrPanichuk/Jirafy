@@ -108,7 +108,3 @@ export const useWorkspacesStore = <T = IWorkspacesStore,>(
 	const context = useSafeContext(WorkspacesContext)
 	return useStore(context, selector)
 }
-
-export const useCurrentWorkspace = () => {
-	return useWorkspacesStore((s) => s.getCurrentWorkspace)()!
-}

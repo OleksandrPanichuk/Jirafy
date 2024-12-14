@@ -1,7 +1,7 @@
 'use client'
 
 import { Input } from '@/components/ui'
-import { useGetUnsplashImagesQuery } from '@/features/image-pickers'
+import { useGetUnsplashImagesQuery } from '@/features/images'
 import { useDebounce } from '@/hooks'
 import { Skeleton } from '@nextui-org/react'
 import { IconSearch } from '@tabler/icons-react'

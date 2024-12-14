@@ -8,7 +8,7 @@ import {
 	SidebarItem,
 	useWorkspaceSidebarStore
 } from '@/features/sidebars'
-import { useCurrentWorkspaceSlug } from '@/hooks'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { cn } from '@/lib'
 import type { TypeProject } from '@/types'
 import {

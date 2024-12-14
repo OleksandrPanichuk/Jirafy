@@ -1,6 +1,7 @@
 'use client'
 
 import {
+	Button,
 	Form,
 	FormControl,
 	FormField,
@@ -8,11 +9,11 @@ import {
 	FormLabel,
 	Input
 } from '@/components/ui'
-import { useDisclosure } from '@/hooks'
+import { useChildrenWithProps, useDisclosure } from '@/hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Modal, ModalContent } from '@nextui-org/react'
+import { Modal, ModalContent } from '@nextui-org/react'
 import { IconAlertTriangle } from '@tabler/icons-react'
-import { cloneElement, ReactElement, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { data } from './DeleteConfirmationModal.data'
@@ -81,9 +82,7 @@ export const DeleteConfirmationModal = ({
 		onOpenChange?.(isOpen)
 	}
 
-	const childrenWithHandler = cloneElement(children as ReactElement, {
-		onClick: open
-	})
+	const childrenWithHandler = useChildrenWithProps(children, { onClick: open })
 
 	return (
 		<>
@@ -158,10 +157,7 @@ export const DeleteConfirmationModal = ({
 									onPress={handleCancel}
 									type="button"
 									size="sm"
-									variant="bordered"
-									className={
-										' rounded text-xs font-medium py-1.5 px-4 bg-transparent border-tw-border-200 hover:bg-tw-border-200  border'
-									}
+									variant="ghost"
 								>
 									Cancel
 								</Button>
@@ -170,9 +166,7 @@ export const DeleteConfirmationModal = ({
 									disabled={isLoading || !isValid}
 									type="submit"
 									size="sm"
-									className={
-										'rounded text-xs font-medium py-1.5 px-4  focus:bg-red-600 focus:text-red-200 bg-red-500 hover:bg-red-600 text-white'
-									}
+									variant="danger"
 								>
 									Delete {type}
 								</Button>

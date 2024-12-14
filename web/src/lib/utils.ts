@@ -1,4 +1,4 @@
-import { APP_URL } from '@/constants/env'
+import { APP_DOMAIN, APP_URL } from '@/constants/env'
 import { ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -12,6 +12,10 @@ export function absoluteApiUrl(url: string = '') {
 
 export function absoluteUrl(url: string = '') {
 	return APP_URL + url
+}
+
+export function domainUrl(url: string = '') {
+	return APP_DOMAIN + url
 }
 
 export function mergeRefs<T = unknown>(...refs: React.Ref<T>[]) {

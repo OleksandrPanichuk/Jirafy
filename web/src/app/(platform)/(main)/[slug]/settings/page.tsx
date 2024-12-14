@@ -1,8 +1,12 @@
-import { DeleteWorkspaceAccordion } from '@/features/workspaces'
+import {
+	DeleteWorkspaceAccordion,
+	UpdateWorkspaceForm
+} from '@/features/workspaces'
 
 const WorkspaceSettingsPage = () => {
 	return (
-		<div className={'h-[200vh]'}>
+		<div>
+			<UpdateWorkspaceForm />
 			<DeleteWorkspaceAccordion />
 		</div>
 	)

@@ -3,7 +3,6 @@
 import { breakpoints, Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
 import { useWorkspaceSidebarStore } from '@/features/sidebars'
-import {} from '@/features/workspaces'
 import {
 	Avatar,
 	Button,

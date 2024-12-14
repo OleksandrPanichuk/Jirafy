@@ -5,6 +5,8 @@ export const OAUTH_DATA_COOKIE_NAME = 'oauth_data'
 export const IDENTITY_VERIFIED_COOKIE_NAME = 'identity_verified'
 
 
+export const IMAGE_MIME_TYPES = ['.jpg', '.webp', '.png', '.jpeg']
+
 export const breakpoints: Record<BreakpointsType, string> = {
 	lg: '(min-width: 1024px)',
 	'max-lg': '(max-width: 1023.98px)',

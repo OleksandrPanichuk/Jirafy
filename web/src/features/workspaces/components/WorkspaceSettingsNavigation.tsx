@@ -1,8 +1,10 @@
 'use client'
 
-import { useCurrentWorkspaceSlug } from '@/hooks'
+import {
+	getSettingsLinks,
+	useCurrentWorkspaceSlug
+} from '@/features/workspaces'
 import { useMemo } from 'react'
-import { getSettingsLinks } from '@/features/workspaces'
 import { cn } from '@/lib'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'

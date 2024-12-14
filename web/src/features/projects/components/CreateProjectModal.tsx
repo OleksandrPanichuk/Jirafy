@@ -3,6 +3,7 @@
 import { CreateProjectInput, createProjectSchema } from '@/api'
 import { EmojiPicker } from '@/components/common'
 import {
+	Button,
 	Form,
 	FormControl,
 	FormError,
@@ -11,7 +12,7 @@ import {
 	Input,
 	Textarea
 } from '@/components/ui'
-import { CoverPicker, useGetRandomImageQuery } from '@/features/image-pickers'
+import { CoverPicker, useGetRandomImageQuery } from '@/features/images'
 import {
 	IdentifierInput,
 	NetworkSelect,
@@ -23,13 +24,7 @@ import { useUploadFileMutation } from '@/features/storage'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { Network, TypeFile } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-	Button,
-	Divider,
-	Modal,
-	ModalContent,
-	Tooltip
-} from '@nextui-org/react'
+import { Divider, Modal, ModalContent, Tooltip } from '@nextui-org/react'
 import { IconInfoCircle, IconX } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -255,10 +250,15 @@ export const CreateProjectModal = () => {
 						</div>
 						<Divider />
 						<div className="flex justify-end gap-2">
-							<Button variant="faded" type="reset" onClick={onCancel}>
+							<Button variant="ghost" size="sm" type="reset" onClick={onCancel}>
 								Cancel
 							</Button>
-							<Button color="primary" isDisabled={!isValid} type="submit">
+							<Button
+								variant="primary"
+								size="sm"
+								isDisabled={!isValid}
+								type="submit"
+							>
 								Create project
 							</Button>
 						</div>

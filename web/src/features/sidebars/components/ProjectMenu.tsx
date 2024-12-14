@@ -7,7 +7,7 @@ import {
 	useRemoveFromFavoritesMutation
 } from '@/features/favorites/api'
 import { toast } from '@/features/notifications'
-import { useCurrentMember, useCurrentWorkspaceSlug } from '@/hooks'
+import { useCurrentMember } from '@/hooks'
 import { absoluteUrl } from '@/lib'
 import {
 	Button,
@@ -26,6 +26,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 
 interface IProjectMenuProps {
 	projectId: string
@@ -100,7 +101,7 @@ export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 						)
 					}
 				>
-					{favorite ? "Remove from favorites" : "Add to favorites"}
+					{favorite ? 'Remove from favorites' : 'Add to favorites'}
 				</DropdownItem>
 				<DropdownItem
 					variant="flat"

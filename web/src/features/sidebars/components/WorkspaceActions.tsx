@@ -1,6 +1,6 @@
 'use client'
 import { Routes } from '@/constants'
-import { useCurrentWorkspaceSlug } from '@/hooks'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import {
 	Button,
 	Dropdown,

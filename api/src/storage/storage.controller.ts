@@ -12,12 +12,15 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { StorageService } from './storage.service'
+import { StorageService } from './storage.service';
 
 @UseGuards(AuthenticatedGuard)
 @Controller('storage')
 export class StorageController {
-  constructor(private readonly cloudinary: CloudinaryService, private readonly storageService: StorageService) {}
+  constructor(
+    private readonly cloudinary: CloudinaryService,
+    private readonly storageService: StorageService,
+  ) {}
 
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')

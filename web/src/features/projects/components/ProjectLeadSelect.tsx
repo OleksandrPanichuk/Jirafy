@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/features/auth'
 import { useInfiniteMembersQuery } from '@/features/members'
-import { useCurrentWorkspaceSlug, useDebounce } from '@/hooks'
+import { useDebounce } from '@/hooks'
 import { TypeMemberWithUser } from '@/types'
 import {
 	Avatar,
@@ -19,6 +19,7 @@ import {
 import { IconSearch } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 
 const DEFAULT_TAKE = 20
 

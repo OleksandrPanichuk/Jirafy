@@ -301,6 +301,7 @@ export class WorkspacesService {
     ]);
 
     await Promise.all([
+      () =>workspace.logo?.key && this.storage.delete(workspace.logo.key),
       projects.flatMap(
         (project) =>
           project.cover.key && this.storage.delete(project.cover.key),

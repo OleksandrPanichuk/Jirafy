@@ -90,6 +90,7 @@ export const WorkspaceSwitcher = () => {
 					variant="light"
 					isIconOnly={isCollapsed}
 				>
+					{/*TODO: show workspace logo if provided*/}
 					<div
 						className={cn(
 							'size-6 rounded-md flex items-center justify-center  font-bold'

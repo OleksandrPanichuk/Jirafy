@@ -4,9 +4,10 @@ import { Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
 import { toast } from '@/features/notifications'
 import { useProjectsStore } from '@/features/projects'
-import { useCurrentWorkspaceSlug, useMutation } from '@/hooks'
+import { useMutation } from '@/hooks'
 import { MemberRole } from '@/types'
 import { useRouter } from 'next/navigation'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 
 export const useCreateProjectMutation = () => {
 	const router = useRouter()

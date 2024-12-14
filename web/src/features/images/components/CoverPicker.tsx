@@ -1,11 +1,11 @@
 'use client'
+import { ImagePicker, UnsplashPicker } from '@/features/images'
 import { useDisclosure } from '@/hooks'
 import { TypeFile } from '@/types'
 import { Button, Modal, ModalContent, Tab, Tabs } from '@nextui-org/react'
 import { IconX } from '@tabler/icons-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { FilePicker, UnsplashPicker } from '@/features/image-pickers'
 
 interface ICoverPickerProps {
 	value?: string | File
@@ -100,7 +100,7 @@ export const CoverPicker = ({
 							<UnsplashPicker onChange={handleUnsplashChange} />
 						</Tab>
 						<Tab title="Upload" key="upload">
-							<FilePicker
+							<ImagePicker
 								onFileChange={handleFileChange}
 								onCancel={close}
 								value={value}

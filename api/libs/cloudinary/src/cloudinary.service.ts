@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { File as UploadedFile } from '@prisma/client';
-import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
+import { UploadApiResponse, v2 as cloudinary } from 'cloudinary';
 
 @Injectable()
 export class CloudinaryService {
@@ -34,11 +34,11 @@ export class CloudinaryService {
       );
       return { key: uploadedFile.public_id, url: uploadedFile.secure_url };
     } catch (err) {
-      throw new InternalServerErrorException("Failed to upload file");
+      throw new InternalServerErrorException('Failed to upload file');
     }
   }
 
-	public async delete(key: string) {
-		await cloudinary.uploader.destroy(key)
-	}
+  public async delete(key: string) {
+    await cloudinary.uploader.destroy(`${this.config.get('CLOUDINARY_FOLDER')}/${key}`);
+  }
 }

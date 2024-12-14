@@ -1,12 +1,13 @@
 'use client'
 
+import { Button } from '@/components/ui'
+import { IMAGE_MIME_TYPES } from '@/constants'
 import { cn } from '@/lib'
 import { TypeFile } from '@/types'
-import { Button } from '@nextui-org/react'
 import { useRef, useState } from 'react'
 import Dropzone, { DropzoneRef } from 'react-dropzone'
 
-interface IFilePickerProps {
+interface IImagePickerProps {
 	onFileChange?: (file: File) => void
 	onCancel?: () => void
 	value?: TypeFile | File | null
@@ -14,15 +15,13 @@ interface IFilePickerProps {
 	name?: string
 }
 
-const ImageMimeTypes = ['.jpg', '.webp', '.png', '.jpeg']
-
-export const FilePicker = ({
+export const ImagePicker = ({
 	onFileChange,
 	onCancel,
 	value,
 	name,
 	disabled
-}: IFilePickerProps) => {
+}: IImagePickerProps) => {
 	const [url, setUrl] = useState<string | null>(
 		value instanceof File ? URL.createObjectURL(value) : value?.url || null
 	)
@@ -68,7 +67,7 @@ export const FilePicker = ({
 					multiple={false}
 					maxSize={10 * 1024 * 1024}
 					accept={{
-						'image/*': ImageMimeTypes
+						'image/*': IMAGE_MIME_TYPES
 					}}
 					ref={dropzoneRef}
 					onDrop={handleDrop}
@@ -101,16 +100,19 @@ export const FilePicker = ({
 					)}
 				</Dropzone>
 			</div>
-			<p>File formats supported- .jpeg, .jpg, .png, .webp</p>
+			<p className="text-tw-text-350">
+				File formats supported- .jpeg, .jpg, .png, .webp
+			</p>
 			<div className="flex gap-2">
-				<Button onClick={onCancel} className="flex-1" variant="faded">
+				<Button onClick={onCancel} className="flex-1" size="sm" variant="ghost">
 					Cancel
 				</Button>
 				<Button
 					onClick={handleSave}
 					isDisabled={disabled || !file}
 					className="flex-[5]"
-					color="primary"
+					size="sm"
+					variant="primary"
 				>
 					Save
 				</Button>

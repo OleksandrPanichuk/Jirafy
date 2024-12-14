@@ -3,7 +3,7 @@
 import { Routes } from '@/constants'
 import { useFavoritesStore } from '@/features/favorites'
 import { useWorkspaceSidebarStore } from '@/features/sidebars'
-import { useCurrentWorkspaceSlug } from '@/hooks'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { FavoritesItemMenu } from './FavoritesItemMenu'
 import { SidebarGroup } from './SidebarGroup'
 import { SidebarItem } from './SidebarItem'

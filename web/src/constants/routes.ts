@@ -72,6 +72,7 @@ export const ApiRoutes = {
 	STORAGE: {
 		ROOT: '/storage',
 		UPLOAD: '/storage/upload',
+		UPLOAD_BY_DATA_URL: '/storage/upload/data-url',
 		DELETE: (key: string) => `/storage/delete/${key}`
 	},
 	MEMBERS: {

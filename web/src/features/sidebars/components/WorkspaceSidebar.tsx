@@ -14,7 +14,7 @@ import {
 	WorkspaceSidebarProvider,
 	WorkspaceSwitcher
 } from '@/features/sidebars'
-import { useCurrentWorkspaceSlug, useDisclosure } from '@/hooks'
+import { useDisclosure } from '@/hooks'
 import { cn } from '@/lib'
 import { Button, Tooltip } from '@nextui-org/react'
 import {
@@ -30,6 +30,7 @@ import {
 	IconUserBolt
 } from '@tabler/icons-react'
 import { useMedia } from 'react-use'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 
 interface IWorkspaceSidebarProps {
 	alwaysOpen?: boolean
