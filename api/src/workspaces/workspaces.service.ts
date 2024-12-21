@@ -6,8 +6,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { MemberRole, MemberType } from '@prisma/client';
-import { CreateWorkspaceInput, SelectWorkspaceInput } from './dto';
+import { ActivityType, MemberRole, MemberType, User } from '@prisma/client';
+import {
+  CreateWorkspaceInput,
+  SelectWorkspaceInput,
+  UpdateWorkspaceInput,
+} from './dto';
 
 @Injectable()
 export class WorkspacesService {
@@ -142,6 +146,58 @@ export class WorkspacesService {
     return { success: true };
   }
 
+  public async update(
+    workspaceId: string,
+    dto: UpdateWorkspaceInput,
+    user: User,
+  ) {
+    const workspace = await this.prisma.workspace.findUnique({
+      where: {
+        id: workspaceId,
+      },
+      include: {
+        members: {
+          where: {
+            userId: user.id,
+          },
+        },
+      },
+    });
+
+    if (!workspace || !workspace.members.length) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    const member = workspace.members[0];
+
+    if (member.role !== MemberRole.OWNER && member.role !== MemberRole.ADMIN) {
+      throw new ForbiddenException(
+        'You are not allowed to update this workspace',
+      );
+    }
+
+    await this.prisma.activity.create({
+      data: {
+        type: ActivityType.UPDATE_WORKSPACE,
+        userId: user.id,
+        data: `**${user.username}** updated workspace.`,
+      },
+    });
+
+    const updated = await this.prisma.workspace.update({
+      where: {
+        id: workspaceId,
+      },
+      data: dto,
+    });
+
+    if (dto.logo && workspace.logo?.key) {
+      await this.storage.delete(workspace.logo.key);
+    }
+
+    return updated;
+  }
+
   public async delete(workspaceId: string, userId: string) {
     const workspace = await this.prisma.workspace.findUnique({
       where: {
@@ -160,10 +216,9 @@ export class WorkspacesService {
       throw new NotFoundException('Workspace not found');
     }
 
-    if (
-      workspace.members[0].role !== MemberRole.OWNER &&
-      workspace.members[0].role !== MemberRole.ADMIN
-    ) {
+    const member = workspace.members[0];
+
+    if (member.role !== MemberRole.OWNER && member.role !== MemberRole.ADMIN) {
       throw new ForbiddenException(
         'You are not allowed to delete this workspace',
       );
@@ -301,7 +356,7 @@ export class WorkspacesService {
     ]);
 
     await Promise.all([
-      () =>workspace.logo?.key && this.storage.delete(workspace.logo.key),
+      () => workspace.logo?.key && this.storage.delete(workspace.logo.key),
       projects.flatMap(
         (project) =>
           project.cover.key && this.storage.delete(project.cover.key),

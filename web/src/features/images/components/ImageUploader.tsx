@@ -22,8 +22,8 @@ import { PropsWithChildren, useRef, useState } from 'react'
 import Dropzone, { DropzoneRef } from 'react-dropzone'
 
 interface IImageUploaderProps extends PropsWithChildren {
-	onUpload?: (image: TypeFile) => void
-	onRemove?: () => void
+	onUpload?: (image: TypeFile) => void | Promise<void>
+	onRemove?: () => void | Promise<void>
 	value?: TypeFile | null
 }
 
@@ -35,18 +35,15 @@ export const ImageUploader = ({
 }: IImageUploaderProps) => {
 	const { isOpen, setIsOpen, open, close } = useDisclosure()
 
+	const [isPending, setIsPending] = useState<boolean>(false)
 	const [cropped, setCropped] = useState<File | null>(null)
 	const [file, setFile] = useState<File | null>(null)
 
 	const dropzoneRef = useRef<DropzoneRef | null>(null)
 
-	const {
-		mutate: uploadFile,
-		data,
-		isPending: isUploading
-	} = useUploadFileMutation()
+	const { mutateAsync: uploadFile, data } = useUploadFileMutation()
+	const { mutateAsync: deleteFile } = useDeleteFileMutation()
 
-	const { mutate: deleteFile, isPending: isDeleting } = useDeleteFileMutation()
 	const [ConfirmationModal, confirm] = useConfirm()
 
 	const handleDrop = (acceptedFiles: File[]) => {
@@ -75,17 +72,20 @@ export const ImageUploader = ({
 		setCropped(file)
 	}
 
-	const handleUpload = () => {
+	const handleUpload = async () => {
 		if (!cropped) {
 			return
 		}
 
-		uploadFile(cropped, {
-			onSuccess: ({ data }) => {
-				onUpload?.(data)
-				handleClose()
-			}
-		})
+		try {
+			setIsPending(true)
+			const { data } = await uploadFile(cropped)
+
+			await onUpload?.(data)
+		} finally {
+			setIsPending(false)
+			handleClose()
+		}
 	}
 
 	const handleRemove = async () => {
@@ -95,12 +95,15 @@ export const ImageUploader = ({
 			return
 		}
 
-		deleteFile(value.key.split('/')[1], {
-			onSuccess: () => {
-				onRemove?.()
-				handleClose()
-			}
-		})
+		try {
+			setIsPending(true)
+			await deleteFile(value.key.split('/')[1])
+
+			await onRemove?.()
+		} finally {
+			setIsPending(false)
+			handleClose()
+		}
 	}
 
 	const handleOpenChange = (isOpen: boolean) => {
@@ -116,8 +119,6 @@ export const ImageUploader = ({
 			open()
 		}
 	})
-
-	const isPending = isUploading || isDeleting
 
 	return (
 		<>

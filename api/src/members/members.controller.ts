@@ -10,11 +10,11 @@ export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
   @Get('/by-workspace-slug/:slug')
-  findAll(
+  findAllByWorkspaceId(
     @Param('slug') slug: string,
     @Query() query: FindAllMembersQuery,
     @CurrentUser('id') userId: string,
   ) {
-    return this.membersService.findAll({ slug, ...query }, userId);
+    return this.membersService.findAll(query, slug, userId);
   }
 }

@@ -8,10 +8,10 @@ import {
 	FieldPath,
 	FieldValues,
 	FormProvider,
-	useFormContext,
+	useFormContext
 } from 'react-hook-form'
 
-import { ILabelProps, Label, LabelInputContainer } from '@/components/ui'
+import { FieldWrapper, ILabelProps, Label } from '@/components/ui'
 import { cn } from '@/lib'
 import { IconAlertTriangle } from '@tabler/icons-react'
 
@@ -60,7 +60,7 @@ const useFormField = () => {
 		formItemId: `${id}-form-item`,
 		formDescriptionId: `${id}-form-item-description`,
 		formMessageId: `${id}-form-item-message`,
-		...fieldState,
+		...fieldState
 	}
 }
 
@@ -80,27 +80,26 @@ const FormItem = React.forwardRef<
 
 	return (
 		<FormItemContext.Provider value={{ id }}>
-			<LabelInputContainer ref={ref} {...props} />
+			<FieldWrapper ref={ref} {...props} />
 		</FormItemContext.Provider>
 	)
 })
 FormItem.displayName = 'FormItem'
 
-const FormLabel = React.forwardRef<
-	React.ElementRef<'label'>,
-	ILabelProps
->(({ className, ...props }, ref) => {
-	const { error, formItemId } = useFormField()
+const FormLabel = React.forwardRef<React.ElementRef<'label'>, ILabelProps>(
+	({ className, ...props }, ref) => {
+		const { error, formItemId } = useFormField()
 
-	return (
-		<Label
-			ref={ref}
-			className={cn(error && 'text-destructive', className)}
-			htmlFor={formItemId}
-			{...props}
-		/>
-	)
-})
+		return (
+			<Label
+				ref={ref}
+				className={cn(error && 'text-destructive', className)}
+				htmlFor={formItemId}
+				{...props}
+			/>
+		)
+	}
+)
 FormLabel.displayName = 'FormLabel'
 
 const FormControl = React.forwardRef<
@@ -160,9 +159,9 @@ const FormError = React.forwardRef<
 			{...props}
 			ref={ref}
 		>
-			<div className=' flex gap-2 items-center'>
+			<div className=" flex gap-2 items-center">
 				<IconAlertTriangle size={20} />
-				<span className='font-medium text-sm'>{String(error.message)}</span>
+				<span className="font-medium text-sm">{String(error.message)}</span>
 			</div>
 		</div>
 	)
@@ -203,5 +202,5 @@ export {
 	FormItem,
 	FormLabel,
 	FormMessage,
-	useFormField,
+	useFormField
 }

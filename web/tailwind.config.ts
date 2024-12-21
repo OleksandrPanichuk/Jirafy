@@ -8,11 +8,11 @@ const config: Config = {
 		'./src/**/*.{js,ts,jsx,tsx,mdx}',
 		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
 	],
-	darkMode: 'class',		
+	darkMode: 'class',
 	theme: {
 		extend: {
 			screens: {
-       "xs":"440px",
+				xs: '440px'
 			},
 			colors: {
 				'tw-dark': 'var(--dark)',
@@ -65,12 +65,15 @@ const config: Config = {
 							DEFAULT: '#3f76ff',
 							foreground: '#ffffff'
 						},
-						default: {
-							DEFAULT: '#191919'
-						},
-						focus: {
-							DEFAULT: '#396ae6'
+						content1: {
+							DEFAULT: 'rgb(25, 25, 25)'
 						}
+						// default: {
+						// 	DEFAULT: '#191919'
+						// }
+						// focus: {
+						// 	DEFAULT: '#396ae6'
+						// }
 					}
 				}
 			}

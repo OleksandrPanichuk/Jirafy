@@ -57,8 +57,9 @@ export const ImagePicker = ({
 			<div className="relative">
 				<Button
 					size="sm"
-					className="absolute z-10 border-tw-border-400 min-w-0 h-6 border right-0 top-0 translate-y-[-50%]"
+					className="absolute z-10 bg-tw-bg-100 border-tw-border-400 min-w-0 h-6 border right-0 top-0 translate-y-[-50%]"
 					onClick={handleEdit}
+					variant={'ghost'}
 				>
 					Edit
 				</Button>

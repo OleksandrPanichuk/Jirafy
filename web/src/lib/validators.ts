@@ -8,11 +8,16 @@ export const zRequired = (message: string = FormErrors.required.any) => {
 
 export const zMongoId = ({
 	message_invalid = 'Invalid id',
-	message_required = FormErrors.required.any,
+	message_required = FormErrors.required.any
 }: { message_invalid?: string; message_required?: string } = {}) => {
 	return z
 		.string({ required_error: message_required })
 		.refine(isMongoId, { message: message_invalid })
 }
 
-
+export const zUploadedFile = () => {
+	return z.object({
+		url: z.string().url(),
+		key: z.string().optional()
+	})
+}

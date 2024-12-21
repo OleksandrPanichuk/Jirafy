@@ -24,7 +24,7 @@ const Label = forwardRef<ElementRef<'label'>, ILabelProps>(
 )
 Label.displayName = 'Label'
 
-const LabelInputContainer = forwardRef<
+const FieldWrapper = forwardRef<
 	ElementRef<'div'>,
 	ComponentPropsWithoutRef<'div'>
 >(({ children, className, ...props }, ref) => {
@@ -39,6 +39,6 @@ const LabelInputContainer = forwardRef<
 	)
 })
 
-LabelInputContainer.displayName = 'LabelInputContainer'
+FieldWrapper.displayName = 'FieldWrapper'
 
-export { Label, LabelInputContainer }
+export { Label, FieldWrapper }

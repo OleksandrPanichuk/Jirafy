@@ -1,9 +1,10 @@
 import { zMongoId, zRequired } from '@/lib'
-import { TypeMemberWithUser } from '@/types'
+import { MemberType, TypeMemberWithUser } from '@/types'
 import { z } from 'zod'
 
 export const findAllMembersSchema = z.object({
-	slug: zRequired(),
+	identifier: zMongoId().or(zRequired()),
+	type: z.nativeEnum(MemberType),
 	searchValue: z.string().optional(),
 	take: z.number().positive().optional(),
 	cursor: zMongoId().nullish()

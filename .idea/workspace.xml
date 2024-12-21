@@ -6,46 +6,31 @@
   <component name="ChangeListManager">
     <list default="true" id="1a363602-2642-4ffb-ac94-9c72f6370b36" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/libs/cloudinary/src/cloudinary.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/libs/cloudinary/src/cloudinary.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/storage/storage.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/storage/storage.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/api/prisma/schema.prisma" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/members/members.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/members/members.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/workspaces/dto/create-workspace.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/workspaces/dto/create-workspace.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/workspaces/dto/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/workspaces/dto/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/workspaces/workspaces.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/workspaces/workspaces.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/workspaces/workspaces.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/workspaces/workspaces.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/bun.lockb" beforeDir="false" afterPath="$PROJECT_DIR$/web/bun.lockb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/next.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/api/storage/storage.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/api/storage/storage.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/(main)/[slug]/settings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/(platform)/(main)/[slug]/settings/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/components/common/DeleteConfirmationModal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/common/DeleteConfirmationModal/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/components/common/SearchModal.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/components/common/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/common/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/components/ui/Drawer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/Drawer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/components/ui/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/constants/data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/constants/data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/api/members/members.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/api/members/members.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/api/workspaces/workspaces.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/api/workspaces/workspaces.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/api/workspaces/workspaces.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/api/workspaces/workspaces.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/Form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/Form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/Label.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/Label.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/constants/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/constants/routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/image-pickers/api/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/image-pickers/api/useGetRandomImageQuery.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/image-pickers/api/useGetUnsplashImagesQuery.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/image-pickers/components/CoverPicker.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/image-pickers/components/FilePicker.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/image-pickers/components/UnsplashPicker.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/image-pickers/components/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/image-pickers/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/projects/api/useCreateProjectMutation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/projects/api/useCreateProjectMutation.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/projects/components/CreateProjectModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/projects/components/CreateProjectModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/projects/components/ProjectLeadSelect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/projects/components/ProjectLeadSelect.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/sidebars/components/ProjectMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/sidebars/components/ProjectMenu.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/sidebars/components/SidebarFavorites.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/sidebars/components/SidebarFavorites.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/sidebars/components/SidebarProjectsItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/sidebars/components/SidebarProjectsItem.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/sidebars/components/WorkspaceActions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/sidebars/components/WorkspaceActions.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/sidebars/components/WorkspaceSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/sidebars/components/WorkspaceSidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/sidebars/components/WorkspaceSwitcher.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/sidebars/components/WorkspaceSwitcher.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/images/components/ImagePicker.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/images/components/ImagePicker.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/images/components/ImageUploader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/images/components/ImageUploader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/members/components/MembersTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/components/MembersTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/members/components/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/components/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/members/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/api/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/api/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/components/SizeSelect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/components/SizeSelect.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/components/UpdateWorkspaceForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/components/UpdateWorkspaceForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/components/WorkspaceSettingsNavigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/components/WorkspaceSettingsNavigation.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/components/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/components/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/providers/WorkspacesProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/providers/WorkspacesProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/hooks/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/hooks/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/hooks/useCurrentWorkspaceSlug.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/lib/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/lib/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/lib/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/lib/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/lib/validators.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/lib/validators.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/types/member.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/types/member.types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/tailwind.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,13 +40,16 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
   <component name="FormatOnSaveOptions">
-    <option name="myRunOnSave" value="true" />
+    <option name="myAllFileTypesSelected" value="true" />
+    <option name="mySelectedFileTypes">
+      <set />
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -133,6 +121,13 @@
       <workItem from="1734125688173" duration="2097000" />
       <workItem from="1734172027285" duration="127000" />
       <workItem from="1734172439491" duration="5805000" />
+      <workItem from="1734220446287" duration="156000" />
+      <workItem from="1734256549289" duration="19593000" />
+      <workItem from="1734366643370" duration="1601000" />
+      <workItem from="1734386891696" duration="84000" />
+      <workItem from="1734556876604" duration="595000" />
+      <workItem from="1734593264523" duration="604000" />
+      <workItem from="1734621367758" duration="1580000" />
     </task>
     <servers />
   </component>

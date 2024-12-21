@@ -1,5 +1,7 @@
+import { MemberType } from '@prisma/client'
 import { Transform } from 'class-transformer';
 import {
+  IsEnum,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
@@ -23,10 +25,12 @@ export class FindAllMembersQuery {
   @IsString()
   @IsOptional()
   readonly searchValue?: string;
-}
 
-export class FindAllMembersInput extends FindAllMembersQuery {
+
   @IsString()
   @IsNotEmpty()
-  readonly slug: string;
+  @IsEnum(MemberType)
+  readonly type: MemberType;  
 }
+
+

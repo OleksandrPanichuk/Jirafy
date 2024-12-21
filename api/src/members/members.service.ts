@@ -1,26 +1,42 @@
 import { PrismaService } from '@app/prisma'
 import { Injectable } from '@nestjs/common'
-import { FindAllMembersInput } from './dto'
+import { FindAllMembersQuery } from './dto'
+import { MemberType, Prisma } from '@prisma/client'
 
 @Injectable()
 export class MembersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async findAll(input: FindAllMembersInput, userId: string) {
-    const { slug, take, searchValue, cursor } = input;
+  public async findAll(query: FindAllMembersQuery, identifier:string, userId: string) {
+    const { type, take, searchValue, cursor } = query;
+
+    let whereCondition: Prisma.MemberWhereInput;
+
+    switch(type) {
+      case MemberType.WORKSPACE: {
+        whereCondition = {
+          workspace: {
+            slug: identifier,
+            members: {
+              some: {
+                userId,
+              },
+            },
+          },
+        }
+
+        break
+      }
+      default: {
+        whereCondition = {}
+      }
+    }
 
     const limit = take ?? 10;
 
     const members = await this.prisma.member.findMany({
       where: {
-        workspace: {
-          slug,
-          members: {
-            some: {
-              userId,
-            },
-          },
-        },
+        ...whereCondition,
         OR: [
           {
             user: {
@@ -55,6 +71,9 @@ export class MembersService {
           select: {
             id: true,
             username: true,
+            email: true,
+            firstName: true,
+            lastName: true,
             avatar: true,
           },
         },

@@ -3,18 +3,50 @@
 import { Routes } from '@/constants'
 import { ImageUploader } from '@/features/images'
 import { toast } from '@/features/notifications'
-import { useCurrentWorkspace, useWorkspacesStore } from '@/features/workspaces'
+import {
+	SizeSelect,
+	useCurrentWorkspace,
+	useUpdateWorkspaceMutation
+} from '@/features/workspaces'
 import { absoluteUrl, domainUrl } from '@/lib'
 import { TypeFile } from '@/types'
 import Image from 'next/image'
 import { useCopyToClipboard } from 'react-use'
+import {
+	Button,
+	FieldWrapper,
+	Form,
+	FormControl,
+	FormError,
+	FormField,
+	FormItem,
+	FormLabel,
+	Label
+} from '@/components/ui'
+import { UpdateWorkspaceInput, updateWorkspaceSchema } from '@/api'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Divider, Input } from '@nextui-org/react'
+
+type FormValues = Omit<Required<UpdateWorkspaceInput>, 'logo'>
 
 export const UpdateWorkspaceForm = () => {
-	const workspace = useCurrentWorkspace()
-	const updateWorkspaceStore = useWorkspacesStore((s) => s.updateWorkspace)
-
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_, copy] = useCopyToClipboard()
+
+	const workspace = useCurrentWorkspace()
+	const form = useForm<FormValues>({
+		resolver: zodResolver(updateWorkspaceSchema.omit({ logo: true })),
+		defaultValues: {
+			name: workspace.name,
+			size: workspace.size,
+			workspaceId: workspace.id
+		}
+	})
+
+	const { handleSubmit, control } = form
+
+	const { mutate: updateWorkspace, isPending } = useUpdateWorkspaceMutation()
 
 	const handleCopy = () => {
 		copy(absoluteUrl(Routes.WORKSPACE_BY_SLUG(workspace.slug)))
@@ -23,15 +55,21 @@ export const UpdateWorkspaceForm = () => {
 	}
 
 	const handleLogoUpload = (uploaded: TypeFile) => {
-		updateWorkspaceStore(workspace.id, {
+		updateWorkspace({
+			workspaceId: workspace.id,
 			logo: uploaded
 		})
 	}
 
 	const handleLogoRemove = () => {
-		updateWorkspaceStore(workspace.id, {
-			logo: undefined
+		updateWorkspace({
+			workspaceId: workspace.id,
+			logo: null
 		})
+	}
+
+	const onSubmit = (values: FormValues) => {
+		updateWorkspace(values)
 	}
 
 	return (
@@ -82,6 +120,67 @@ export const UpdateWorkspaceForm = () => {
 					</ImageUploader>
 				</div>
 			</div>
+			<Divider className={'my-6'} />
+			<Form {...form}>
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className={'flex flex-col gap-8 items-start'}
+				>
+					<div className={'grid xl:grid-cols-2 2xl:grid-cols-3 gap-10 w-full'}>
+						<FormField
+							control={control}
+							name={'name'}
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Workspace name</FormLabel>
+									<FormControl>
+										<Input
+											variant="flat"
+											classNames={{
+												inputWrapper: 'rounded-md'
+											}}
+											isDisabled={isPending}
+											placeholder={'Name'}
+											{...field}
+										/>
+									</FormControl>
+									<FormError />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={control}
+							name={'size'}
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Company size</FormLabel>
+									<FormControl>
+										<SizeSelect disabled={isPending} {...field} />
+									</FormControl>
+									<FormError />
+								</FormItem>
+							)}
+						/>
+						<FieldWrapper className={'pointer-events-none'}>
+							<Label htmlFor={'slug'}>Workspace URL</Label>
+							<Input
+								variant="flat"
+								id={'slug'}
+								classNames={{
+									inputWrapper: 'rounded-md'
+								}}
+								isDisabled={isPending}
+								value={domainUrl(Routes.WORKSPACE_BY_SLUG(workspace.slug))}
+								readOnly
+							/>
+						</FieldWrapper>
+					</div>
+					<Button isDisabled={isPending} type={'submit'} size={'sm'}>
+						{isPending ? 'Updating' : 'Update workspace'}
+					</Button>
+				</form>
+			</Form>
+			<Divider className={'my-6'} />
 		</div>
 	)
 }

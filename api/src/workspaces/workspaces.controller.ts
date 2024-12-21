@@ -8,11 +8,17 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { CreateWorkspaceInput, SelectWorkspaceInput } from './dto';
+import {
+  CreateWorkspaceInput,
+  SelectWorkspaceInput,
+  UpdateWorkspaceInput,
+} from './dto';
 import { WorkspacesService } from './workspaces.service';
+import { User } from '@prisma/client';
 
 @UseGuards(AuthenticatedGuard)
 @Controller('workspaces')
@@ -39,9 +45,21 @@ export class WorkspacesController {
     return this.workspacesService.selectWorkspace(dto, userId);
   }
 
-  @Delete(":id")
+  @Patch(':id')
+  updateWorkspace(
+    @Body() dto: UpdateWorkspaceInput,
+    @Param('id') workspaceId: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.workspacesService.update(workspaceId, dto, user);
+  }
+
+  @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteWorkspace(@Param('id') workspaceId:string,@CurrentUser('id') userId: string) {
-    return this.workspacesService.delete(workspaceId,userId);
+  deleteWorkspace(
+    @Param('id') workspaceId: string,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.workspacesService.delete(workspaceId, userId);
   }
 }

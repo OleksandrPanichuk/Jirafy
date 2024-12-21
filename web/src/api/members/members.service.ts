@@ -1,5 +1,6 @@
 import { ApiRoutes } from '@/constants'
 import { axios } from '@/lib'
+import { MemberType } from '@/types'
 import qs from 'query-string'
 import {
 	FindAllMembersInput,
@@ -9,14 +10,27 @@ import {
 
 const findAll = async (input: FindAllMembersInput) => {
 	findAllMembersSchema.parse(input)
-	const { slug, ...query } = input
+	const { identifier, type, ...query } = input
 
-	const url = qs.stringifyUrl({
-		url: ApiRoutes.MEMBERS.BY_WORKSPACE_SLUG(slug),
+	let url: string
+
+	switch (type) {
+		case MemberType.WORKSPACE: {
+			url = ApiRoutes.MEMBERS.BY_WORKSPACE_SLUG(identifier)
+			break;
+		}
+
+		default: {
+			throw new Error("Incorrect type")
+		}
+	}
+
+	const urlWithQuery = qs.stringifyUrl({
+		url,
 		query
 	})
 
-	return (await axios.get<FindAllMembersResponse>(url)).data
+	return (await axios.get<FindAllMembersResponse>(urlWithQuery)).data
 }
 
 export const MembersApi = {

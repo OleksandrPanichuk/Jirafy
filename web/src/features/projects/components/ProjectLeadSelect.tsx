@@ -2,8 +2,9 @@
 
 import { useAuth } from '@/features/auth'
 import { useInfiniteMembersQuery } from '@/features/members'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { useDebounce } from '@/hooks'
-import { TypeMemberWithUser } from '@/types'
+import { MemberType, TypeMemberWithUser } from '@/types'
 import {
 	Avatar,
 	Button,
@@ -19,7 +20,6 @@ import {
 import { IconSearch } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'
-import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 
 const DEFAULT_TAKE = 20
 
@@ -37,7 +37,8 @@ export const ProjectLeadSelect = ({
 	const [selectedKeys, setSelectedKeys] = useState(new Set(['']))
 
 	const { data, isFetching, hasNextPage, ref } = useInfiniteMembersQuery({
-		slug,
+		identifier: slug,
+		type: MemberType.WORKSPACE,
 		searchValue: debouncedSearchValue,
 		take: DEFAULT_TAKE
 	})

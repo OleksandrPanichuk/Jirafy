@@ -40,7 +40,7 @@ const selectOptions = [
 	}
 ] satisfies ISelectOption[]
 
-export const SizeSelect = ({ value, onChange }: ISizeSelectProps) => {
+export const SizeSelect = ({ value, onChange, disabled }: ISizeSelectProps) => {
 	return (
 		<Select
 			placeholder="Select organization size"
@@ -50,8 +50,9 @@ export const SizeSelect = ({ value, onChange }: ISizeSelectProps) => {
 			variant="flat"
 			aria-label="Workspace size select"
 			classNames={{
-				trigger: 'rounded-md'
+				trigger: 'rounded-md hover:!bg-default-200'
 			}}
+			isDisabled={disabled}
 		>
 			{selectOptions.map((option) => (
 				<SelectItem key={option.value}>{option.label}</SelectItem>

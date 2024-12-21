@@ -33,7 +33,9 @@ export const Routes = {
 	WORKSPACE_PROJECTS: (slug: string) => `/${slug}/projects`,
 	WORKSPACE_VIEWS_ALL: (slug: string) => `/${slug}/workspace-views/all-issues`,
 	WORKSPACE_ANALYTICS: (slug: string) => `/${slug}/analytics`,
-	WORKSPACE_CHAT: (slug: string) => `/${slug}/chat`
+	WORKSPACE_CHAT: (slug: string) => `/${slug}/chat`,
+	WORKSPACE_MEMBER: (slug: string, userId: string) =>
+		`/${slug}/members/${userId}`
 } as const
 
 export type Routes = (typeof Routes)[keyof typeof Routes]
@@ -62,7 +64,7 @@ export const ApiRoutes = {
 		ROOT: '/workspaces',
 		ALL: '/workspaces/all',
 		SELECT: '/workspaces/select',
-		BY_ID: (id: string) => `/workspaces/${id}`,
+		BY_ID: (id: string) => `/workspaces/${id}`
 	},
 	PROJECTS: {
 		ROOT: '/projects',

@@ -7,9 +7,19 @@ export enum MemberRole {
 	GUEST = 'GUEST'
 }
 
+export enum MemberType {
+	WORKSPACE = 'WORKSPACE',
+	PROJECT = 'PROJECT',
+	CHAT = 'CHAT',
+	CONVERSATION = 'CONVERSATION',
+	PAGE = 'PAGE'
+}
+
 export type TypeMember = {
 	id: string
 	userId: string
+
+	type: MemberType
 	role?: MemberRole
 
 	createdAt: Date
@@ -30,6 +40,9 @@ export type TypeMemberWithUser = TypeMember & {
 	user: {
 		id: string
 		username: string
+		email: string
+		firstName: string
+		lastName: string
 		avatar?: TypeFile
 	}
 }
