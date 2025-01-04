@@ -1,18 +1,18 @@
-import { PrismaService } from '@app/prisma'
-import { Injectable } from '@nestjs/common'
-import { FindAllMembersQuery } from './dto'
-import { MemberType, Prisma } from '@prisma/client'
+import { PrismaService } from '@app/prisma';
+import { Injectable } from '@nestjs/common';
+import { FindAllMembersInput } from './dto';
+import { MemberType, Prisma } from '@prisma/client';
 
 @Injectable()
 export class MembersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async findAll(query: FindAllMembersQuery, identifier:string, userId: string) {
-    const { type, take, searchValue, cursor } = query;
+  public async findAll(query: FindAllMembersInput, userId: string) {
+    const { type, take, searchValue, cursor, identifier, withUser } = query;
 
     let whereCondition: Prisma.MemberWhereInput;
 
-    switch(type) {
+    switch (type) {
       case MemberType.WORKSPACE: {
         whereCondition = {
           workspace: {
@@ -23,13 +23,24 @@ export class MembersService {
               },
             },
           },
-        }
+        };
 
-        break
+        break;
       }
       default: {
-        whereCondition = {}
+        whereCondition = {};
       }
+    }
+
+    if (!withUser) {
+      whereCondition = {
+        ...whereCondition,
+        NOT: {
+          user: {
+            id: userId,
+          },
+        },
+      };
     }
 
     const limit = take ?? 10;
@@ -53,12 +64,6 @@ export class MembersService {
             },
           },
         ],
-
-        NOT: {
-          user: {
-            id: userId,
-          },
-        },
       },
       cursor: cursor
         ? {

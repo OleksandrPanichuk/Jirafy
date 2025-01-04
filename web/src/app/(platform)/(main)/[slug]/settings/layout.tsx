@@ -11,7 +11,7 @@ export default function Layout({ children }: PropsWithChildren) {
 			<WorkspaceSettingsHeader />
 			<main className={'overflow-y-auto w-full h-full flex gap-2 p-4'}>
 				<WorkspaceSettingsNavigation />
-				<div className={'w-full'}>{children}</div>
+				<div className={'w-full overflow-x-auto'}>{children}</div>
 			</main>
 		</div>
 	)

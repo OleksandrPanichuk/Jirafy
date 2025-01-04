@@ -4,6 +4,7 @@ import { Drawer, DrawerContent } from '@/components/ui'
 import { breakpoints, Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
 import {
+	getWorkspaceLinks,
 	SidebarFavorites,
 	SidebarGroup,
 	SidebarItem,
@@ -14,23 +15,19 @@ import {
 	WorkspaceSidebarProvider,
 	WorkspaceSwitcher
 } from '@/features/sidebars'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { useDisclosure } from '@/hooks'
 import { cn } from '@/lib'
 import { Button, Tooltip } from '@nextui-org/react'
 import {
 	IconArrowRight,
-	IconBriefcase,
-	IconChartBar,
 	IconHeart,
 	IconHome,
 	IconInbox,
 	IconMenu2,
-	IconMessage,
-	IconStack2,
 	IconUserBolt
 } from '@tabler/icons-react'
 import { useMedia } from 'react-use'
-import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 
 interface IWorkspaceSidebarProps {
 	alwaysOpen?: boolean
@@ -124,26 +121,9 @@ function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 						/>
 					</div>
 					<SidebarGroup title="Workspace" action={<WorkspaceActions />}>
-						<SidebarItem
-							href={Routes.WORKSPACE_PROJECTS(workspaceSlug)}
-							text="Projects"
-							icon={<IconBriefcase className="size-4" />}
-						/>
-						<SidebarItem
-							href={Routes.WORKSPACE_VIEWS_ALL(workspaceSlug)}
-							text="Views"
-							icon={<IconStack2 className="size-4" />}
-						/>
-						<SidebarItem
-							href={Routes.WORKSPACE_CHAT(workspaceSlug)}
-							text="Chat"
-							icon={<IconMessage className="size-4" />}
-						/>
-						<SidebarItem
-							href={Routes.WORKSPACE_ANALYTICS(workspaceSlug)}
-							text="Analytics"
-							icon={<IconChartBar className="size-4" />}
-						/>
+						{getWorkspaceLinks(workspaceSlug).map((link) => (
+							<SidebarItem key={link.href} {...link} />
+						))}
 					</SidebarGroup>
 					<SidebarFavorites />
 					<SidebarProjects />

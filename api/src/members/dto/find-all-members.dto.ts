@@ -1,4 +1,4 @@
-import { MemberType } from '@prisma/client'
+import { MemberType } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import {
   IsEnum,
@@ -11,7 +11,6 @@ import {
 } from 'class-validator';
 
 export class FindAllMembersQuery {
-  // Transfrom values from type string to type number
   @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @IsPositive()
@@ -26,11 +25,17 @@ export class FindAllMembersQuery {
   @IsOptional()
   readonly searchValue?: string;
 
+  @Transform(({ value }) => value === 'true')
+  @IsOptional()
+  readonly withUser?: boolean;
+}
 
+export class FindAllMembersInput extends FindAllMembersQuery {
   @IsString()
   @IsNotEmpty()
   @IsEnum(MemberType)
-  readonly type: MemberType;  
+  readonly type: MemberType;
+
+  @IsString()
+  readonly identifier: string;
 }
-
-

@@ -33,6 +33,7 @@ export const Routes = {
 	WORKSPACE_PROJECTS: (slug: string) => `/${slug}/projects`,
 	WORKSPACE_VIEWS_ALL: (slug: string) => `/${slug}/workspace-views/all-issues`,
 	WORKSPACE_ANALYTICS: (slug: string) => `/${slug}/analytics`,
+	WORKSPACE_AI: (slug: string) => `/${slug}/ai`,
 	WORKSPACE_CHAT: (slug: string) => `/${slug}/chat`,
 	WORKSPACE_MEMBER: (slug: string, userId: string) =>
 		`/${slug}/members/${userId}`
@@ -79,7 +80,8 @@ export const ApiRoutes = {
 	},
 	MEMBERS: {
 		ROOT: '/members',
-		BY_WORKSPACE_SLUG: (slug: string) => `/members/by-workspace-slug/${slug}`
+		BY_WORKSPACE_SLUG: (slug: string) => `/members/by-workspace-slug/${slug}`,
+		BY_ID: (id: string) => `/members/${id}`
 	},
 	FAVORITES: {
 		ROOT: '/favorites',

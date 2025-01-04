@@ -1,9 +1,8 @@
-import { BreakpointsType } from "@/types"
+import { BreakpointsType, MemberRole } from '@/types'
 
 export const SESSION_COOKIE_NAME = 'chatify-session'
 export const OAUTH_DATA_COOKIE_NAME = 'oauth_data'
 export const IDENTITY_VERIFIED_COOKIE_NAME = 'identity_verified'
-
 
 export const IMAGE_MIME_TYPES = ['.jpg', '.webp', '.png', '.jpeg']
 
@@ -17,3 +16,17 @@ export const breakpoints: Record<BreakpointsType, string> = {
 	xs: '(min-width: 440px)',
 	'max-xs': '(max-width: 439.98px)'
 }
+
+// export const memberRolesMap: Record<MemberRole, string> = {
+// 	ADMIN:"Admin",
+// 	MEMBER:"Member",
+// 	GUEST:"Guest",
+// 	OWNER:"Owner"
+// }
+
+export const memberRolesMap = new Map<MemberRole, string>([
+	[MemberRole.ADMIN, 'Admin'],
+	[MemberRole.MEMBER, 'Member'],
+	[MemberRole.GUEST, 'Guest'],
+	[MemberRole.OWNER, 'Owner']
+])

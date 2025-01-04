@@ -1,7 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui'
-import { useConfirm } from '@/hooks'
+import { useDeleteMemberMutation } from '@/features/members'
+import { useConfirm, useCurrentMember } from '@/hooks'
 import {
 	Dropdown,
 	DropdownItem,
@@ -17,24 +18,41 @@ interface IMemberActionsProps {
 export const MemberActions = ({ memberId }: IMemberActionsProps) => {
 	const [ConfirmationModal, confirm] = useConfirm()
 
+	const member = useCurrentMember()
+	const { mutate: deleteMember, isPending } = useDeleteMemberMutation()
+
 	const handleRemoveMember = async () => {
 		const ok = await confirm()
 		if (!ok) {
 			return
 		}
+
+		deleteMember({ memberId })
 	}
+
+	if (memberId === member.id) {
+		return null
+	}
+
 	return (
 		<>
 			<ConfirmationModal />
-			<Dropdown>
+			<Dropdown isDisabled={isPending}>
 				<DropdownTrigger>
-					<Button isIconOnly size="sm" variant="ghost">
-						<IconDotsVertical className="text-default-300" />
+					<Button
+						className="!size-6 p-1 min-w-0"
+						variant="ghost"
+						isIconOnly
+					>
+						<IconDotsVertical className="size-4 text-default-300" />
 					</Button>
 				</DropdownTrigger>
 				<DropdownMenu>
-					<DropdownItem onPress={handleRemoveMember}>
-						<IconTrash className="size-4 mr-2" />
+					<DropdownItem
+						startContent={<IconTrash className="size-4 mr-2" />}
+						onPress={handleRemoveMember}
+						key={'key'}
+					>
 						Delete
 					</DropdownItem>
 				</DropdownMenu>

@@ -1,8 +1,10 @@
 import { ApiRoutes } from '@/constants'
 import { axios } from '@/lib'
-import { MemberType } from '@/types'
+import { MemberType, TypeMember } from '@/types'
 import qs from 'query-string'
 import {
+	DeleteMemberInput,
+	deleteMemberSchema,
 	FindAllMembersInput,
 	FindAllMembersResponse,
 	findAllMembersSchema
@@ -17,11 +19,11 @@ const findAll = async (input: FindAllMembersInput) => {
 	switch (type) {
 		case MemberType.WORKSPACE: {
 			url = ApiRoutes.MEMBERS.BY_WORKSPACE_SLUG(identifier)
-			break;
+			break
 		}
 
 		default: {
-			throw new Error("Incorrect type")
+			throw new Error('Incorrect type')
 		}
 	}
 
@@ -33,6 +35,13 @@ const findAll = async (input: FindAllMembersInput) => {
 	return (await axios.get<FindAllMembersResponse>(urlWithQuery)).data
 }
 
+const deleteMember = async (input: DeleteMemberInput) => {
+	deleteMemberSchema.parse(input)
+
+	return await axios.delete<TypeMember>(ApiRoutes.MEMBERS.BY_ID(input.memberId))
+}
+
 export const MembersApi = {
-	findAll
+	findAll,
+	delete: deleteMember
 } as const

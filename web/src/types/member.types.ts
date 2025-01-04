@@ -20,7 +20,7 @@ export type TypeMember = {
 	userId: string
 
 	type: MemberType
-	role?: MemberRole
+	role: MemberRole
 
 	createdAt: Date
 	updatedAt: Date

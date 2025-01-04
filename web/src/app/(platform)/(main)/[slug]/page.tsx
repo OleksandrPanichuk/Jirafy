@@ -1,11 +1,6 @@
 'use client'
 
-import { Drawer, DrawerContent } from '@/components/ui'
-import { WorkspaceSidebar } from '@/features/sidebars'
 import { useCurrentWorkspace, useWorkspacesStore } from '@/features/workspaces'
-import { useDisclosure } from '@/hooks'
-import { Button } from '@nextui-org/react'
-import { IconMenu2 } from '@tabler/icons-react'
 import { notFound, useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -31,11 +26,7 @@ const Page = () => {
 		return notFound()
 	}
 
-	return (
-		<div>
-			
-		</div>
-	)
+	return <div></div>
 }
 
 export default Page

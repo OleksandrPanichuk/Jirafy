@@ -7,7 +7,12 @@ export const findAllMembersSchema = z.object({
 	type: z.nativeEnum(MemberType),
 	searchValue: z.string().optional(),
 	take: z.number().positive().optional(),
-	cursor: zMongoId().nullish()
+	cursor: zMongoId().nullish(),
+	withUser: z.boolean().optional()
+})
+
+export const deleteMemberSchema = z.object({
+	memberId: zMongoId()
 })
 
 export type FindAllMembersInput = z.infer<typeof findAllMembersSchema>
@@ -16,3 +21,6 @@ export type FindAllMembersResponse = {
 	members: TypeMemberWithUser[]
 	nextCursor?: string
 }
+
+
+export type DeleteMemberInput = z.infer<typeof deleteMemberSchema>
