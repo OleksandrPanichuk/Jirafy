@@ -1,0 +1,15 @@
+{
+  "a-file-icon-vscode.activeIconPacks": [
+    "angular2",
+    "ngrx",
+    "nest",
+    "react",
+    "redux",
+    "recoil",
+    "vue",
+    "vuex",
+    "rails",
+    "phalcon",
+    "volt"
+  ]
+}

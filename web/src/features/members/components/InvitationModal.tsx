@@ -7,17 +7,16 @@ import {
 	FormControl,
 	FormError,
 	FormField,
-	FormItem,
-	Input
+	FormItem
 } from '@/components/ui'
+import { MemberRoleSelect } from '@/features/members'
 import { useChildrenWithProps, useDisclosure } from '@/hooks'
 import { MemberRole } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Modal, ModalContent } from '@nextui-org/react'
-import { IconX } from '@tabler/icons-react'
+import { Input, Modal, ModalContent } from '@nextui-org/react'
+import { IconPlus, IconX } from '@tabler/icons-react'
 import { PropsWithChildren } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
-import { MemberRoleSelect } from './MemberRoleSelect'
 
 type FormValues = {
 	members: InviteMembersInput
@@ -39,7 +38,8 @@ export const InvitationModal = ({ children }: IInviteModalProps) => {
 		resolver: zodResolver(inviteMembersSchema),
 		defaultValues: {
 			members: defaultValue
-		}
+		},
+		mode: 'onBlur'
 	})
 
 	const { fields, append, remove } = useFieldArray({
@@ -72,7 +72,7 @@ export const InvitationModal = ({ children }: IInviteModalProps) => {
 		<>
 			{childrenWithHandler}
 			<Modal isOpen={isOpen} onOpenChange={handleOpenChange}>
-				<ModalContent>
+				<ModalContent className="p-6">
 					<Form {...form}>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<ul className="flex flex-col gap-3">
@@ -86,7 +86,12 @@ export const InvitationModal = ({ children }: IInviteModalProps) => {
 													<FormItem className="flex-[5]">
 														<FormControl>
 															<Input
+																variant="bordered"
 																type="email"
+																classNames={{
+																	inputWrapper:
+																		' rounded border-tw-border-200 group-data-[focus=true]:!border-tw-border-200 group-data-[hover=true]:!border-tw-border-200 min-h-0 h-8 border-[1px]'
+																}}
 																placeholder={'name@company.com'}
 																{...field}
 															/>
@@ -108,7 +113,7 @@ export const InvitationModal = ({ children }: IInviteModalProps) => {
 											/>
 											{fields.length > 1 && (
 												<button onClick={() => remove(index)}>
-													<IconX />
+													<IconX className="size-4" />
 												</button>
 											)}
 										</li>
@@ -116,8 +121,9 @@ export const InvitationModal = ({ children }: IInviteModalProps) => {
 								})}
 							</ul>
 
-							<div>
+							<div className="flex justify-between">
 								<button type="button" onClick={() => append(defaultValue[0])}>
+									<IconPlus className="size-4" />
 									Add another
 								</button>
 								<div>

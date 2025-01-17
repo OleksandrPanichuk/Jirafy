@@ -1,5 +1,5 @@
 'use client'
-import { toast } from '@/features/notifications'
+import { toast } from '@/features/toast'
 import {
 	useMutation as useMutationDefault,
 	UseMutationOptions
@@ -7,7 +7,8 @@ import {
 import { AxiosError } from 'axios'
 import { ZodError } from 'zod'
 
-export interface IUseMutationProps<T, U> extends UseMutationOptions<T, Error, U> {}
+export interface IUseMutationProps<T, U>
+	extends UseMutationOptions<T, Error, U> {}
 
 export const useMutation = <T, U>(options?: IUseMutationProps<T, U>) => {
 	return useMutationDefault({

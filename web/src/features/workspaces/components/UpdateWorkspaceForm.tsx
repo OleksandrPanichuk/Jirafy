@@ -1,17 +1,6 @@
 'use client'
 
-import { Routes } from '@/constants'
-import { ImageUploader } from '@/features/images'
-import { toast } from '@/features/notifications'
-import {
-	SizeSelect,
-	useCurrentWorkspace,
-	useUpdateWorkspaceMutation
-} from '@/features/workspaces'
-import { absoluteUrl, domainUrl } from '@/lib'
-import { TypeFile } from '@/types'
-import Image from 'next/image'
-import { useCopyToClipboard } from 'react-use'
+import { UpdateWorkspaceInput, updateWorkspaceSchema } from '@/api'
 import {
 	Button,
 	FieldWrapper,
@@ -23,10 +12,21 @@ import {
 	FormLabel,
 	Label
 } from '@/components/ui'
-import { UpdateWorkspaceInput, updateWorkspaceSchema } from '@/api'
-import { useForm } from 'react-hook-form'
+import { Routes } from '@/constants'
+import { ImageUploader } from '@/features/images'
+import { toast } from '@/features/toast'
+import {
+	SizeSelect,
+	useCurrentWorkspace,
+	useUpdateWorkspaceMutation
+} from '@/features/workspaces'
+import { absoluteUrl, domainUrl } from '@/lib'
+import { TypeFile } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Divider, Input } from '@nextui-org/react'
+import Image from 'next/image'
+import { useForm } from 'react-hook-form'
+import { useCopyToClipboard } from 'react-use'
 
 type FormValues = Omit<Required<UpdateWorkspaceInput>, 'logo'>
 

@@ -1,9 +1,9 @@
 'use client'
 
 import { EmailApi } from '@/api'
-import { toast } from '@/features/notifications'
-import { useMutation } from '@/hooks'
 import { useAuth } from '@/features/auth'
+import { toast } from '@/features/toast'
+import { useMutation } from '@/hooks'
 
 export const useChangeEmailMutation = () => {
 	const setUser = useAuth((s) => s.setUser)

@@ -1,9 +1,9 @@
 'use client'
 
-import { useMutation } from '@/hooks'
 import { WorkspacesApi } from '@/api'
-import { toast } from '@/features/notifications'
+import { toast } from '@/features/toast'
 import { useWorkspacesStore } from '@/features/workspaces'
+import { useMutation } from '@/hooks'
 import { useRouter } from 'next/navigation'
 
 export const useUpdateWorkspaceMutation = () => {

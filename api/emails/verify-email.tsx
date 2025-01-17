@@ -9,7 +9,7 @@ import {
   Text,
 } from '@react-email/components';
 
-type VerifyEmailProps = {
+type Props = {
   name: string;
   link: string;
 };
@@ -45,7 +45,7 @@ const link = {
   textDecoration: 'none',
 };
 
-const VerifyEmail = ({ name, link: verificationLink }: VerifyEmailProps) => {
+const VerifyEmail = ({ name, link: verificationLink }: Props) => {
   return (
     <Html>
       <Head />

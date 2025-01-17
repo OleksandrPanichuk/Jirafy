@@ -2,13 +2,13 @@
 
 import { Routes } from '@/constants'
 import {
+	useAuth,
 	UserMenu,
 	useVerifyEmailMutation,
 	VerificationCard,
 	VerificationProcess
 } from '@/features/auth'
-import { toast } from '@/features/notifications'
-import { useAuth } from '@/features/auth'
+import { toast } from '@/features/toast'
 import { redirect, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 

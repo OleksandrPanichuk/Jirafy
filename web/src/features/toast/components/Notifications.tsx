@@ -1,16 +1,15 @@
 'use client'
 
-import { useNotifications } from '@/features/notifications'
+import { useNotifications } from '@/features/toast'
 
-import { NotificationItem } from '@/features/notifications'
-import { NotificationList } from '@/features/notifications'
+import { NotificationItem, NotificationList } from '@/features/toast'
 
 export const Notifications = () => {
 	const notifications = useNotifications()
 
 	return (
 		<NotificationList>
-			{notifications.map(notification => (
+			{notifications.map((notification) => (
 				<NotificationItem key={notification.id} notification={notification} />
 			))}
 		</NotificationList>

@@ -26,15 +26,15 @@ export class FavoritesController {
   }
 
   @Post('')
-  add(@Body() input: AddToFavoritesInput, @CurrentUser('id') userId: string) {
-    return this.favoritesService.add(input, userId);
+  add(@Body() dto: AddToFavoritesInput, @CurrentUser('id') userId: string) {
+    return this.favoritesService.add(dto, userId);
   }
 
   @Delete('')
   remove(
-    @Body() input: RemoveFromFavoritesInput,
+    @Body() dto: RemoveFromFavoritesInput,
     @CurrentUser('id') userId: string,
   ) {
-    return this.favoritesService.remove(input, userId);
+    return this.favoritesService.remove(dto, userId);
   }
 }

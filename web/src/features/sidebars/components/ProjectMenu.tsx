@@ -6,7 +6,8 @@ import {
 	useAddToFavoritesMutation,
 	useRemoveFromFavoritesMutation
 } from '@/features/favorites/api'
-import { toast } from '@/features/notifications'
+import { toast } from '@/features/toast'
+import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { useCurrentMember } from '@/hooks'
 import { absoluteUrl } from '@/lib'
 import {
@@ -26,7 +27,6 @@ import {
 import { useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 
 interface IProjectMenuProps {
 	projectId: string

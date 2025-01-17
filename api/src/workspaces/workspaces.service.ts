@@ -176,19 +176,20 @@ export class WorkspacesService {
       );
     }
 
+    
+    const updated = await this.prisma.workspace.update({
+      where: {
+        id: workspaceId,
+      },
+      data: dto,
+    });
+    
     await this.prisma.activity.create({
       data: {
         type: ActivityType.UPDATE_WORKSPACE,
         userId: user.id,
         data: `**${user.username}** updated workspace.`,
       },
-    });
-
-    const updated = await this.prisma.workspace.update({
-      where: {
-        id: workspaceId,
-      },
-      data: dto,
     });
 
     if (dto.logo && workspace.logo?.key) {

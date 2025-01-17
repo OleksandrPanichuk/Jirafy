@@ -1,9 +1,11 @@
-import { default as ResetPassword } from '@emails/reset-password';
-import { default as VerifyEmail } from '@emails/verify-email';
+import Invitation from '@emails/invitation';
+import ResetPassword from '@emails/reset-password';
+import VerifyEmail from '@emails/verify-email';
 
 export enum EmailTemplates {
   RESET_PASSWORD = 'reset-password',
   VERIFY_EMAIL = 'verify-email',
+  INVITATION = 'invitation',
 }
 
 export const TemplatesMatch: Record<
@@ -12,4 +14,5 @@ export const TemplatesMatch: Record<
 > = {
   [EmailTemplates.RESET_PASSWORD]: ResetPassword,
   [EmailTemplates.VERIFY_EMAIL]: VerifyEmail,
+  [EmailTemplates.INVITATION]: Invitation,
 };

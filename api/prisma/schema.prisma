@@ -25,6 +25,12 @@ enum MemberRole {
   GUEST
 }
 
+enum InviteMemberRole {
+  ADMIN
+  MEMBER
+  GUEST
+}
+
 enum Network {
   PUBLIC
   PRIVATE
@@ -77,11 +83,25 @@ enum ActivityType {
   UPDATE_CYCLE
   DELETE_CYCLE
   COMMENT_ISSUE
+  JOIN_WORKSPACE
+  LEAVE_WORKSPACE
+  JOIN_PROJECT
+  LEAVE_PROJECT
 }
 
 enum IssueStatus {
   DRAFT
   PUBLISHED
+}
+
+model Session {
+  id String @id @map("_id") @db.String
+
+  expires DateTime
+
+  session String
+
+  @@map("sessions")
 }
 
 model User {
@@ -106,7 +126,7 @@ model User {
 
   workspaces Member[]
   invites    Invites[]
-  acitvities Activity[]
+  activities Activity[]
   comments   Comment[]
   reactions  Reaction[]
   mentions   Mention[]
@@ -175,7 +195,7 @@ model Member {
 
   favorites     Favorites[]
   createdIssues Issue[]
-  assignements  Assignee[]
+  assignments   Assignee[]
 
   conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId String?       @db.ObjectId
@@ -224,6 +244,7 @@ model Invites {
 
   email String
   state InviteState
+  role  InviteMemberRole
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @db.ObjectId

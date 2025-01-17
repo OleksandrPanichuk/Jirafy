@@ -1,4 +1,4 @@
-import { IDENTITY_VERIFIED_COOKIE_NAME } from '@/app.constants';
+import { IDENTITY_VERIFIED_COOKIE_NAME } from '@/shared/constants';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';

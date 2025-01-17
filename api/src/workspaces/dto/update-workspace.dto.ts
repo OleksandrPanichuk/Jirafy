@@ -1,4 +1,4 @@
-import { UploadedFile } from '@/shared/dto';
+import { UploadedFile } from '@/shared/interfaces';
 import {
   IsNotEmpty,
   IsNumber,

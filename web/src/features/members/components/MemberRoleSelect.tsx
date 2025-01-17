@@ -45,7 +45,10 @@ export const MemberRoleSelect = ({
 		}
 	}, [selected, value])
 
-	const options = Array.from(memberRolesMap, ([key, value]) => ({ key, value }))
+	const options = Array.from(memberRolesMap, ([key, value]) => ({
+		key,
+		value
+	})).filter((el) => el.key !== MemberRole.OWNER)
 
 	return (
 		<Dropdown
@@ -56,7 +59,7 @@ export const MemberRoleSelect = ({
 			isDisabled={isDisabled}
 		>
 			<DropdownTrigger>
-				<Button variant={'ghost'} size="sm">
+				<Button className='min-w-20' variant={'ghost'} size="sm">
 					<p>{selectedValue}</p>
 				</Button>
 			</DropdownTrigger>
@@ -73,7 +76,7 @@ export const MemberRoleSelect = ({
 				{options.map((option) => {
 					return (
 						<DropdownItem
-							key={option.value}
+							key={option.key}
 							textValue={option.value}
 							className="hover:!bg-tw-bg-80"
 						>

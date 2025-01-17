@@ -1,6 +1,6 @@
 import { currentUser, getAllWorkspaces } from '@/api'
 import { AuthProvider } from '@/features/auth'
-import { Notifications } from '@/features/notifications'
+import { Notifications } from '@/features/toast'
 import { WorkspacesProvider } from '@/features/workspaces'
 import { QueryProvider } from '@/providers'
 import '@/styles/globals.scss'

@@ -9,7 +9,7 @@ import {
 	TableHeader,
 	TableRow
 } from '@/components/ui'
-import { useInfiniteMembersQuery } from '@/features/members'
+import { InvitationModal, useInfiniteMembersQuery } from '@/features/members'
 import { useDebounce } from '@/hooks'
 import { MemberType } from '@/types'
 import { Input, Spinner } from '@nextui-org/react'
@@ -86,9 +86,11 @@ export const MembersTable = ({ type, identifier }: IMembersTableProps) => {
 						startContent={<IconSearch />}
 						onChange={handleSearchValueChange}
 					/>
-					<Button variant="primary" size="sm">
-						Add member
-					</Button>
+					<InvitationModal>
+						<Button variant="primary" size="sm">
+							Add member
+						</Button>
+					</InvitationModal>
 				</div>
 			</div>
 			<div className="rounded-md border border-tw-border-300 mt-4">

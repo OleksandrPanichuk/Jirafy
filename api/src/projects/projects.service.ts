@@ -94,11 +94,11 @@ export class ProjectsService {
     return project;
   }
 
-  public async reorder(input: ReorderProjectInput, userId: string) {
+  public async reorder(dto: ReorderProjectInput, userId: string) {
     const currentMember = await this.prisma.member.findFirst({
       where: {
         userId,
-        workspaceId: input.workspaceId,
+        workspaceId: dto.workspaceId,
       },
     });
 
@@ -110,7 +110,7 @@ export class ProjectsService {
 
     const projects = await this.prisma.project.findMany({
       where: {
-        workspaceId: input.workspaceId,
+        workspaceId: dto.workspaceId,
         members: {
           some: {
             userId,
@@ -124,7 +124,7 @@ export class ProjectsService {
 
     const projectIds = projects.map((project) => project.id);
 
-    const reorderedProjects = input.data.map((data) => ({
+    const reorderedProjects = dto.data.map((data) => ({
       id: data.projectId,
       order: data.order,
     }));
