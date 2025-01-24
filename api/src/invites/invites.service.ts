@@ -1,20 +1,26 @@
-import { MembersService } from '@/members/members.service'
-import { MailerService } from '@app/mailer'
-import { EmailTemplates } from '@app/mailer/mailer.constants'
-import { PrismaService } from '@app/prisma'
+import { MembersService } from '@/members/members.service';
+import { MailerService } from '@app/mailer';
+import { EmailTemplates } from '@app/mailer/mailer.constants';
+import { PrismaService } from '@app/prisma';
 import {
   ForbiddenException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common'
-import { WsException } from '@nestjs/websockets'
-import { ActivityType, InviteState, Prisma, User } from '@prisma/client'
+} from '@nestjs/common';
+import { WsException } from '@nestjs/websockets';
+import {
+  ActivityType,
+  InviteState,
+  MemberRole,
+  Prisma,
+  User,
+} from '@prisma/client';
 import {
   AcceptInviteInput,
   CreateInviteInput,
   FindAllInvitesInput,
   RejectInviteInput,
-} from './dto'
+} from './dto';
 
 @Injectable()
 export class InvitesService {
@@ -70,8 +76,26 @@ export class InvitesService {
     });
   }
 
-  public async create(dto: CreateInviteInput) {
-    const user = await this.prisma.user.findUnique({
+  public async create(dto: CreateInviteInput, senderId: string) {
+    const member = await this.prisma.member.findFirst({
+      where: {
+        userId: senderId,
+        role: {
+          in: [MemberRole.ADMIN, MemberRole.OWNER],
+        },
+        ...(dto.workspaceId
+          ? { workspaceId: dto.workspaceId }
+          : { projectId: dto.projectId }),
+      },
+    });
+
+    if (!member) {
+      throw new ForbiddenException(
+        'You do not have permission to invite members',
+      );
+    }
+
+    const userToInvite = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
       },
@@ -81,7 +105,7 @@ export class InvitesService {
       },
     });
 
-    if (!user) {
+    if (!userToInvite) {
       throw new WsException({
         status: 'error',
         message: 'User not found',
@@ -110,9 +134,9 @@ export class InvitesService {
       data: {
         ...dto,
         state: InviteState.PENDING,
-        userId: user.id,
+        userId: userToInvite.id,
       },
-      select: {
+      include: {
         user: {
           select: {
             id: true,
@@ -154,7 +178,7 @@ export class InvitesService {
         subject: 'You have been invited to join a workspace',
       },
       {
-        name: user.firstName,
+        name: userToInvite.firstName,
         invitationPlace,
       },
     );
@@ -239,7 +263,7 @@ export class InvitesService {
       throw new ForbiddenException('Invite is no longer valid');
     }
 
-   const updatedInvite = await this.prisma.invites.update({
+    const updatedInvite = await this.prisma.invites.update({
       where: {
         id: dto.inviteId,
       },

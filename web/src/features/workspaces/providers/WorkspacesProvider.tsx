@@ -23,7 +23,7 @@ interface IWorkspacesStore {
 
 type WorkspacesContext = StoreApi<IWorkspacesStore>
 
-interface IWorkspacesProviderProps {
+interface IWorkspacesProviderProps extends PropsWithChildren {
 	initialWorkspaces?: TypeWorkspaceWithMembers[]
 }
 
@@ -34,7 +34,7 @@ const WorkspacesContext = createContext<WorkspacesContext>(
 export const WorkspacesProvider = ({
 	children,
 	initialWorkspaces
-}: PropsWithChildren<IWorkspacesProviderProps>) => {
+}: IWorkspacesProviderProps) => {
 	const { mutate: selectWorkspaceServer } = useSelectWorkspaceMutation()
 
 	const [store] = useState(

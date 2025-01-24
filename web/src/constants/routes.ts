@@ -86,5 +86,10 @@ export const ApiRoutes = {
 	FAVORITES: {
 		ROOT: '/favorites',
 		BY_WORKSPACE_SLUG: (slug: string) => `/favorites/by-workspace-slug/${slug}`
+	},
+	INVITES: {
+		ROOT: '/invites',
+		ACCEPT: '/invites/accept',
+		REJECT: '/invites/reject'
 	}
 } as const

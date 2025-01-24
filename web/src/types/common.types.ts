@@ -12,7 +12,6 @@ export enum Network {
 	PRIVATE = 'PRIVATE'
 }
 
-
 export type BreakpointsType =
 	| 'lg'
 	| 'max-lg'
@@ -22,3 +21,8 @@ export type BreakpointsType =
 	| 'max-sm'
 	| 'xs'
 	| 'max-xs'
+
+export enum SocketNamespace {
+	INVITES = 'invites',
+	CHAT = 'chat'
+}

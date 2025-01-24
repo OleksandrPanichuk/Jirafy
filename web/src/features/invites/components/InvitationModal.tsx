@@ -11,7 +11,8 @@ import {
 } from '@/components/ui'
 import { MemberRoleSelect } from '@/features/members'
 import { useChildrenWithProps, useDisclosure } from '@/hooks'
-import { MemberRole } from '@/types'
+import { useSocket } from '@/providers'
+import { MemberRole, MemberType, SocketNamespace } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input, Modal, ModalContent } from '@nextui-org/react'
 import { IconPlus, IconX } from '@tabler/icons-react'
@@ -22,7 +23,10 @@ type FormValues = {
 	members: InviteMembersInput
 }
 
-interface IInviteModalProps extends PropsWithChildren {}
+interface IInvitationModalProps extends PropsWithChildren {
+	type: MemberType
+	identifier: string
+}
 
 const defaultValue: InviteMembersInput = [
 	{
@@ -31,8 +35,14 @@ const defaultValue: InviteMembersInput = [
 	}
 ]
 
-export const InvitationModal = ({ children }: IInviteModalProps) => {
+export const InvitationModal = ({
+	children,
+	type,
+	identifier
+}: IInvitationModalProps) => {
 	const { isOpen, open, setIsOpen, close } = useDisclosure()
+
+	const invitesSocket = useSocket(SocketNamespace.INVITES)
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(inviteMembersSchema),
@@ -61,7 +71,26 @@ export const InvitationModal = ({ children }: IInviteModalProps) => {
 	}
 
 	const onSubmit = (values: FormValues) => {
-		console.log(values)
+		values.members.forEach((member) => {
+			let rest
+
+			switch (type) {
+				case MemberType.WORKSPACE: {
+					rest = { workspaceId: identifier }
+					break
+				}
+				case MemberType.PROJECT: {
+					rest = { projectId: identifier }
+					break
+				}
+				default: {
+					return
+				}
+			}
+
+			const payload = { ...member, ...rest }
+			invitesSocket?.emit('create-invite', payload)
+		})
 	}
 
 	const childrenWithHandler = useChildrenWithProps(children, {

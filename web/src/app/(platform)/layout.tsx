@@ -1,6 +1,7 @@
 'use client'
 import { Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
+import { InvitesProvider } from '@/features/invites'
 import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 
@@ -14,5 +15,5 @@ export default function Layout({ children }: PropsWithChildren) {
 		return redirect(Routes.VERIFY_EMAIL)
 	}
 
-	return <>{children}</>
+	return <InvitesProvider>{children} </InvitesProvider>
 }

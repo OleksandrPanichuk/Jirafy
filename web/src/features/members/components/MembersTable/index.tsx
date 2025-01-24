@@ -9,7 +9,7 @@ import {
 	TableHeader,
 	TableRow
 } from '@/components/ui'
-import { InvitationModal, useInfiniteMembersQuery } from '@/features/members'
+import { useInfiniteMembersQuery } from '@/features/members'
 import { useDebounce } from '@/hooks'
 import { MemberType } from '@/types'
 import { Input, Spinner } from '@nextui-org/react'
@@ -20,6 +20,8 @@ import {
 	useReactTable
 } from '@tanstack/react-table'
 import { ChangeEvent, useMemo, useState } from 'react'
+
+import { InvitationModal } from '@/features/invites'
 
 import { columns } from './columns'
 
@@ -86,7 +88,7 @@ export const MembersTable = ({ type, identifier }: IMembersTableProps) => {
 						startContent={<IconSearch />}
 						onChange={handleSearchValueChange}
 					/>
-					<InvitationModal>
+					<InvitationModal type={type} identifier={identifier}>
 						<Button variant="primary" size="sm">
 							Add member
 						</Button>

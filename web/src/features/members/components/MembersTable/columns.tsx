@@ -45,6 +45,7 @@ export const columns: ColumnDef<TypeMemberWithUser>[] = [
 			<p className="text-tw-text-350">{row.original.user.username}</p>
 		)
 	},
+	// TODO: if i am OWNER then i change another user role
 	{
 		accessorKey: 'role',
 		header: 'Role',

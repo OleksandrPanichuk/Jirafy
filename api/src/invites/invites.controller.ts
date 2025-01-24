@@ -1,6 +1,6 @@
 import { CurrentUser } from '@/shared/decorators';
 import { AuthenticatedGuard } from '@/shared/guards';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
 import {
   AcceptInviteInput,
@@ -15,7 +15,7 @@ export class InvitesController {
   constructor(private readonly invitesService: InvitesService) {}
 
   @Get()
-  findAll(@Body() dto: FindAllInvitesInput, @CurrentUser('id') userId: string) {
+  findAll(@Query() dto: FindAllInvitesInput, @CurrentUser('id') userId: string) {
     return this.invitesService.findAll(dto, userId);
   }
 
