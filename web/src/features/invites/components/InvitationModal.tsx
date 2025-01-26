@@ -9,6 +9,7 @@ import {
 	FormField,
 	FormItem
 } from '@/components/ui'
+import { SocketEvents } from '@/constants'
 import { MemberRoleSelect } from '@/features/members'
 import { useChildrenWithProps, useDisclosure } from '@/hooks'
 import { useSocket } from '@/providers'
@@ -22,6 +23,7 @@ import { useFieldArray, useForm } from 'react-hook-form'
 type FormValues = {
 	members: InviteMembersInput
 }
+
 
 interface IInvitationModalProps extends PropsWithChildren {
 	type: MemberType
@@ -71,26 +73,27 @@ export const InvitationModal = ({
 	}
 
 	const onSubmit = (values: FormValues) => {
-		values.members.forEach((member) => {
-			let rest
+		let rest
 
-			switch (type) {
-				case MemberType.WORKSPACE: {
-					rest = { workspaceId: identifier }
-					break
-				}
-				case MemberType.PROJECT: {
-					rest = { projectId: identifier }
-					break
-				}
-				default: {
-					return
-				}
+		switch (type) {
+			case MemberType.WORKSPACE: {
+				rest = { workspaceId: identifier }
+				break
 			}
-
+			case MemberType.PROJECT: {
+				rest = { projectId: identifier }
+				break
+			}
+			default: {
+				return
+			}
+		}
+    
+		 
+		values.members.forEach((member) => {
 			const payload = { ...member, ...rest }
-			invitesSocket?.emit('create-invite', payload)
-		})
+			invitesSocket?.emit(SocketEvents.CREATE_INVITE, payload)
+		})	
 	}
 
 	const childrenWithHandler = useChildrenWithProps(children, {

@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui'
 import { memberRolesMap } from '@/constants'
+import { cn } from '@/lib'
 import { MemberRole } from '@/types'
 import {
 	Dropdown,
@@ -15,11 +16,15 @@ interface IMemberRolesSelectProps {
 	value: MemberRole
 	onChange: (value: MemberRole) => void
 	isDisabled?: boolean
+	classNames?: {
+		trigger?: string
+	}
 }
 
 export const MemberRoleSelect = ({
 	onChange,
 	isDisabled,
+	classNames,
 	value
 }: IMemberRolesSelectProps) => {
 	const [selected, setSelected] = useState<Set<MemberRole>>(
@@ -59,8 +64,12 @@ export const MemberRoleSelect = ({
 			isDisabled={isDisabled}
 		>
 			<DropdownTrigger>
-				<Button className='min-w-20' variant={'ghost'} size="sm">
-					<p>{selectedValue}</p>
+				<Button
+					className={cn('min-w-20', classNames?.trigger)}
+					variant={'ghost'}
+					size="sm"
+				>
+					<p>{memberRolesMap.get(selectedValue as MemberRole)}</p>
 				</Button>
 			</DropdownTrigger>
 			<DropdownMenu

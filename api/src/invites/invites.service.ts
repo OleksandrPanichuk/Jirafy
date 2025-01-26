@@ -99,9 +99,19 @@ export class InvitesService {
       where: {
         email: dto.email,
       },
-      select: {
-        id: true,
-        firstName: true,
+      include: {
+        participations: {
+          where: {
+            OR: [
+              {
+                workspaceId: dto.workspaceId,
+              },
+              {
+                projectId: dto.projectId,
+              },
+            ],
+          },
+        },
       },
     });
 
@@ -109,6 +119,13 @@ export class InvitesService {
       throw new WsException({
         status: 'error',
         message: 'User not found',
+      });
+    }
+
+    if (userToInvite.participations.length) {
+      throw new WsException({
+        status: 'error',
+        message: 'User is already a member of this workspace/project',
       });
     }
 

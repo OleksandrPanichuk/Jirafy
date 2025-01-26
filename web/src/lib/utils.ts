@@ -1,6 +1,7 @@
 import { APP_DOMAIN, APP_URL } from '@/constants/env'
 import { ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { MemberRole } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -28,4 +29,8 @@ export function mergeRefs<T = unknown>(...refs: React.Ref<T>[]) {
 			}
 		})
 	}
+}
+
+export function checkMemberPermissions(role: MemberRole) {
+	return role === MemberRole.ADMIN || role === MemberRole.OWNER
 }

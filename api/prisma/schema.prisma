@@ -124,13 +124,13 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  workspaces Member[]
-  invites    Invites[]
-  activities Activity[]
-  comments   Comment[]
-  reactions  Reaction[]
-  mentions   Mention[]
-  messages   Message[]
+  participations Member[]
+  invites        Invites[]
+  activities     Activity[]
+  comments       Comment[]
+  reactions      Reaction[]
+  mentions       Mention[]
+  messages       Message[]
 
   @@map("users")
 }

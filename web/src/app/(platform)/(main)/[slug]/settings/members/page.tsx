@@ -1,16 +1,16 @@
-import { MembersTable } from "@/features/members"
-import { MemberType } from "@/types"
+'use client'
+import { MembersTable } from '@/features/members'
+import { MemberType } from '@/types'
+import { useParams } from 'next/navigation'
+import { useCurrentWorkspaceMember } from '@/features/members'
 
-interface IPageProps {
-	params: {
-		slug: string
-	}
-}
+const WorkspaceMembersPage = () => {
+	const { slug } = useParams()
+	const {role} = useCurrentWorkspaceMember()
 
-const WorkspaceMembersPage = ({ params }: IPageProps) => {
 	return (
 		<div>
-			<MembersTable type={MemberType.WORKSPACE} identifier={params.slug} />
+			<MembersTable currentMemberRole={role} type={MemberType.WORKSPACE} identifier={slug as string} />
 		</div>
 	)
 }

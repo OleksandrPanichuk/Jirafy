@@ -1,4 +1,4 @@
-import { memberRolesMap, Routes } from '@/constants'
+import { Routes } from '@/constants'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { formatJoinDate } from '@/lib'
 import { TypeMemberWithUser } from '@/types'
@@ -6,6 +6,7 @@ import { Avatar } from '@nextui-org/react'
 import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { MemberActions } from '../MemberActions'
+import { MemberRoleCell } from './MemberRoleCell'
 
 export const columns: ColumnDef<TypeMemberWithUser>[] = [
 	{
@@ -45,13 +46,11 @@ export const columns: ColumnDef<TypeMemberWithUser>[] = [
 			<p className="text-tw-text-350">{row.original.user.username}</p>
 		)
 	},
-	// TODO: if i am OWNER then i change another user role
+	// TODO: if i am OWNER then i can change another user role
 	{
 		accessorKey: 'role',
 		header: 'Role',
-		cell: ({ row }) => (
-			<p className="text-tw-text-350">{memberRolesMap.get(row.original.role)}</p>
-		)
+		cell: ({ row }) => <MemberRoleCell {...row.original} />
 	},
 	{
 		accessorKey: 'createdAt',

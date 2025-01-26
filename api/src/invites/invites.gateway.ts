@@ -6,7 +6,13 @@ import {
 } from '@/shared/filters';
 import { WsAuthenticatedGuard } from '@/shared/guards';
 import { WsUserInterceptor } from '@/shared/interceptors';
-import { UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  UseFilters,
+  UseGuards,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -18,6 +24,7 @@ import { Server, Socket } from 'socket.io';
 import { CreateInviteInput } from './dto';
 import { InvitesService } from './invites.service';
 
+@UsePipes(new ValidationPipe())
 @UseGuards(WsAuthenticatedGuard)
 @UseFilters(WebSocketExceptionFilter, WebSocketValidationFilter)
 @WebSocketGateway({

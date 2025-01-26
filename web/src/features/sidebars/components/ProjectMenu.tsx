@@ -6,9 +6,9 @@ import {
 	useAddToFavoritesMutation,
 	useRemoveFromFavoritesMutation
 } from '@/features/favorites/api'
+import { useCurrentWorkspaceMember } from '@/features/members'
 import { toast } from '@/features/toast'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
-import { useCurrentMember } from '@/hooks'
 import { absoluteUrl } from '@/lib'
 import {
 	Button,
@@ -35,7 +35,7 @@ interface IProjectMenuProps {
 export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 	const router = useRouter()
 	const slug = useCurrentWorkspaceSlug()
-	const currentMember = useCurrentMember()
+	const currentMember = useCurrentWorkspaceMember()
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_, copy] = useCopyToClipboard()

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui'
 import { useInfiniteMembersQuery } from '@/features/members'
 import { useDebounce } from '@/hooks'
-import { MemberType } from '@/types'
+import { MemberRole, MemberType } from '@/types'
 import { Input, Spinner } from '@nextui-org/react'
 import { IconSearch } from '@tabler/icons-react'
 import {
@@ -24,13 +24,19 @@ import { ChangeEvent, useMemo, useState } from 'react'
 import { InvitationModal } from '@/features/invites'
 
 import { columns } from './columns'
+import { checkMemberPermissions } from '@/lib'
 
 interface IMembersTableProps {
 	type: MemberType
 	identifier: string
+	currentMemberRole: MemberRole
 }
 
-export const MembersTable = ({ type, identifier }: IMembersTableProps) => {
+export const MembersTable = ({
+	type,
+	identifier,
+	currentMemberRole
+}: IMembersTableProps) => {
 	const [searchValue, setSearchValue] = useState('')
 
 	const debouncedSearchValue = useDebounce(searchValue)
@@ -88,11 +94,13 @@ export const MembersTable = ({ type, identifier }: IMembersTableProps) => {
 						startContent={<IconSearch />}
 						onChange={handleSearchValueChange}
 					/>
-					<InvitationModal type={type} identifier={identifier}>
-						<Button variant="primary" size="sm">
-							Add member
-						</Button>
-					</InvitationModal>
+					{checkMemberPermissions(currentMemberRole) && (
+						<InvitationModal type={type} identifier={identifier}>
+							<Button variant="primary" size="sm">
+								Add member
+							</Button>
+						</InvitationModal>
+					)}
 				</div>
 			</div>
 			<div className="rounded-md border border-tw-border-300 mt-4">

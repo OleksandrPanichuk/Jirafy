@@ -1,6 +1,5 @@
 export * from './useChildrenWithProps'
 export * from './useConfirm'
-export * from './useCurrentMember'
 export * from './useDebounce'
 export * from './useDisclosure'
 export * from './useInfiniteQueryRef'
