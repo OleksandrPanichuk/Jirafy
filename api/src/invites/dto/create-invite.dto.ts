@@ -16,15 +16,6 @@ export class CreateInviteInput {
   @IsMongoId()
   readonly workspaceId: string;
 
-  @ValidateIf((o) => !o.workspaceId)
-  @IsMongoId()
-  readonly projectId: string;
-
   @IsEnum(InviteMemberRole)
   readonly role: InviteMemberRole;
-
-  @Validate(OnlyOneFieldConstraint, [['projectId', 'workspaceId']])
-  private validateFields(input: CreateInviteInput) {
-    return input;
-  }
 }

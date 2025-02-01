@@ -11,24 +11,23 @@ import {
 } from '@/components/ui'
 import { SocketEvents } from '@/constants'
 import { MemberRoleSelect } from '@/features/members'
+import { useCurrentWorkspace } from '@/features/workspaces'
 import { useChildrenWithProps, useDisclosure } from '@/hooks'
 import { useSocket } from '@/providers'
-import { MemberRole, MemberType, SocketNamespace } from '@/types'
+import { MemberRole, SocketNamespace } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input, Modal, ModalContent } from '@nextui-org/react'
 import { IconPlus, IconX } from '@tabler/icons-react'
 import { PropsWithChildren } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-type FormValues = {
-	members: InviteMembersInput
-}
+const formSchema = z.object({
+	members: inviteMembersSchema
+})
 
+type FormValues = z.infer<typeof formSchema>
 
-interface IInvitationModalProps extends PropsWithChildren {
-	type: MemberType
-	identifier: string
-}
 
 const defaultValue: InviteMembersInput = [
 	{
@@ -38,16 +37,15 @@ const defaultValue: InviteMembersInput = [
 ]
 
 export const InvitationModal = ({
-	children,
-	type,
-	identifier
-}: IInvitationModalProps) => {
-	const { isOpen, open, setIsOpen, close } = useDisclosure()
+	children
+}: PropsWithChildren) => {
+	const { isOpen, open, close } = useDisclosure()
+	const currentWorkspace = useCurrentWorkspace()
 
 	const invitesSocket = useSocket(SocketNamespace.INVITES)
 
 	const form = useForm<FormValues>({
-		resolver: zodResolver(inviteMembersSchema),
+		resolver: zodResolver(formSchema),
 		defaultValues: {
 			members: defaultValue
 		},
@@ -59,11 +57,12 @@ export const InvitationModal = ({
 		name: 'members'
 	})
 
-	const { control, handleSubmit, reset } = form
-
-	const handleOpenChange = (isOpen: boolean) => {
-		setIsOpen(isOpen)
-	}
+	const {
+		control,
+		handleSubmit,
+		reset,
+		formState: { errors }
+	} = form
 
 	const handleCancel = () => {
 		reset({
@@ -72,28 +71,19 @@ export const InvitationModal = ({
 		close()
 	}
 
-	const onSubmit = (values: FormValues) => {
-		let rest
-
-		switch (type) {
-			case MemberType.WORKSPACE: {
-				rest = { workspaceId: identifier }
-				break
-			}
-			case MemberType.PROJECT: {
-				rest = { projectId: identifier }
-				break
-			}
-			default: {
-				return
-			}
+	const handleOpenChange = (isOpen: boolean) => {
+		if (isOpen) {
+			open()
+		} else {
+			handleCancel()
 		}
-    
-		 
+	}
+
+	const onSubmit = (values: FormValues) => {
 		values.members.forEach((member) => {
-			const payload = { ...member, ...rest }
+			const payload = { ...member, workspaceId: currentWorkspace.id }
 			invitesSocket?.emit(SocketEvents.CREATE_INVITE, payload)
-		})	
+		})
 	}
 
 	const childrenWithHandler = useChildrenWithProps(children, {
@@ -104,61 +94,70 @@ export const InvitationModal = ({
 		<>
 			{childrenWithHandler}
 			<Modal isOpen={isOpen} onOpenChange={handleOpenChange}>
-				<ModalContent className="p-6">
+				<ModalContent className="p-6 pt-7 max-h-[80vh] overflow-y-auto">
 					<Form {...form}>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<ul className="flex flex-col gap-3">
 								{fields.map((group, index) => {
+									const emailError = errors?.members?.[index]?.email
 									return (
-										<li className="flex w-full gap-3" key={group.id}>
-											<FormField
-												control={control}
-												name={`members.${index}.email`}
-												render={({ field }) => (
-													<FormItem className="flex-[5]">
-														<FormControl>
-															<Input
-																variant="bordered"
-																type="email"
-																classNames={{
-																	inputWrapper:
-																		' rounded border-tw-border-200 group-data-[focus=true]:!border-tw-border-200 group-data-[hover=true]:!border-tw-border-200 min-h-0 h-8 border-[1px]'
-																}}
-																placeholder={'name@company.com'}
-																{...field}
-															/>
-														</FormControl>
-														<FormError />
-													</FormItem>
+										<li className="flex w-full gap-3 flex-col" key={group.id}>
+											<div className={'flex gap-3'}>
+												<FormField
+													control={control}
+													name={`members.${index}.email`}
+													render={({ field }) => (
+														<FormItem className="flex-[5]">
+															<FormControl>
+																<Input
+																	variant="bordered"
+																	type="email"
+																	classNames={{
+																		inputWrapper:
+																			' rounded border-tw-border-200 group-data-[focus=true]:!border-tw-border-200 group-data-[hover=true]:!border-tw-border-200 min-h-0 h-8 border-[1px]'
+																	}}
+																	placeholder={'name@company.com'}
+																	{...field}
+																/>
+															</FormControl>
+														</FormItem>
+													)}
+												/>
+												<FormField
+													control={control}
+													name={`members.${index}.role`}
+													render={({ field }) => (
+														<FormItem className="flex-[1]">
+															<FormControl>
+																<MemberRoleSelect {...field} />
+															</FormControl>
+														</FormItem>
+													)}
+												/>
+												{fields.length > 1 && (
+													<button onClick={() => remove(index)}>
+														<IconX className="size-4" />
+													</button>
 												)}
-											/>
-											<FormField
-												control={control}
-												name={`members.${index}.role`}
-												render={({ field }) => (
-													<FormItem className="flex-[1]">
-														<FormControl>
-															<MemberRoleSelect {...field} />
-														</FormControl>
-													</FormItem>
-												)}
-											/>
-											{fields.length > 1 && (
-												<button onClick={() => remove(index)}>
-													<IconX className="size-4" />
-												</button>
+											</div>
+											{emailError && (
+												<FormError>{emailError.message}</FormError>
 											)}
 										</li>
 									)
 								})}
 							</ul>
 
-							<div className="flex justify-between">
-								<button type="button" onClick={() => append(defaultValue[0])}>
+							<div className="flex justify-between mt-4">
+								<button
+									type="button"
+									className={'text-sm flex items-center gap-2'}
+									onClick={() => append(defaultValue[0])}
+								>
 									<IconPlus className="size-4" />
 									Add another
 								</button>
-								<div>
+								<div className={'space-x-2'}>
 									<Button
 										size="sm"
 										variant="ghost"

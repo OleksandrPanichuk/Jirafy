@@ -23,8 +23,8 @@ import { ChangeEvent, useMemo, useState } from 'react'
 
 import { InvitationModal } from '@/features/invites'
 
-import { columns } from './columns'
 import { checkMemberPermissions } from '@/lib'
+import { columns } from './columns'
 
 interface IMembersTableProps {
 	type: MemberType
@@ -94,9 +94,9 @@ export const MembersTable = ({
 						startContent={<IconSearch />}
 						onChange={handleSearchValueChange}
 					/>
-					{checkMemberPermissions(currentMemberRole) && (
-						<InvitationModal type={type} identifier={identifier}>
-							<Button variant="primary" size="sm">
+					{checkMemberPermissions(currentMemberRole) && type === MemberType.WORKSPACE && (
+						<InvitationModal >
+							<Button variant="primary" size="sm" className={'px-5'}>
 								Add member
 							</Button>
 						</InvitationModal>

@@ -1,7 +1,6 @@
 import type { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
-import { ConfigService } from '@nestjs/config';
 
-export const getCorsConfig = (config: ConfigService): CorsOptions => ({
+export const corsConfig: CorsOptions = {
   credentials: true,
-  origin: [config.get<string>('CLIENT_URL')],
-});
+  origin: process.env.CLIENT_URL,
+} 

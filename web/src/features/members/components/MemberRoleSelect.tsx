@@ -19,12 +19,14 @@ interface IMemberRolesSelectProps {
 	classNames?: {
 		trigger?: string
 	}
+	headlessTrigger?: boolean
 }
 
 export const MemberRoleSelect = ({
 	onChange,
 	isDisabled,
 	classNames,
+	headlessTrigger,
 	value
 }: IMemberRolesSelectProps) => {
 	const [selected, setSelected] = useState<Set<MemberRole>>(
@@ -65,11 +67,18 @@ export const MemberRoleSelect = ({
 		>
 			<DropdownTrigger>
 				<Button
-					className={cn('min-w-20', classNames?.trigger)}
+					className={cn(
+						'min-w-20',
+						headlessTrigger &&
+							'border-none hover:bg-transparent text-tw-text-350 text-sm p-0 data-[pressed=true]:scale-100 data-[focus-visible=true]:outline-none min-w-0 aria-expanded:opacity-100 aria-expanded:scale-100',
+						classNames?.trigger
+					)}
 					variant={'ghost'}
 					size="sm"
+					disableAnimation={headlessTrigger}
+					disableRipple={headlessTrigger}
 				>
-					<p>{memberRolesMap.get(selectedValue as MemberRole)}</p>
+					<p>{selectedValue}</p>
 				</Button>
 			</DropdownTrigger>
 			<DropdownMenu

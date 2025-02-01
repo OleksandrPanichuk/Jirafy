@@ -7,7 +7,9 @@ import {
 	deleteMemberSchema,
 	FindAllMembersInput,
 	FindAllMembersResponse,
-	findAllMembersSchema
+	findAllMembersSchema,
+	UpdateMemberRoleInput,
+	updateMemberRoleSchema
 } from './members.dto'
 
 const findAll = async (input: FindAllMembersInput) => {
@@ -35,6 +37,17 @@ const findAll = async (input: FindAllMembersInput) => {
 	return (await axios.get<FindAllMembersResponse>(urlWithQuery)).data
 }
 
+const updateRole = async (input: UpdateMemberRoleInput) => {
+	updateMemberRoleSchema.parse(input)
+
+	const { memberId, ...dto } = input
+
+	return await axios.patch<TypeMember>(
+		ApiRoutes.MEMBERS.BY_ID_ROLE(memberId),
+		dto
+	)
+}
+
 const deleteMember = async (input: DeleteMemberInput) => {
 	deleteMemberSchema.parse(input)
 
@@ -43,5 +56,6 @@ const deleteMember = async (input: DeleteMemberInput) => {
 
 export const MembersApi = {
 	findAll,
+	updateRole,
 	delete: deleteMember
 } as const

@@ -1,5 +1,5 @@
 import { zMongoId, zRequired } from '@/lib'
-import { MemberType, TypeMemberWithUser } from '@/types'
+import { InviteMemberRole, MemberType, TypeMemberWithUser } from '@/types'
 import { z } from 'zod'
 
 export const findAllMembersSchema = z.object({
@@ -15,12 +15,23 @@ export const deleteMemberSchema = z.object({
 	memberId: zMongoId()
 })
 
+const updateMemberSchemaBase = z.object({
+	memberId:zMongoId()
+})
+
+export const updateMemberRoleSchema = updateMemberSchemaBase.extend({
+	role: z.nativeEnum(InviteMemberRole)
+})
+
 export type FindAllMembersInput = z.infer<typeof findAllMembersSchema>
 
 export type FindAllMembersResponse = {
 	members: TypeMemberWithUser[]
 	nextCursor?: string
 }
+
+export type UpdateMemberRoleInput = z.infer<typeof updateMemberRoleSchema>
+
 
 
 export type DeleteMemberInput = z.infer<typeof deleteMemberSchema>

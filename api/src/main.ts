@@ -1,4 +1,6 @@
-import { getCorsConfig } from '@/shared/config';
+import * as dotenv from 'dotenv'
+dotenv.config()
+import { corsConfig } from '@/shared/config';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
@@ -20,7 +22,7 @@ async function bootstrap() {
 
   app.use(helmet());
 
-  app.enableCors(getCorsConfig(config));
+  app.enableCors(corsConfig);
 
   app.setGlobalPrefix('api');
 

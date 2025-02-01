@@ -1,12 +1,14 @@
 'use client'
 
+import { API_URL } from '@/constants'
+import { useAuth } from '@/features/auth'
 import { useSafeContext } from '@/hooks'
-import { absoluteApiUrl } from '@/lib'
 import { SocketNamespace } from '@/types'
 import { createContext, PropsWithChildren, useEffect, useState } from 'react'
-import { io, Socket } from 'socket.io-client'
+import { io, ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
 
 type SocketsContext = Record<SocketNamespace, Socket | null>
+
 const SocketsContext = createContext<SocketsContext>({} as SocketsContext)
 
 export const SocketsProvider = ({ children }: PropsWithChildren) => {
@@ -15,14 +17,25 @@ export const SocketsProvider = ({ children }: PropsWithChildren) => {
 		chat: null
 	})
 
+	const user = useAuth((s) => s.user)
+
 	useEffect(() => {
-		const invitesSocket = io(absoluteApiUrl('/invites'), {
-			addTrailingSlash: false,
+		if (!user?.id) {
+			return
+		}
+
+		const config: Partial<ManagerOptions & SocketOptions> = {
 			withCredentials: true,
+			reconnectionAttempts: 2,
+		}
+
+		const invitesSocket = io(API_URL + '/invites', {
+			path: '/invites',
+			...config
 		})
-		const chatSocket = io(absoluteApiUrl('/chat'), {
-			addTrailingSlash: false,
-			withCredentials: true
+		const chatSocket = io(API_URL + '/chat', {
+			path: '/chat',
+			...config
 		})
 
 		invitesSocket.on('connect', () => {
@@ -47,7 +60,7 @@ export const SocketsProvider = ({ children }: PropsWithChildren) => {
 			invitesSocket.disconnect()
 			chatSocket.disconnect()
 		}
-	}, [])
+	}, [user?.id])
 
 	return (
 		<SocketsContext.Provider value={sockets}>
@@ -55,6 +68,7 @@ export const SocketsProvider = ({ children }: PropsWithChildren) => {
 		</SocketsContext.Provider>
 	)
 }
+export const useSockets = () => useSafeContext(SocketsContext)
 
 export const useSocket = (namespace: SocketNamespace) => {
 	const context = useSafeContext(SocketsContext)

@@ -1,17 +1,51 @@
 'use client'
 
 import { memberRolesMap } from '@/constants'
-import { MemberRoleSelect, useCurrentWorkspaceMember } from '@/features/members'
+import { useAuth } from '@/features/auth'
+import {
+	MemberRoleSelect,
+	useCurrentWorkspaceMember,
+	useUpdateMemberRoleMutation
+} from '@/features/members'
 import { checkMemberPermissions } from '@/lib'
-import { TypeMember } from '@/types'
+import { InviteMemberRole, MemberRole, TypeMember } from '@/types'
 
 export const MemberRoleCell = (member: TypeMember) => {
-	const { role: currentMemberRole } = useCurrentWorkspaceMember()
+	const currentMember = useCurrentWorkspaceMember()
+	const currentUser = useAuth((s) => s.user)
 
-	if (checkMemberPermissions(currentMemberRole)) {
-		// TODO: implement logic to change role and styles
-		return <MemberRoleSelect value={member.role} onChange={() => {}}  />
+	const { mutate: updateRole, isPending } = useUpdateMemberRoleMutation()
+
+	const handleRoleChange = (value: MemberRole) => {
+		if (value === MemberRole.OWNER) {
+			return
+		}
+		updateRole({
+			memberId: member.id,
+			role: value as never as InviteMemberRole
+		})
 	}
 
-	return <p className="text-tw-text-350">{memberRolesMap.get(member.role)}</p>
+	if (
+		checkMemberPermissions(currentMember?.role) &&
+		member.userId !== currentUser?.id
+	) {
+		return (
+			<MemberRoleSelect
+				value={member.role}
+				onChange={handleRoleChange}
+				isDisabled={isPending}
+				classNames={{
+					trigger: 'min-w-16 flex justify-start'
+				}}
+				headlessTrigger
+			/>
+		)
+	}
+
+	return (
+		<p className="text-tw-text-350 min-w-20 text-start">
+			{memberRolesMap.get(member.role)}
+		</p>
+	)
 }

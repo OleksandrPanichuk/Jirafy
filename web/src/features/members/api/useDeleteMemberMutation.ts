@@ -1,5 +1,3 @@
-'use client'
-
 import { MembersApi } from '@/api'
 import { toast } from '@/features/toast'
 import { useMutation } from '@/hooks'

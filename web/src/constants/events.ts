@@ -5,4 +5,5 @@ export enum SocketEvents {
 	INVITE_CREATED = 'invite-created',
 	JOIN_ROOM = 'join-room',
 	LEAVE_ROOM = 'leave-room',
+	EXCEPTION = 'exception'
 }

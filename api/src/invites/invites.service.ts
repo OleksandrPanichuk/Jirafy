@@ -8,17 +8,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
-import {
-  ActivityType,
-  InviteState,
-  MemberRole,
-  Prisma,
-  User,
-} from '@prisma/client';
+import { ActivityType, InviteState, MemberRole, User } from '@prisma/client';
 import {
   AcceptInviteInput,
   CreateInviteInput,
-  FindAllInvitesInput,
+  FindAllUserInvitesQuery,
+  FindAllWorkspaceInvitesQuery,
   RejectInviteInput,
 } from './dto';
 
@@ -30,49 +25,38 @@ export class InvitesService {
     private readonly membersService: MembersService,
   ) {}
 
-  public async findAll(input: FindAllInvitesInput, currentUserId: string) {
-    let whereCondition: Prisma.InvitesWhereInput;
-
-    if (input.userId && input.userId !== currentUserId) {
-      throw new ForbiddenException("You cannot view other user's invites");
-    }
-
-    if (input.userId) {
-      whereCondition = {
-        userId: input.userId,
-      };
-    } else {
-      whereCondition = {
-        OR: [
-          {
-            workspaceId: input.workspaceId,
-            workspace: {
-              members: {
-                some: {
-                  userId: currentUserId,
-                },
-              },
-            },
-          },
-          {
-            projectId: input.projectId,
-            project: {
-              members: {
-                some: {
-                  userId: currentUserId,
-                },
-              },
-            },
-          },
-        ],
-      };
-    }
-
+  public async findAllUserInvites(
+    dto: FindAllUserInvitesQuery,
+    userId: string,
+  ) {
     return this.prisma.invites.findMany({
-      where: whereCondition,
-      include: input.userId
-        ? { workspace: true, project: true }
-        : { user: true },
+      where: {
+        userId,
+        state: dto.state,
+      },
+      include: {
+        workspace: true,
+      },
+    });
+  }
+
+
+  public async findAllWorkspaceInvites(dto: FindAllWorkspaceInvitesQuery, userId: string) {
+    return this.prisma.invites.findMany({
+      where: {
+        workspaceId: dto.workspaceId,
+        workspace: {
+          members: {
+            some: {
+              userId,
+            },
+          }
+        },
+        state: dto.state,
+      },
+      include: {
+        user: true,
+      },
     });
   }
 
@@ -83,9 +67,7 @@ export class InvitesService {
         role: {
           in: [MemberRole.ADMIN, MemberRole.OWNER],
         },
-        ...(dto.workspaceId
-          ? { workspaceId: dto.workspaceId }
-          : { projectId: dto.projectId }),
+        workspaceId: dto.workspaceId,
       },
     });
 
@@ -102,14 +84,7 @@ export class InvitesService {
       include: {
         participations: {
           where: {
-            OR: [
-              {
-                workspaceId: dto.workspaceId,
-              },
-              {
-                projectId: dto.projectId,
-              },
-            ],
+            workspaceId: dto.workspaceId,
           },
         },
       },
@@ -133,7 +108,6 @@ export class InvitesService {
       where: {
         email: dto.email,
         workspaceId: dto.workspaceId,
-        projectId: dto.projectId,
         state: InviteState.PENDING,
       },
     });
@@ -145,7 +119,7 @@ export class InvitesService {
       });
     }
 
-    //TODO: Check for limits of members per project/workspace. If limits are reached, throw an error
+    //TODO: Check for limits of members per workspace. If limits are reached, throw an error
 
     const invite = await this.prisma.invites.create({
       data: {
@@ -162,31 +136,16 @@ export class InvitesService {
       },
     });
 
-    let invitationPlace: string;
-
-    if (dto.workspaceId) {
-      invitationPlace = (
-        await this.prisma.workspace.findUnique({
-          where: {
-            id: dto.workspaceId,
-          },
-          select: {
-            name: true,
-          },
-        })
-      ).name;
-    } else {
-      invitationPlace = (
-        await this.prisma.project.findUnique({
-          where: {
-            id: dto.projectId,
-          },
-          select: {
-            name: true,
-          },
-        })
-      ).name;
-    }
+    const invitationPlace: string = (
+      await this.prisma.workspace.findUnique({
+        where: {
+          id: dto.workspaceId,
+        },
+        select: {
+          name: true,
+        },
+      })
+    ).name;
 
     await this.mailer.sendHTML(
       EmailTemplates.INVITATION,
@@ -203,14 +162,11 @@ export class InvitesService {
     return invite;
   }
 
-  // TODO: check for limits, if workspace/project is full and workspace without subscription then throw an error
+  // TODO: check for limits, if workspace is full and workspace without subscription then throw an error
   public async accept(dto: AcceptInviteInput, user: User) {
     const invite = await this.prisma.invites.findUnique({
       where: {
         id: dto.inviteId,
-      },
-      include: {
-        project: true,
       },
     });
 
@@ -231,20 +187,11 @@ export class InvitesService {
       },
     });
 
-    if (invite.workspaceId) {
-      await this.membersService.createWorkspaceMember({
-        role: invite.role,
-        userId: user.id,
-        workspaceId: invite.workspaceId,
-      });
-    } else {
-      await this.membersService.createProjectMember({
-        projectId: invite.projectId,
-        role: invite.role,
-        userId: user.id,
-        workspaceId: invite.workspaceId,
-      });
-    }
+    await this.membersService.createWorkspaceMember({
+      role: invite.role,
+      userId: user.id,
+      workspaceId: invite.workspaceId,
+    });
 
     // TODO: separate into activities service
     await this.prisma.activity.create({
@@ -253,9 +200,8 @@ export class InvitesService {
           ? ActivityType.JOIN_WORKSPACE
           : ActivityType.JOIN_PROJECT,
         workspaceId: invite.workspaceId,
-        projectId: invite.projectId,
         userId: user.id,
-        data: `**${user.username}** joined the ${invite.workspaceId ? 'workspace' : invite.project.name + ' project'}.`,
+        data: `**${user.username}** joined the workspace.`,
       },
     });
 
@@ -266,9 +212,6 @@ export class InvitesService {
     const invite = await this.prisma.invites.findUnique({
       where: {
         id: dto.inviteId,
-      },
-      include: {
-        project: true,
       },
     });
 
@@ -295,9 +238,8 @@ export class InvitesService {
           ? ActivityType.JOIN_WORKSPACE
           : ActivityType.JOIN_PROJECT,
         workspaceId: invite.workspaceId,
-        projectId: invite.projectId,
         userId: user.id,
-        data: `**${user.username}** rejected the ${invite.workspaceId ? 'workspace invite' : invite.project.name + ' project invite'}.`,
+        data: `**${user.username}** rejected the workspace invite.`,
       },
     });
 

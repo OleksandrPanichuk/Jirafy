@@ -14,44 +14,16 @@ export const inviteMembersSchema = z.array(
 
 export type InviteMembersInput = z.infer<typeof inviteMembersSchema>
 
-export const findAllInvitesSchema = z
-	.object({
-		state: z.nativeEnum(InviteState).optional(),
-		projectId: zMongoId().optional(),
-		userId: zMongoId().optional(),
-		workspaceId: zMongoId().optional()
-	})
-	.refine(
-		(data) => {
-			const { projectId, workspaceId, userId } = data;
-			
-			if (!projectId && !workspaceId && !userId) {
-				return false;
-			}
 
-			const fields = [projectId, workspaceId, userId]
-			return fields.filter(Boolean).length === 1
-		},
-		{
-			message:
-				'Exactly one of projectId, workspaceId, or userId must be defined.',
-			path: ['projectId', 'workspaceId', 'userId']
-		}
-	)
+export const findAllUserInvitesSchema = z.object({
+	state: z.nativeEnum(InviteState).optional()
+})
 
-export type FindAllInvitesInput = z.infer<typeof findAllInvitesSchema>
+export const findAllWorkspaceInvitesSchema = z.object({
+	state: z.nativeEnum(InviteState).optional(),
+	workspaceId: zMongoId()
+})
 
-export type FindAllUserInvitesInput = Omit<
-	FindAllInvitesInput,
-	'workspaceId' | 'projectId'
->
 
-export type FindAllWorkspaceInvitesInput = Omit<
-	FindAllInvitesInput,
-	'userId' | 'projectId'
->
-
-export type FindAllProjectInvitesInput = Omit<
-	FindAllInvitesInput,
-	'userId' | 'workspaceId'
->
+export type FindAllUserInvitesInput = z.infer<typeof findAllUserInvitesSchema>
+export type FindAllWorkspaceInvitesInput = z.infer<typeof findAllWorkspaceInvitesSchema>

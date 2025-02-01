@@ -36,20 +36,15 @@ export class WsUserInterceptor implements NestInterceptor {
       where: { id: sessionId },
     });
 
-
-
     if (!session) {
       return next.handle();
     }
 
     const sessionData = JSON.parse(session.session) as SessionData;
 
-
-
     const userId = sessionData.passport.user;
 
     const user = await this.userService.findById(userId);
-
 
     client.data.user = user;
 

@@ -1,30 +1,29 @@
-import { TypeProject } from "./project.types"
-import { TypeUser } from "./user.types"
-import { TypeWorkspace } from "./workspace.types"
-
+import { TypeProject } from './project.types'
+import { TypeUser } from './user.types'
+import { TypeWorkspace } from './workspace.types'
 
 export enum InviteState {
 	PENDING = 'PENDING',
 	ACCEPTED = 'ACCEPTED',
-	REJECTED = 'REJECTED',
+	REJECTED = 'REJECTED'
 }
 
 export enum InviteMemberRole {
 	ADMIN = 'ADMIN',
 	MEMBER = 'MEMBER',
-	GUEST	= 'GUEST'
+	GUEST = 'GUEST'
 }
 
 export type TypeInvite = {
-	id:string
-	email:string
+	id: string
+	email: string
 	state: InviteState
 	role: InviteMemberRole
 
-	userId:string
+	userId: string
 
-	createdAt:Date
-	updatedAt:Date
+	createdAt: Date
+	updatedAt: Date
 
 	workspaceId?: string
 	projectId?: string
@@ -32,10 +31,6 @@ export type TypeInvite = {
 
 export type TypeInviteWithWorkspace = TypeInvite & {
 	workspace: TypeWorkspace
-}
-
-export type TypeInviteWithProject = TypeInvite & {
-	project: TypeProject
 }
 
 export type TypeInviteWithUser = TypeInvite & {

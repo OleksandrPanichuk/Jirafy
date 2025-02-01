@@ -144,9 +144,11 @@ FormDescription.displayName = 'FormDescription'
 const FormError = React.forwardRef<
 	HTMLDivElement,
 	React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
+>(({ className, children, ...props }, ref) => {
 	const { error } = useFormField()
-	if (!error || !String(error.message)) {
+	const body = error ? String(error?.message) : children
+
+	if (!body) {
 		return null
 	}
 
@@ -161,7 +163,7 @@ const FormError = React.forwardRef<
 		>
 			<div className=" flex gap-2 items-center">
 				<IconAlertTriangle size={20} />
-				<span className="font-medium text-sm">{String(error.message)}</span>
+				<span className="font-medium text-sm">{body}</span>
 			</div>
 		</div>
 	)

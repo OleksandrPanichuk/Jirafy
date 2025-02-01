@@ -1,3 +1,4 @@
+import { corsConfig } from '@/shared/config';
 import { WsCurrentUserDecorator } from '@/shared/decorators';
 import { SocketEvents } from '@/shared/enums';
 import {
@@ -15,6 +16,7 @@ import {
 } from '@nestjs/common';
 import {
   ConnectedSocket,
+  GatewayMetadata,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
@@ -29,7 +31,9 @@ import { InvitesService } from './invites.service';
 @UseFilters(WebSocketExceptionFilter, WebSocketValidationFilter)
 @WebSocketGateway({
   namespace: 'invites',
-})
+  path: '/invites',
+  cors: corsConfig,
+} as GatewayMetadata)
 export class InvitesGateway {
   constructor(private readonly invitesService: InvitesService) {}
 

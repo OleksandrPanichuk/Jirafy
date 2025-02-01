@@ -5,19 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a363602-2642-4ffb-ac94-9c72f6370b36" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web/src/hooks/useCurrentWorkspaceMember.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/api/prisma/schema.prisma" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/invites/invites.gateway.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/invites/invites.gateway.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/invites/invites.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/invites/invites.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/(main)/[slug]/settings/members/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/(platform)/(main)/[slug]/settings/members/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/auth/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/members/members.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/members/members.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/members/members.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/members/members.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/api/members/members.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/api/members/members.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/api/members/members.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/api/members/members.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/(main)/[slug]/settings/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/(platform)/(main)/[slug]/settings/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/Form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/Form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/constants/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/constants/routes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/features/invites/components/InvitationModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/invites/components/InvitationModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/members/components/MemberActions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/components/MemberActions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/members/api/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/api/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/members/api/useDeleteMemberMutation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/api/useDeleteMemberMutation.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/members/api/useUpdateMemberMutation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/api/useUpdateMemberRoleMutation.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/members/components/MemberRoleSelect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/components/MemberRoleSelect.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/features/members/components/MembersTable/MemberRoleCell.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/components/MembersTable/MemberRoleCell.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/features/members/components/MembersTable/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/components/MembersTable/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/sidebars/components/ProjectMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/sidebars/components/ProjectMenu.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/hooks/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/hooks/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/hooks/useCurrentMember.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/lib/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/lib/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/providers/SocketsProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/providers/SocketsProvider.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,6 +139,14 @@
       <workItem from="1737884934747" duration="3531000" />
       <workItem from="1737897094706" duration="511000" />
       <workItem from="1737903522637" duration="1736000" />
+      <workItem from="1737979121794" duration="4957000" />
+      <workItem from="1738185553715" duration="2236000" />
+      <workItem from="1738221173641" duration="2086000" />
+      <workItem from="1738237833950" duration="4298000" />
+      <workItem from="1738248014160" duration="349000" />
+      <workItem from="1738259286841" duration="596000" />
+      <workItem from="1738270437938" duration="1792000" />
+      <workItem from="1738316153248" duration="6727000" />
     </task>
     <servers />
   </component>

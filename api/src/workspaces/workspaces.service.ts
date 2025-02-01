@@ -20,6 +20,9 @@ export class WorkspacesService {
     private readonly storage: CloudinaryService,
   ) {}
 
+
+  
+
   public async findAll(userId: string) {
     return await this.prisma.workspace.findMany({
       where: {
@@ -176,14 +179,13 @@ export class WorkspacesService {
       );
     }
 
-    
     const updated = await this.prisma.workspace.update({
       where: {
         id: workspaceId,
       },
       data: dto,
     });
-    
+
     await this.prisma.activity.create({
       data: {
         type: ActivityType.UPDATE_WORKSPACE,

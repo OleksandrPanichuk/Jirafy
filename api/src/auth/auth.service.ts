@@ -1,4 +1,4 @@
-import { PrismaService } from '@app/prisma'
+import { PrismaService } from '@app/prisma';
 import {
   BadRequestException,
   ConflictException,
@@ -6,13 +6,13 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
-} from '@nestjs/common'
-import { SignInInput, SignUpInput, VerifyIdentityInput } from './dto'
+} from '@nestjs/common';
+import { SignInInput, SignUpInput, VerifyIdentityInput } from './dto';
 
-import { JwtService } from '@nestjs/jwt'
-import * as bcrypt from 'bcrypt'
-import { OAuthState } from './auth.constants'
-import { OAuthUser } from './auth.types'
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { OAuthState } from './auth.constants';
+import { OAuthUser } from './auth.types';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,7 @@ export class AuthService {
       where: {
         id,
       },
-    })
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -38,7 +38,10 @@ export class AuthService {
       throw new ForbiddenException('Invalid password');
     }
 
-    const identityToken = this.jwtService.sign({ id, verified }, { expiresIn: '1d' });
+    const identityToken = this.jwtService.sign(
+      { id, verified },
+      { expiresIn: '1d' },
+    );
 
     return identityToken;
   }
@@ -60,12 +63,12 @@ export class AuthService {
       },
     });
 
-    if (existingUser?.email === email) {
+    if (existingUser) {
+      throw new ConflictException('User already exists');
+    } else if (existingUser?.email === email) {
       throw new ConflictException('Email already in use');
     } else if (existingUser?.username === username) {
       throw new ConflictException('Username already in use');
-    } else if (existingUser?.id) {
-      throw new ConflictException('User already exists');
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -96,14 +99,15 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    if (!user?.hash)
+    if (!user?.hash) {
       throw new BadRequestException('Password is not set. Use OAuth instead');
+    }
 
     const doPasswordsMatch = await bcrypt.compare(password, user.hash);
 
-    if (!doPasswordsMatch)
+    if (!doPasswordsMatch) {
       throw new ForbiddenException('Invalid email or password');
-
+    }
     return user;
   }
 

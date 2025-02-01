@@ -81,7 +81,8 @@ export const ApiRoutes = {
 	MEMBERS: {
 		ROOT: '/members',
 		BY_WORKSPACE_SLUG: (slug: string) => `/members/by-workspace-slug/${slug}`,
-		BY_ID: (id: string) => `/members/${id}`
+		BY_ID: (id: string) => `/members/${id}`,
+		BY_ID_ROLE: (id: string) => `/members/${id}/role`
 	},
 	FAVORITES: {
 		ROOT: '/favorites',
@@ -89,6 +90,8 @@ export const ApiRoutes = {
 	},
 	INVITES: {
 		ROOT: '/invites',
+		USER: '/user',
+		WORKSPACE: '/workspace',
 		ACCEPT: '/invites/accept',
 		REJECT: '/invites/reject'
 	}

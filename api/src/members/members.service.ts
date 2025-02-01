@@ -1,11 +1,16 @@
 import { PrismaService } from '@app/prisma';
-import { Injectable } from '@nestjs/common';
-import { MemberType, Prisma } from '@prisma/client';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { MemberRole, MemberType, Prisma } from '@prisma/client';
 import {
   CreateProjectMemberInput,
   CreateWorkspaceMemberInput,
   FindAllMembersInput,
 } from './dto';
+import { UpdateMemberRoleInput } from '@/members/dto/update-member.dto';
 
 const DEFAULT_TAKE_MEMBERS = 10;
 
@@ -104,6 +109,58 @@ export class MembersService {
     };
   }
 
+  public async updateRole(
+    dto: UpdateMemberRoleInput,
+    memberId: string,
+    userId: string,
+  ) {
+    const member = await this.prisma.member.findUnique({
+      where: {
+        id: memberId,
+      },
+    });
+
+    if (!member) {
+      throw new NotFoundException('Member not found');
+    }
+
+    if (member.userId === userId && dto.role) {
+      throw new ForbiddenException("You can't update your own role");
+    }
+
+    const updater = await this.prisma.member.findFirst({
+      where: {
+        userId,
+        role: {
+          in: [MemberRole.ADMIN, MemberRole.OWNER],
+        },
+        OR: [
+          {
+            workspaceId: member.workspaceId,
+          },
+          {
+            projectId: member.projectId,
+          },
+        ],
+      },
+    });
+
+    if (!updater) {
+      throw new ForbiddenException(
+        "You don't have permission to update this member",
+      );
+    }
+
+    return this.prisma.member.update({
+      where: {
+        id: memberId,
+      },
+      data: {
+        role: dto.role,
+      },
+    });
+  }
+
   public async createProjectMember(dto: CreateProjectMemberInput) {
     const { isLead, defaultAssignee, ...rest } = dto;
     const projectsCount = await this.prisma.project.count({
@@ -117,7 +174,7 @@ export class MembersService {
       },
     });
 
-    return await this.prisma.member.create({
+    return this.prisma.member.create({
       data: {
         ...rest,
         isLead: isLead ?? false,

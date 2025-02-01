@@ -55,6 +55,8 @@ export const InvitesProvider = ({ children }: IInvitesProviderProps) => {
 		}
 		invitesSocket.emit(SocketEvents.JOIN_ROOM, user.id)
 
+		invitesSocket.on(SocketEvents.EXCEPTION, (error) => console.error('WsError',error))
+
 		invitesSocket.on(SocketEvents.INVITE_CREATED, (invite: TypeInvite) => {
 			store.getState().add(invite)
 

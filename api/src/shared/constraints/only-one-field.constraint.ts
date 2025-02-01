@@ -8,7 +8,6 @@ export class OnlyOneFieldConstraint implements ValidatorConstraintInterface {
 
 		const filledFields = fieldsToCheck.filter((field) => targetObject[field]);
 
-		console.log(filledFields);
 		return filledFields.length <= 1;
 	}
 

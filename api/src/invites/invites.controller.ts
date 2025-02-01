@@ -4,7 +4,8 @@ import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
 import {
   AcceptInviteInput,
-  FindAllInvitesInput,
+  FindAllWorkspaceInvitesQuery,
+  FindAllUserInvitesQuery,
   RejectInviteInput,
 } from './dto';
 import { InvitesService } from './invites.service';
@@ -14,9 +15,20 @@ import { InvitesService } from './invites.service';
 export class InvitesController {
   constructor(private readonly invitesService: InvitesService) {}
 
-  @Get()
-  findAll(@Query() dto: FindAllInvitesInput, @CurrentUser('id') userId: string) {
-    return this.invitesService.findAll(dto, userId);
+  @Get('/user')
+  findAllUserInvites(
+    @Query() query: FindAllUserInvitesQuery,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.invitesService.findAllUserInvites(query, userId);
+  }
+
+  @Get('/workspace')
+  findAllWorkspaceInvites(
+    @Query() query: FindAllWorkspaceInvitesQuery,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.invitesService.findAllWorkspaceInvites(query, userId);
   }
 
   @Post('/accept')
