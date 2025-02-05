@@ -1,13 +1,11 @@
 'use server'
 
-import { TypeInviteWithWorkspace } from '@/types'
 import { InvitesApi } from './invites.service'
+import { type FindAllUserInvitesInput } from './invites.dto'
 
-export async function getAllInvitesByUserId(
-	input: TypeInviteWithWorkspace
-) {
+export async function getAllUserInvites(input: FindAllUserInvitesInput) {
 	try {
-		return await InvitesApi.findAllByUserId(input)
+		return await InvitesApi.findAllUserInvites(input)
 	} catch {
 		return []
 	}

@@ -5,8 +5,7 @@ import { TypeMemberWithUser } from '@/types'
 import { Avatar } from '@nextui-org/react'
 import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
-import { MemberActions } from '../MemberActions'
-import { MemberRoleCell } from './MemberRoleCell'
+import { MemberActions, MemberRoleCell } from '@/features/members'
 
 export const columns: ColumnDef<TypeMemberWithUser>[] = [
 	{
@@ -46,7 +45,6 @@ export const columns: ColumnDef<TypeMemberWithUser>[] = [
 			<p className="text-tw-text-350">{row.original.user.username}</p>
 		)
 	},
-	// TODO: if i am OWNER then i can change another user role
 	{
 		accessorKey: 'role',
 		header: 'Role',

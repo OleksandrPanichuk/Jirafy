@@ -6,30 +6,32 @@ import { useUserInvitesQuery } from '@/features/invites'
 import { toast } from '@/features/toast'
 import { useSafeContext } from '@/hooks'
 import { useSocket } from '@/providers'
-import { SocketNamespace, TypeInvite } from '@/types'
+import { SocketNamespace, TypeInvite, TypeInviteWithUser } from '@/types'
 import { createContext, PropsWithChildren, useEffect, useState } from 'react'
 import { createStore, StoreApi, useStore } from 'zustand'
 
-interface IInvitesStore {
-	invites: TypeInvite[]
-	set: (invites: TypeInvite[]) => void
-	add: (invite: TypeInvite) => void
-	update: (id: string, invite: Partial<Omit<TypeInvite, 'id'>>) => void
+interface IUserInvitesStore {
+	invites: TypeInviteWithUser[]
+	set: (invites: TypeInviteWithUser[]) => void
+	add: (invite: TypeInviteWithUser) => void
+	update: (id: string, invite: Partial<Omit<TypeInviteWithUser, 'id'>>) => void
 }
 
-type InvitesContext = StoreApi<IInvitesStore>
+type UserInvitesContext = StoreApi<IUserInvitesStore>
 
-interface IInvitesProviderProps extends PropsWithChildren {}
+interface IUserInvitesProviderProps extends PropsWithChildren {
+	initialInvites?: TypeInviteWithUser[]
+}
 
-const InvitesContext = createContext<InvitesContext>({} as InvitesContext)
+const UserInvitesContext = createContext<UserInvitesContext>({} as UserInvitesContext)
 
-export const InvitesProvider = ({ children }: IInvitesProviderProps) => {
+export const UserInvitesProvider = ({ children, initialInvites }: IUserInvitesProviderProps) => {
 	const invitesSocket = useSocket(SocketNamespace.INVITES)
 	const user = useAuth((s) => s.user)
 
 	const [store] = useState(
-		createStore<IInvitesStore>((set) => ({
-			invites: [],
+		createStore<IUserInvitesStore>((set) => ({
+			invites: initialInvites ?? [],
 			add: (invite) =>
 				set((state) => ({ invites: [...state.invites, invite] })),
 			set: (invites) => set({ invites }),
@@ -58,7 +60,10 @@ export const InvitesProvider = ({ children }: IInvitesProviderProps) => {
 		invitesSocket.on(SocketEvents.EXCEPTION, (error) => console.error('WsError',error))
 
 		invitesSocket.on(SocketEvents.INVITE_CREATED, (invite: TypeInvite) => {
-			store.getState().add(invite)
+			store.getState().add({
+				...invite,
+				user
+			})
 
 			toast.success('New invite received')
 		})
@@ -69,17 +74,17 @@ export const InvitesProvider = ({ children }: IInvitesProviderProps) => {
 	}, [invitesSocket, user, store])
 
 	return (
-		<InvitesContext.Provider value={store}>{children}</InvitesContext.Provider>
+		<UserInvitesContext.Provider value={store}>{children}</UserInvitesContext.Provider>
 	)
 }
 
-const defaultSelector = (state: IInvitesStore) => state
+const defaultSelector = (state: IUserInvitesStore) => state
 
-export const useInvitesStore = <T = IInvitesStore,>(
-	selector: (store: IInvitesStore) => T = defaultSelector as (
-		store: IInvitesStore
+export const useUserInvitesStore = <T = IUserInvitesStore,>(
+	selector: (store: IUserInvitesStore) => T = defaultSelector as (
+		store: IUserInvitesStore
 	) => T
 ): T => {
-	const context = useSafeContext(InvitesContext)
+	const context = useSafeContext(UserInvitesContext)
 	return useStore(context, selector)
 }

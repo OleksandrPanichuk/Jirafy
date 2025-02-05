@@ -4,8 +4,8 @@ import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
 import {
   AcceptInviteInput,
-  FindAllWorkspaceInvitesQuery,
   FindAllUserInvitesQuery,
+  FindAllWorkspaceInvitesQuery,
   RejectInviteInput,
 } from './dto';
 import { InvitesService } from './invites.service';

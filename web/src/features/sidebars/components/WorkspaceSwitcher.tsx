@@ -3,7 +3,7 @@
 import { Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
 import { useWorkspaceSidebarStore } from '@/features/sidebars'
-import { useWorkspacesStore } from '@/features/workspaces'
+import { useWorkspacesStore, WorkspaceLogo } from '@/features/workspaces'
 import { useDisclosure } from '@/hooks'
 import { cn } from '@/lib'
 import { MemberRole, TypeWorkspace } from '@/types'
@@ -24,7 +24,6 @@ import {
 	IconSquarePlus
 } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
-import randomColor from 'randomcolor'
 
 // TODO: when adding a subscription check whether user can create new workspace or not
 export const WorkspaceSwitcher = () => {
@@ -91,23 +90,7 @@ export const WorkspaceSwitcher = () => {
 					isIconOnly={isCollapsed}
 				>
 					{/*TODO: show workspace logo if provided*/}
-					<div
-						className={cn(
-							'size-6 rounded-md flex items-center justify-center  font-bold'
-						)}
-						style={{
-							backgroundColor: randomColor({
-								seed: currentWorkspace.name.at(0),
-								luminosity: 'dark'
-							}),
-							color: randomColor({
-								luminosity: 'light',
-								seed: currentWorkspace.name.at(0)
-							})
-						}}
-					>
-						{currentWorkspace.name[0].toUpperCase()}
-					</div>
+					<WorkspaceLogo size={24} name={currentWorkspace.name} src={currentWorkspace.logo?.url} />
 					{!isCollapsed && (
 						<>
 							<p className="flex-1 text-start">{currentWorkspace.name}</p>
@@ -134,23 +117,11 @@ export const WorkspaceSwitcher = () => {
 							onPress={() => handleSelectWorkspace(workspace)}
 						>
 							<div className="flex items-center gap-2">
-								<div
-									className={cn(
-										'size-6 rounded-md flex items-center justify-center  font-bold'
-									)}
-									style={{
-										backgroundColor: randomColor({
-											seed: workspace.name.at(0),
-											luminosity: 'dark'
-										}),
-										color: randomColor({
-											luminosity: 'light',
-											seed: workspace.name.at(0)
-										})
-									}}
-								>
-									{workspace.name[0].toUpperCase()}
-								</div>
+								<WorkspaceLogo
+									size={24}
+									name={workspace.name}
+									src={workspace.logo?.url}
+								/>
 								<p
 									className={cn(
 										'flex-1 text-start',

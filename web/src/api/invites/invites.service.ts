@@ -9,7 +9,7 @@ import {
 	findAllWorkspaceInvitesSchema
 } from './invites.dto'
 
-const findAllByUserId = async (input: FindAllUserInvitesInput) => {
+const findAllUserInvites = async (input: FindAllUserInvitesInput) => {
 	findAllUserInvitesSchema.parse(input)
 	const url = qs.stringifyUrl({
 		url: ApiRoutes.INVITES.USER,
@@ -30,6 +30,6 @@ const findAllByWorkspaceId = async (input: FindAllWorkspaceInvitesInput) => {
 }
 
 export const InvitesApi = {
-	findAllByUserId,
+	findAllUserInvites,
 	findAllByWorkspaceId
 } as const

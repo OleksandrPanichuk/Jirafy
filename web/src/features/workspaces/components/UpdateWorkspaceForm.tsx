@@ -82,15 +82,15 @@ export const UpdateWorkspaceForm = () => {
 				>
 					<div
 						className={
-							'w-14 h-14 grid place-items-center rounded-lg aspect-video cursor-pointer bg-gray-700  relative'
+							'w-14 h-14 grid place-items-center rounded-lg overflow-hidden aspect-video cursor-pointer bg-gray-700  relative'
 						}
 					>
 						{workspace.logo ? (
 							<Image
 								src={workspace.logo.url}
 								objectFit={'cover'}
-								fill
 								alt={'workspace url'}
+								fill
 							/>
 						) : (
 							<span className={'uppercase text-lg text-white'}>

@@ -28,7 +28,6 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-
 const defaultValue: InviteMembersInput = [
 	{
 		email: '',
@@ -36,9 +35,7 @@ const defaultValue: InviteMembersInput = [
 	}
 ]
 
-export const InvitationModal = ({
-	children
-}: PropsWithChildren) => {
+export const InvitationModal = ({ children }: PropsWithChildren) => {
 	const { isOpen, open, close } = useDisclosure()
 	const currentWorkspace = useCurrentWorkspace()
 
@@ -93,8 +90,12 @@ export const InvitationModal = ({
 	return (
 		<>
 			{childrenWithHandler}
-			<Modal isOpen={isOpen} onOpenChange={handleOpenChange}>
-				<ModalContent className="p-6 pt-7 max-h-[80vh] overflow-y-auto">
+			<Modal
+				isOpen={isOpen}
+				onOpenChange={handleOpenChange}
+				hideCloseButton={true}
+			>
+				<ModalContent className="p-5 max-h-[80vh] overflow-y-auto">
 					<Form {...form}>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<ul className="flex flex-col gap-3">

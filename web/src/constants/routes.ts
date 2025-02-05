@@ -9,6 +9,7 @@ export const Routes = {
 	CREATE_WORKSPACE: '/create-workspace',
 	INVITATIONS: '/invitations',
 
+	PROFILE: '/profile',
 	PROFILE_SETTINGS: '/profile/settings',
 
 	YOUR_WORK: (slug: string, userId: string) => `/${slug}/profile/${userId}`,
@@ -90,8 +91,8 @@ export const ApiRoutes = {
 	},
 	INVITES: {
 		ROOT: '/invites',
-		USER: '/user',
-		WORKSPACE: '/workspace',
+		USER: '/invites/user',
+		WORKSPACE: '/invites/workspace',
 		ACCEPT: '/invites/accept',
 		REJECT: '/invites/reject'
 	}

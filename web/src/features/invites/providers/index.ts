@@ -1,1 +1,1 @@
-export * from './InvitesProvider'
+export * from './UserInvitesProvider'

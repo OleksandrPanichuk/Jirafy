@@ -1,12 +1,12 @@
-'use client'
+import { currentUser, getAllUserInvites } from '@/api'
 import { Routes } from '@/constants'
-import { useAuth } from '@/features/auth'
-import { InvitesProvider } from '@/features/invites'
+import { UserInvitesProvider } from '@/features/invites'
+import { InviteState } from '@/types'
 import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 
-export default function Layout({ children }: PropsWithChildren) {
-	const user = useAuth((s) => s.user)
+export default async function Layout({ children }: PropsWithChildren) {
+	const user = await currentUser()
 	if (!user) {
 		return redirect(Routes.SIGN_IN)
 	}
@@ -15,5 +15,11 @@ export default function Layout({ children }: PropsWithChildren) {
 		return redirect(Routes.VERIFY_EMAIL)
 	}
 
-	return <InvitesProvider>{children} </InvitesProvider>
+	const invites = await getAllUserInvites({ state: InviteState.PENDING })
+
+	return (
+		<UserInvitesProvider initialInvites={invites}>
+			{children}
+		</UserInvitesProvider>
+	)
 }

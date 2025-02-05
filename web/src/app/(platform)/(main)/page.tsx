@@ -7,9 +7,8 @@ import { redirect } from 'next/navigation'
 const Page = () => {
 	const workspaces = useWorkspacesStore((s) => s.workspaces)
 
-
 	if (!workspaces.length) {
-		return redirect(Routes.CREATE_WORKSPACE)
+		return redirect(Routes.PROFILE)
 	}
 
 	const selectedWorkspace = workspaces.find(
