@@ -9,6 +9,7 @@ import {
 import { useCurrentWorkspaceMember } from '@/features/members'
 import { toast } from '@/features/toast'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
+import { useCopy } from '@/hooks'
 import { absoluteUrl } from '@/lib'
 import {
 	Button,
@@ -26,7 +27,6 @@ import {
 } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useMemo } from 'react'
-import { useCopyToClipboard } from 'react-use'
 
 interface IProjectMenuProps {
 	projectId: string
@@ -38,7 +38,7 @@ export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 	const currentMember = useCurrentWorkspaceMember()
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [_, copy] = useCopyToClipboard()
+	const [_, copy] = useCopy()
 
 	const favorites = useFavoritesStore((s) => s.favorites)
 

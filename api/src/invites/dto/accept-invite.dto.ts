@@ -1,8 +1,7 @@
-import { IsMongoId } from "class-validator"
-
-
+import { IsArray, IsMongoId } from 'class-validator';
 
 export class AcceptInviteInput {
-	@IsMongoId()
-	readonly inviteId: string
+  @IsArray()
+  @IsMongoId({ each: true })
+  readonly invites: string[];
 }

@@ -2,30 +2,38 @@
 
 import { SocketEvents } from '@/constants'
 import { useAuth } from '@/features/auth'
-import { useUserInvitesQuery } from '@/features/invites'
 import { toast } from '@/features/toast'
 import { useSafeContext } from '@/hooks'
 import { useSocket } from '@/providers'
-import { SocketNamespace, TypeInvite, TypeInviteWithUser } from '@/types'
+import { SocketNamespace, TypeInviteWithWorkspace } from '@/types'
 import { createContext, PropsWithChildren, useEffect, useState } from 'react'
 import { createStore, StoreApi, useStore } from 'zustand'
 
 interface IUserInvitesStore {
-	invites: TypeInviteWithUser[]
-	set: (invites: TypeInviteWithUser[]) => void
-	add: (invite: TypeInviteWithUser) => void
-	update: (id: string, invite: Partial<Omit<TypeInviteWithUser, 'id'>>) => void
+	invites: TypeInviteWithWorkspace[]
+	set: (invites: TypeInviteWithWorkspace[]) => void
+	add: (invite: TypeInviteWithWorkspace) => void
+	update: (
+		id: string,
+		invite: Partial<Omit<TypeInviteWithWorkspace, 'id'>>
+	) => void
+	removeMany: (ids: string[]) => void
 }
 
 type UserInvitesContext = StoreApi<IUserInvitesStore>
 
 interface IUserInvitesProviderProps extends PropsWithChildren {
-	initialInvites?: TypeInviteWithUser[]
+	initialInvites?: TypeInviteWithWorkspace[]
 }
 
-const UserInvitesContext = createContext<UserInvitesContext>({} as UserInvitesContext)
+const UserInvitesContext = createContext<UserInvitesContext>(
+	{} as UserInvitesContext
+)
 
-export const UserInvitesProvider = ({ children, initialInvites }: IUserInvitesProviderProps) => {
+export const UserInvitesProvider = ({
+	children,
+	initialInvites
+}: IUserInvitesProviderProps) => {
 	const invitesSocket = useSocket(SocketNamespace.INVITES)
 	const user = useAuth((s) => s.user)
 
@@ -40,16 +48,13 @@ export const UserInvitesProvider = ({ children, initialInvites }: IUserInvitesPr
 					invites: state.invites.map((i) =>
 						i.id === id ? { ...i, ...invite } : i
 					)
+				})),
+			removeMany: (ids) =>
+				set((state) => ({
+					invites: state.invites.filter((i) => !ids.includes(i.id))
 				}))
 		}))
 	)
-
-	useUserInvitesQuery({
-		onSuccess: (invites) => {
-			store.getState().set(invites)
-		}
-	})
-
 
 	useEffect(() => {
 		if (!user || !invitesSocket) {
@@ -57,16 +62,19 @@ export const UserInvitesProvider = ({ children, initialInvites }: IUserInvitesPr
 		}
 		invitesSocket.emit(SocketEvents.JOIN_ROOM, user.id)
 
-		invitesSocket.on(SocketEvents.EXCEPTION, (error) => console.error('WsError',error))
+		invitesSocket.on(SocketEvents.EXCEPTION, (error) =>
+			console.error('WsError', error)
+		)
 
-		invitesSocket.on(SocketEvents.INVITE_CREATED, (invite: TypeInvite) => {
-			store.getState().add({
-				...invite,
-				user
-			})
+		// TODO:fix
+		invitesSocket.on(
+			SocketEvents.INVITE_CREATED,
+			(invite: TypeInviteWithWorkspace) => {
+				store.getState().add(invite)
 
-			toast.success('New invite received')
-		})
+				toast.success('New invite received')
+			}
+		)
 
 		return () => {
 			invitesSocket.emit(SocketEvents.LEAVE_ROOM, user.id)
@@ -74,7 +82,9 @@ export const UserInvitesProvider = ({ children, initialInvites }: IUserInvitesPr
 	}, [invitesSocket, user, store])
 
 	return (
-		<UserInvitesContext.Provider value={store}>{children}</UserInvitesContext.Provider>
+		<UserInvitesContext.Provider value={store}>
+			{children}
+		</UserInvitesContext.Provider>
 	)
 }
 

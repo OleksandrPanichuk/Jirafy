@@ -20,19 +20,19 @@ import {
 	useCurrentWorkspace,
 	useUpdateWorkspaceMutation
 } from '@/features/workspaces'
+import { useCopy } from '@/hooks'
 import { absoluteUrl, domainUrl } from '@/lib'
 import { TypeFile } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Divider, Input } from '@nextui-org/react'
 import Image from 'next/image'
 import { useForm } from 'react-hook-form'
-import { useCopyToClipboard } from 'react-use'
 
 type FormValues = Omit<Required<UpdateWorkspaceInput>, 'logo'>
 
 export const UpdateWorkspaceForm = () => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [_, copy] = useCopyToClipboard()
+	const [_, copy] = useCopy()
 
 	const workspace = useCurrentWorkspace()
 	const form = useForm<FormValues>({

@@ -16,7 +16,7 @@ import {
 	WorkspaceSwitcher
 } from '@/features/sidebars'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
-import { useDisclosure } from '@/hooks'
+import { useDisclosure, useMediaQuery } from '@/hooks'
 import { cn } from '@/lib'
 import { Button, Tooltip } from '@nextui-org/react'
 import {
@@ -27,7 +27,6 @@ import {
 	IconMenu2,
 	IconUserBolt
 } from '@tabler/icons-react'
-import { useMedia } from 'react-use'
 
 interface IWorkspaceSidebarProps {
 	alwaysOpen?: boolean
@@ -46,7 +45,9 @@ const WorkspaceSidebar = ({
 }
 
 export const WorkspaceSidebarDesktop = () => {
-	const isMobile = useMedia(breakpoints['max-md'], false)
+	const isMobile = useMediaQuery(breakpoints['max-md'], {
+		fallback: false
+	})
 	if (isMobile) return null
 
 	return <WorkspaceSidebar className={'hidden md:block'} />
@@ -54,7 +55,7 @@ export const WorkspaceSidebarDesktop = () => {
 
 export const WorkspaceSidebarMobile = () => {
 	const { isOpen, open, setIsOpen, close } = useDisclosure()
-	const isMobile = useMedia(breakpoints['max-md'], true)
+	const isMobile = useMediaQuery(breakpoints['max-md'])
 
 	if (!isMobile) return null
 

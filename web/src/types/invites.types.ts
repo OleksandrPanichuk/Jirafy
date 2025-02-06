@@ -1,4 +1,3 @@
-import { TypeProject } from './project.types'
 import { TypeUser } from './user.types'
 import { TypeWorkspace } from './workspace.types'
 

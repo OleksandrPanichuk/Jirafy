@@ -2,14 +2,12 @@
 
 import { motion, useIsPresent, type Variants } from 'framer-motion'
 import { ReactNode } from 'react'
-import { useTimeoutFn, useUpdateEffect } from 'react-use'
-
 import {
 	Notification,
 	NotificationPositions,
 	useNotificationsStore
 } from '@/features/toast'
-import { usePrefersReducedMotion } from '@/hooks'
+import { usePrefersReducedMotion, useUpdateEffect, useTimeoutFn } from '@/hooks'
 import { cn } from '@/lib'
 import {
 	IconAlertTriangle,

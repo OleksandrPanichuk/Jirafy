@@ -83,6 +83,8 @@ export const MembersTable = ({
 		}
 	}
 
+	console.log({ tableData })
+
 	return (
 		<div className={'overflow-hidden'}>
 			<div className={'flex justify-between w-full'}>
@@ -94,13 +96,14 @@ export const MembersTable = ({
 						startContent={<IconSearch />}
 						onChange={handleSearchValueChange}
 					/>
-					{checkMemberPermissions(currentMemberRole) && type === MemberType.WORKSPACE && (
-						<InvitationModal >
-							<Button variant="primary" size="sm" className={'px-5'}>
-								Add member
-							</Button>
-						</InvitationModal>
-					)}
+					{checkMemberPermissions(currentMemberRole) &&
+						type === MemberType.WORKSPACE && (
+							<InvitationModal>
+								<Button variant="primary" size="sm" className={'px-5'}>
+									Add member
+								</Button>
+							</InvitationModal>
+						)}
 				</div>
 			</div>
 			<div className="rounded-md border border-tw-border-300 mt-4">

@@ -1,8 +1,7 @@
 'use client'
 
-import { useSafeContext } from '@/hooks'
+import { useLocalStorage, useSafeContext } from '@/hooks'
 import { createContext, PropsWithChildren, useEffect, useState } from 'react'
-import { useLocalStorage } from 'react-use'
 import { createStore, StoreApi, useStore } from 'zustand'
 
 interface IWorkspaceSidebarStore {

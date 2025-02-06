@@ -1,8 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui'
-import { useDeleteMemberMutation, useCurrentWorkspaceMember } from '@/features/members'
+import {
+	useCurrentWorkspaceMember,
+	useDeleteMemberMutation
+} from '@/features/members'
 import { useConfirm } from '@/hooks'
+import { checkMemberPermissions } from '@/lib'
+import { MemberRole } from '@/types'
 import {
 	Dropdown,
 	DropdownItem,
@@ -13,12 +18,13 @@ import { IconDotsVertical, IconTrash } from '@tabler/icons-react'
 
 interface IMemberActionsProps {
 	memberId: string
+	role: MemberRole
 }
 
-export const MemberActions = ({ memberId }: IMemberActionsProps) => {
+export const MemberActions = ({ memberId, role }: IMemberActionsProps) => {
 	const [ConfirmationModal, confirm] = useConfirm()
 
-	const member = useCurrentWorkspaceMember()
+	const currentMember = useCurrentWorkspaceMember()
 	const { mutate: deleteMember, isPending } = useDeleteMemberMutation()
 
 	const handleRemoveMember = async () => {
@@ -30,8 +36,12 @@ export const MemberActions = ({ memberId }: IMemberActionsProps) => {
 		deleteMember({ memberId })
 	}
 
-	if (memberId === member.id) {
-		return null
+	if (
+		memberId === currentMember.id ||
+		role === MemberRole.OWNER ||
+		!checkMemberPermissions(currentMember.role)
+	) {
+		return <div className="w-6" />
 	}
 
 	return (

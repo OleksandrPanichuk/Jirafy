@@ -89,7 +89,6 @@ export const WorkspaceSwitcher = () => {
 					variant="light"
 					isIconOnly={isCollapsed}
 				>
-					{/*TODO: show workspace logo if provided*/}
 					<WorkspaceLogo size={24} name={currentWorkspace.name} src={currentWorkspace.logo?.url} />
 					{!isCollapsed && (
 						<>
@@ -109,6 +108,7 @@ export const WorkspaceSwitcher = () => {
 					<p className="text-xs text-tw-text-400">{user.email}</p>
 				</DropdownItem>
 				<DropdownSection aria-label="Workspace select" showDivider>
+					{/* TODO: if too many workspaces show overflow  */}
 					{workspaces.map((workspace) => (
 						<DropdownItem
 							className={' hover:!bg-tw-bg-80 rounded-md p-1'}

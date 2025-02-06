@@ -1,11 +1,11 @@
 import { Routes } from '@/constants'
+import { MemberActions, MemberRoleCell } from '@/features/members'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { formatJoinDate } from '@/lib'
 import { TypeMemberWithUser } from '@/types'
 import { Avatar } from '@nextui-org/react'
 import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
-import { MemberActions, MemberRoleCell } from '@/features/members'
 
 export const columns: ColumnDef<TypeMemberWithUser>[] = [
 	{
@@ -61,6 +61,6 @@ export const columns: ColumnDef<TypeMemberWithUser>[] = [
 	},
 	{
 		id: 'actions',
-		cell: ({ row }) => <MemberActions memberId={row.original.id} />
+		cell: ({ row }) => <MemberActions memberId={row.original.id} role={row.original.role} />
 	}
 ]

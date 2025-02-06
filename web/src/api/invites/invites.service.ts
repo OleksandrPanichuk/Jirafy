@@ -1,12 +1,16 @@
 import { ApiRoutes } from '@/constants'
 import { axios } from '@/lib'
-import { TypeInviteWithUser, TypeInviteWithWorkspace } from '@/types'
+import { TypeInvite, TypeInviteWithUser, TypeInviteWithWorkspace } from '@/types'
 import qs from 'query-string'
 import {
+	AcceptInvitesInput,
 	FindAllUserInvitesInput,
 	FindAllWorkspaceInvitesInput,
+	RejectInvitesInput,
+	acceptInvitesSchema,
 	findAllUserInvitesSchema,
-	findAllWorkspaceInvitesSchema
+	findAllWorkspaceInvitesSchema,
+	rejectInvitesSchema
 } from './invites.dto'
 
 const findAllUserInvites = async (input: FindAllUserInvitesInput) => {
@@ -15,7 +19,7 @@ const findAllUserInvites = async (input: FindAllUserInvitesInput) => {
 		url: ApiRoutes.INVITES.USER,
 		query: input
 	})
-	return (await axios.get<TypeInviteWithUser[]>(url)).data
+	return (await axios.get<TypeInviteWithWorkspace[]>(url)).data
 }
 
 const findAllByWorkspaceId = async (input: FindAllWorkspaceInvitesInput) => {
@@ -26,10 +30,24 @@ const findAllByWorkspaceId = async (input: FindAllWorkspaceInvitesInput) => {
 		query: input
 	})
 
-	return (await axios.get<TypeInviteWithWorkspace[]>(url)).data
+	return (await axios.get<TypeInviteWithUser[]>(url)).data
+}
+
+const accept = async (input: AcceptInvitesInput) => {
+	acceptInvitesSchema.parse(input)
+
+	return await axios.post<TypeInvite[]>(ApiRoutes.INVITES.ACCEPT, input)
+}
+
+const reject = async (input:RejectInvitesInput) => {
+	rejectInvitesSchema.parse(input)
+
+	return await axios.post<TypeInvite[]>(ApiRoutes.INVITES.REJECT, input)
 }
 
 export const InvitesApi = {
 	findAllUserInvites,
-	findAllByWorkspaceId
+	findAllByWorkspaceId,
+	accept,
+	reject
 } as const

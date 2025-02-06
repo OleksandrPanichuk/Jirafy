@@ -1,3 +1,4 @@
+'use client'
 import { cloneElement, HTMLAttributes, isValidElement, ReactNode } from 'react'
 
 export const useChildrenWithProps = (

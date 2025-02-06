@@ -17,12 +17,7 @@ export const breakpoints: Record<BreakpointsType, string> = {
 	'max-xs': '(max-width: 439.98px)'
 }
 
-// export const memberRolesMap: Record<MemberRole, string> = {
-// 	ADMIN:"Admin",
-// 	MEMBER:"Member",
-// 	GUEST:"Guest",
-// 	OWNER:"Owner"
-// }
+
 
 export const memberRolesMap = new Map<MemberRole, string>([
 	[MemberRole.ADMIN, 'Admin'],
@@ -30,3 +25,5 @@ export const memberRolesMap = new Map<MemberRole, string>([
 	[MemberRole.GUEST, 'Guest'],
 	[MemberRole.OWNER, 'Owner']
 ])
+
+

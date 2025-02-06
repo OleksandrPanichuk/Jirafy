@@ -27,3 +27,13 @@ export const findAllWorkspaceInvitesSchema = z.object({
 
 export type FindAllUserInvitesInput = z.infer<typeof findAllUserInvitesSchema>
 export type FindAllWorkspaceInvitesInput = z.infer<typeof findAllWorkspaceInvitesSchema>
+
+
+export const acceptInvitesSchema = z.object({
+	invites: z.array(zMongoId())
+})
+
+export const rejectInvitesSchema = acceptInvitesSchema
+
+export type AcceptInvitesInput = z.infer<typeof acceptInvitesSchema>
+export type RejectInvitesInput = z.infer<typeof rejectInvitesSchema>

@@ -3,6 +3,7 @@
 import { breakpoints, Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
 import { useWorkspaceSidebarStore } from '@/features/sidebars'
+import { useMediaQuery } from '@/hooks'
 import {
 	Avatar,
 	Button,
@@ -13,11 +14,11 @@ import {
 } from '@nextui-org/react'
 import { IconLogout, IconSettings } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
-import { useMedia } from 'react-use'
+
 
 export const UserMenu = () => {
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
-	const isMobile = useMedia(breakpoints['max-sm'])
+	const isMobile = useMediaQuery(breakpoints['max-sm'])
 	const user = useAuth((s) => s.user)
 
 	const router = useRouter()

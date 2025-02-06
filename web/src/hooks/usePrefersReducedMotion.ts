@@ -1,5 +1,5 @@
-import { useMedia } from 'react-use'
+import { useMediaQuery } from './useMediaQuery'
 
 export function usePrefersReducedMotion() {
-  return useMedia('(prefers-reduced-motion: reduce)')
+	return useMediaQuery('(prefers-reduced-motion: reduce)')
 }

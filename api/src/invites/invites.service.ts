@@ -40,8 +40,10 @@ export class InvitesService {
     });
   }
 
-
-  public async findAllWorkspaceInvites(dto: FindAllWorkspaceInvitesQuery, userId: string) {
+  public async findAllWorkspaceInvites(
+    dto: FindAllWorkspaceInvitesQuery,
+    userId: string,
+  ) {
     return this.prisma.invites.findMany({
       where: {
         workspaceId: dto.workspaceId,
@@ -50,7 +52,7 @@ export class InvitesService {
             some: {
               userId,
             },
-          }
+          },
         },
         state: dto.state,
       },
@@ -133,6 +135,7 @@ export class InvitesService {
             id: true,
           },
         },
+        workspace: true,
       },
     });
 
@@ -162,11 +165,29 @@ export class InvitesService {
     return invite;
   }
 
+  // Batch accept
+  public async acceptMany(dto: AcceptInviteInput, user: User) {
+    return await Promise.all(
+      dto.invites.map(async (inviteId) => {
+        return this.acceptById(inviteId, user);
+      }),
+    );
+  }
+
+  public async rejectMany(dto:RejectInviteInput, user:User) {
+    return await Promise.all(
+      dto.invites.map(async (inviteId) => {
+        return this.rejectById(inviteId, user);
+      }),
+    );
+  }
+
   // TODO: check for limits, if workspace is full and workspace without subscription then throw an error
-  public async accept(dto: AcceptInviteInput, user: User) {
+  private async acceptById(inviteId: string, user: User) {
     const invite = await this.prisma.invites.findUnique({
       where: {
-        id: dto.inviteId,
+        id: inviteId,
+        userId: user.id,
       },
     });
 
@@ -180,7 +201,7 @@ export class InvitesService {
 
     const updatedInvite = await this.prisma.invites.update({
       where: {
-        id: dto.inviteId,
+        id: inviteId,
       },
       data: {
         state: InviteState.ACCEPTED,
@@ -200,18 +221,19 @@ export class InvitesService {
           ? ActivityType.JOIN_WORKSPACE
           : ActivityType.JOIN_PROJECT,
         workspaceId: invite.workspaceId,
-        userId: user.id,
         data: `**${user.username}** joined the workspace.`,
+        userId:user.id,
       },
     });
 
     return updatedInvite;
   }
 
-  public async reject(dto: RejectInviteInput, user: User) {
+  private async rejectById(inviteId: string, user:User) {
     const invite = await this.prisma.invites.findUnique({
       where: {
-        id: dto.inviteId,
+        id: inviteId,
+        userId: user.id,
       },
     });
 
@@ -225,7 +247,7 @@ export class InvitesService {
 
     const updatedInvite = await this.prisma.invites.update({
       where: {
-        id: dto.inviteId,
+        id: inviteId,
       },
       data: {
         state: InviteState.REJECTED,
@@ -238,8 +260,8 @@ export class InvitesService {
           ? ActivityType.JOIN_WORKSPACE
           : ActivityType.JOIN_PROJECT,
         workspaceId: invite.workspaceId,
-        userId: user.id,
         data: `**${user.username}** rejected the workspace invite.`,
+        userId: user.id,
       },
     });
 

@@ -27,8 +27,10 @@ export const MemberRoleCell = (member: TypeMember) => {
 	}
 
 	if (
-		checkMemberPermissions(currentMember?.role) &&
-		member.userId !== currentUser?.id
+		member.userId !== currentUser?.id &&
+		(currentMember?.role === MemberRole.OWNER ||
+			(checkMemberPermissions(currentMember?.role) &&
+				!checkMemberPermissions(member.role)))
 	) {
 		return (
 			<MemberRoleSelect
