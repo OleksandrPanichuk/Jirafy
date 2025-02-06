@@ -1,5 +1,4 @@
 'use client'
-
 import { WorkspacesApi } from '@/api'
 import { Routes } from '@/constants'
 import { toast } from '@/features/toast'

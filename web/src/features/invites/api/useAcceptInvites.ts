@@ -1,19 +1,34 @@
-'use client'
-
-import { InvitesApi } from '@/api'
+import { InvitesApi, WorkspacesApi } from '@/api'
 import { useUserInvitesStore } from '@/features/invites'
-import { useMutation } from '@/hooks'
-import { useRouter } from 'next/navigation'
+import { toast } from '@/features/toast'
+import { useWorkspacesStore } from '@/features/workspaces'
+import { useLazyQuery, useMutation } from '@/hooks'
 
 export const useAcceptInvites = () => {
-	const remove = useUserInvitesStore((s) => s.removeMany)
-	const router = useRouter()
+	const removeInvites = useUserInvitesStore((s) => s.removeMany)
+	const setWorkspaces = useWorkspacesStore((s) => s.setWorkspaces)
+
+	const { fetchData } = useLazyQuery({
+		queryFn: WorkspacesApi.findAll,
+		queryKey: ['workspaces']
+	})
+
 	return useMutation({
 		mutationFn: InvitesApi.accept,
-		onSuccess: ({ data }) => {
-			remove(data.map((invite) => invite.id))
+		onSuccess: async ({ data }) => {
+			removeInvites(data.map((invite) => invite.id))
+			try {
+				const workspaces = await fetchData()
 
-			router.refresh()
+				if (!workspaces) {
+					return
+				}
+
+				setWorkspaces(workspaces)
+			} catch {
+				toast.error('Failed to fetch workspaces. Reloading window')
+				window.location.reload()
+			}
 		}
 	})
 }

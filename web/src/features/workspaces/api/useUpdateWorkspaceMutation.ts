@@ -1,5 +1,4 @@
 'use client'
-
 import { WorkspacesApi } from '@/api'
 import { toast } from '@/features/toast'
 import { useWorkspacesStore } from '@/features/workspaces'

@@ -45,7 +45,7 @@ const WorkspaceSidebar = ({
 }
 
 export const WorkspaceSidebarDesktop = () => {
-	const isMobile = useMediaQuery(breakpoints['max-md'], {
+	const [isMobile] = useMediaQuery(breakpoints['max-md'], {
 		fallback: false
 	})
 	if (isMobile) return null

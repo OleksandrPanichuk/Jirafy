@@ -1,3 +1,4 @@
+import { UpdateMemberRoleInput } from '@/members/dto/update-member.dto';
 import { PrismaService } from '@app/prisma';
 import {
   ForbiddenException,
@@ -10,7 +11,6 @@ import {
   CreateWorkspaceMemberInput,
   FindAllMembersInput,
 } from './dto';
-import { UpdateMemberRoleInput } from '@/members/dto/update-member.dto';
 
 const DEFAULT_TAKE_MEMBERS = 10;
 
@@ -193,6 +193,63 @@ export class MembersService {
         isWorkspaceSelected: false,
         type: MemberType.WORKSPACE,
         userId: dto.userId,
+      },
+    });
+  }
+
+  public async delete(memberId: string, userId: string) {
+    const member = await this.prisma.member.findUnique({
+      where: {
+        id: memberId,
+      },
+    });
+
+    if (!member) {
+      throw new NotFoundException('Member not found');
+    }
+
+    if (member.userId === userId) {
+      throw new ForbiddenException("You can't delete yourself");
+    }
+
+    if (member.role === MemberRole.OWNER) {
+      throw new ForbiddenException(
+        "You can't delete the owner of the workspace or project",
+      );
+    }
+
+    const deleter = await this.prisma.member.findFirst({
+      where: {
+        userId,
+        role: {
+          in: [MemberRole.ADMIN, MemberRole.OWNER],
+        },
+        OR: [
+          {
+            workspaceId: member.workspaceId,
+          },
+          {
+            projectId: member.projectId,
+          },
+        ],
+      },
+    });
+
+    if (!deleter) {
+      throw new ForbiddenException(
+        "You don't have permission to delete this member",
+      );
+    }
+
+    if (member.role === MemberRole.ADMIN && deleter.role !== MemberRole.OWNER) {
+      throw new ForbiddenException(
+        "You can't delete an admin of the workspace or project",
+      );
+    }
+
+    return await this.prisma.member.delete({
+      where: {
+        id: memberId,
       },
     });
   }

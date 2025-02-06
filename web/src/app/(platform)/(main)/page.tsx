@@ -11,9 +11,8 @@ const Page = () => {
 		return redirect(Routes.PROFILE)
 	}
 
-	const selectedWorkspace = workspaces.find(
-		(w) => w.members[0].isWorkspaceSelected
-	)
+	const selectedWorkspace =
+		workspaces.find((w) => w.members[0].isWorkspaceSelected) ?? workspaces[0]
 
 	if (selectedWorkspace) {
 		return redirect(Routes.WORKSPACE_BY_SLUG(selectedWorkspace.slug))

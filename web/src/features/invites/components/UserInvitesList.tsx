@@ -19,7 +19,7 @@ export const UserInvitesList = () => {
 	const invites = useUserInvitesStore((s) => s.invites)
 	const [selected, setSelected] = useState<Set<string>>(new Set())
 
-	const { mutate: acceptInvites, isPending: isAccepting } = useAcceptInvites()
+	const { mutateAsync: acceptInvites, isPending: isAccepting } = useAcceptInvites()
 	const { mutate: rejectInvites, isPending: isRejecting } = useRejectInvites()
 
 	const handleToggle = (id: string) => {
@@ -34,15 +34,10 @@ export const UserInvitesList = () => {
 		}
 	}
 
-	const handleAccept = () => {
-		acceptInvites(
-			{ invites: Array.from(selected) },
-			{
-				onSuccess: () => {
-					router.push(Routes.ROOT)
-				}
-			}
-		)
+	const handleAccept = async () => {
+		try {
+			await acceptInvites({ invites: Array.from(selected) })
+		} catch {}
 	}
 
 	const handleReject = async () => {

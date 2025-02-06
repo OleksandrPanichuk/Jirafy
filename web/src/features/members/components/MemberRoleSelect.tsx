@@ -30,7 +30,7 @@ export const MemberRoleSelect = ({
 	value
 }: IMemberRolesSelectProps) => {
 	const [selected, setSelected] = useState<Set<MemberRole>>(
-		new Set([MemberRole.MEMBER])
+		new Set(value ? [value] : [MemberRole.MEMBER])
 	)
 
 	const selectedValue = useMemo(

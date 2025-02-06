@@ -81,6 +81,8 @@ export const InvitationModal = ({ children }: PropsWithChildren) => {
 			const payload = { ...member, workspaceId: currentWorkspace.id }
 			invitesSocket?.emit(SocketEvents.CREATE_INVITE, payload)
 		})
+
+		handleCancel()
 	}
 
 	const childrenWithHandler = useChildrenWithProps(children, {

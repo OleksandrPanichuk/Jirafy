@@ -92,8 +92,6 @@ export const WorkspacesProvider = ({
 		}))
 	)
 
-	
-
 	return (
 		<WorkspacesContext.Provider value={store}>
 			{children}
