@@ -2,7 +2,7 @@
 import { toast } from "@/features/toast"
 import { useState } from "react"
 
-export const useCopy = (withToast:boolean = true): [boolean, (value:string) => void] => {
+export const useCopy = (withToast:boolean = false): [boolean, (value:string) => void] => {
 	const [copied, setCopied] = useState(false)
 
 	const copy = (value:string) =>  {
@@ -14,7 +14,7 @@ export const useCopy = (withToast:boolean = true): [boolean, (value:string) => v
 		navigator.clipboard.writeText(value)
 		setCopied(true)
 		
-		withToast && toast.info('Copied')
+		withToast && toast.info('Copied to clipboard')
 
 		setTimeout(() => {
 			setCopied(false)

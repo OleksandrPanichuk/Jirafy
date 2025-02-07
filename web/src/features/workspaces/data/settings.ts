@@ -11,6 +11,10 @@ export const getSettingsLinks = (slug: string) =>
 			label: 'Members'
 		},
 		{
+			href: Routes.WORKSPACE_INVITES(slug),
+			label: 'Invites'
+		},
+		{
 			href: Routes.WORKSPACE_BILLING(slug),
 			label: 'Billing'
 		},

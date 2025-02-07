@@ -1,11 +1,22 @@
+'use client'
+import { useCurrentWorkspaceMember } from '@/features/members'
 import {
 	WorkspaceSettingsHeader,
 	WorkspaceSettingsNavigation
 } from '@/features/workspaces'
+import { checkMemberPermissions } from '@/lib'
 
 import { PropsWithChildren } from 'react'
 
 export default function Layout({ children }: PropsWithChildren) {
+	const currentMember = useCurrentWorkspaceMember()
+
+	const hasPermission = checkMemberPermissions(currentMember.role)
+
+	if (!hasPermission) {
+		return null
+	}
+
 	return (
 		<div className={'flex flex-col h-screen w-full overflow-x-hidden'}>
 			<WorkspaceSettingsHeader />

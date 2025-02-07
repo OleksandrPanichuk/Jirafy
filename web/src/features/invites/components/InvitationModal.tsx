@@ -18,6 +18,7 @@ import { MemberRole, SocketNamespace } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input, Modal, ModalContent } from '@nextui-org/react'
 import { IconPlus, IconX } from '@tabler/icons-react'
+import { useQueryClient } from '@tanstack/react-query'
 import { PropsWithChildren } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -40,6 +41,8 @@ export const InvitationModal = ({ children }: PropsWithChildren) => {
 	const currentWorkspace = useCurrentWorkspace()
 
 	const invitesSocket = useSocket(SocketNamespace.INVITES)
+
+	const queryClient = useQueryClient()
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
@@ -77,9 +80,14 @@ export const InvitationModal = ({ children }: PropsWithChildren) => {
 	}
 
 	const onSubmit = (values: FormValues) => {
+		const workspaceId = currentWorkspace.id
 		values.members.forEach((member) => {
-			const payload = { ...member, workspaceId: currentWorkspace.id }
+			const payload = { ...member, workspaceId }
 			invitesSocket?.emit(SocketEvents.CREATE_INVITE, payload)
+		})
+
+		queryClient.invalidateQueries({
+			queryKey: ['workspace-invites', { workspaceId }]
 		})
 
 		handleCancel()

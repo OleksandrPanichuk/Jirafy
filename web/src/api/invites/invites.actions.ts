@@ -1,7 +1,7 @@
 'use server'
 
-import { InvitesApi } from './invites.service'
 import { type FindAllUserInvitesInput } from './invites.dto'
+import { InvitesApi } from './invites.service'
 
 export async function getAllUserInvites(input: FindAllUserInvitesInput) {
 	try {

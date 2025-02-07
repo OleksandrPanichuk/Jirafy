@@ -1,7 +1,7 @@
 import { Routes } from '@/constants'
 import { MemberActions, MemberRoleCell } from '@/features/members'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
-import { formatJoinDate } from '@/lib'
+import { formatDate } from '@/lib'
 import { TypeMemberWithUser } from '@/types'
 import { Avatar } from '@nextui-org/react'
 import { ColumnDef } from '@tanstack/react-table'
@@ -54,13 +54,13 @@ export const columns: ColumnDef<TypeMemberWithUser>[] = [
 		accessorKey: 'createdAt',
 		header: 'Join Date',
 		cell: ({ row }) => (
-			<p className="text-tw-text-350">
-				{formatJoinDate(row.original.createdAt)}
-			</p>
+			<p className="text-tw-text-350">{formatDate(row.original.createdAt)}</p>
 		)
 	},
 	{
 		id: 'actions',
-		cell: ({ row }) => <MemberActions memberId={row.original.id} role={row.original.role} />
+		cell: ({ row }) => (
+			<MemberActions memberId={row.original.id} role={row.original.role} />
+		)
 	}
 ]

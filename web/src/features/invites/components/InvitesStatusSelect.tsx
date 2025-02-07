@@ -1,9 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui'
-import { memberRolesMap } from '@/constants'
 import { cn } from '@/lib'
-import { MemberRole } from '@/types'
+import { InviteState } from '@/types'
 import {
 	Dropdown,
 	DropdownItem,
@@ -12,41 +11,55 @@ import {
 } from '@nextui-org/react'
 import { useEffect, useMemo, useState } from 'react'
 
+type TypeInviteState = 'ALL' | `${InviteState}`
+
 interface IMemberRolesSelectProps {
-	value: MemberRole
-	onChange: (value: MemberRole) => void
+	value?: InviteState
+	onChange: (value: `${InviteState}` | undefined) => void
 	isDisabled?: boolean
 	classNames?: {
 		trigger?: string
 	}
-	headlessTrigger?: boolean
 }
 
-const options = Array.from(memberRolesMap, ([key, value]) => ({
-	key,
-	value
-})).filter((el) => el.key !== MemberRole.OWNER)
+const options = [
+	{
+		key: 'ALL',
+		value: 'All states'
+	},
+	{
+		key: InviteState.ACCEPTED,
+		value: 'Accepted'
+	},
+	{
+		key: InviteState.PENDING,
+		value: 'Pending'
+	},
+	{
+		key: InviteState.REJECTED,
+		value: 'Rejected'
+	}
+]
 
-export const MemberRoleSelect = ({
+export const InvitesStatusSelect = ({
 	onChange,
 	isDisabled,
 	classNames,
-	headlessTrigger,
 	value
 }: IMemberRolesSelectProps) => {
-	const [selected, setSelected] = useState<Set<MemberRole>>(
-		new Set(value ? [value] : [MemberRole.MEMBER])
+	const [selected, setSelected] = useState<Set<TypeInviteState>>(
+		new Set(value ? [`${value}` as TypeInviteState] : ['ALL'])
 	)
 
 	const selectedValue = useMemo(
-		() => memberRolesMap.get([...selected][0])!,
+		() => options.find((option) => option.key === [...selected][0])?.value,
 		[selected]
 	)
 
-	const handleSelectionChange = (key: Set<MemberRole>) => {
+	const handleSelectionChange = (key: Set<TypeInviteState>) => {
 		const value = [...key][0]
 
-		onChange(value)
+		onChange(value === 'ALL' ? undefined : value)
 		setSelected(key)
 	}
 
@@ -67,16 +80,9 @@ export const MemberRoleSelect = ({
 		>
 			<DropdownTrigger>
 				<Button
-					className={cn(
-						'min-w-20',
-						headlessTrigger &&
-							'border-none hover:bg-transparent text-tw-text-350 text-sm p-0 data-[pressed=true]:scale-100 data-[focus-visible=true]:outline-none min-w-0 aria-expanded:opacity-100 aria-expanded:scale-100',
-						classNames?.trigger
-					)}
+					className={cn('min-w-20', classNames?.trigger)}
 					variant={'ghost'}
 					size="sm"
-					disableAnimation={headlessTrigger}
-					disableRipple={headlessTrigger}
 				>
 					<p>{selectedValue}</p>
 				</Button>
@@ -87,7 +93,7 @@ export const MemberRoleSelect = ({
 				selectionMode="single"
 				selectedKeys={selected}
 				onSelectionChange={(key) =>
-					handleSelectionChange(key as Set<MemberRole>)
+					handleSelectionChange(key as Set<TypeInviteState>)
 				}
 			>
 				{options.map((option) => {

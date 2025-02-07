@@ -3,8 +3,8 @@
 import { Button } from '@/components/ui'
 import { Routes } from '@/constants'
 import {
-	useAcceptInvites,
-	useRejectInvites,
+	useAcceptInvitesMutation,
+	useRejectInvitesMutation,
 	UserInviteCard,
 	useUserInvitesStore
 } from '@/features/invites'
@@ -19,8 +19,8 @@ export const UserInvitesList = () => {
 	const invites = useUserInvitesStore((s) => s.invites)
 	const [selected, setSelected] = useState<Set<string>>(new Set())
 
-	const { mutateAsync: acceptInvites, isPending: isAccepting } = useAcceptInvites()
-	const { mutate: rejectInvites, isPending: isRejecting } = useRejectInvites()
+	const { mutateAsync: acceptInvites, isPending: isAccepting } = useAcceptInvitesMutation()
+	const { mutate: rejectInvites, isPending: isRejecting } = useRejectInvitesMutation()
 
 	const handleToggle = (id: string) => {
 		if (selected.has(id)) {
@@ -37,6 +37,7 @@ export const UserInvitesList = () => {
 	const handleAccept = async () => {
 		try {
 			await acceptInvites({ invites: Array.from(selected) })
+			router.push(Routes.ROOT)
 		} catch {}
 	}
 

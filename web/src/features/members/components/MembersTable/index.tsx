@@ -24,7 +24,7 @@ import { ChangeEvent, useMemo, useState } from 'react'
 import { InvitationModal } from '@/features/invites'
 
 import { checkMemberPermissions } from '@/lib'
-import { columns } from './columns'
+import { columns } from './MembersTable.columns'
 
 interface IMembersTableProps {
 	type: MemberType
@@ -83,8 +83,6 @@ export const MembersTable = ({
 		}
 	}
 
-	console.log({ tableData })
-
 	return (
 		<div className={'overflow-hidden'}>
 			<div className={'flex justify-between w-full'}>
@@ -106,6 +104,7 @@ export const MembersTable = ({
 						)}
 				</div>
 			</div>
+			{/* TODO: separate into custom component */}
 			<div className="rounded-md border border-tw-border-300 mt-4">
 				<Table>
 					<TableHeader>

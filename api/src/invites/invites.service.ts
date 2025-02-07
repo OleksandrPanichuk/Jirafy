@@ -1,4 +1,5 @@
 import { MembersService } from '@/members/members.service';
+import { SocketEvents } from '@/shared/enums';
 import { MailerService } from '@app/mailer';
 import { EmailTemplates } from '@app/mailer/mailer.constants';
 import { PrismaService } from '@app/prisma';
@@ -7,14 +8,16 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { WsException } from '@nestjs/websockets';
+import { WebSocketServer, WsException } from '@nestjs/websockets';
 import { ActivityType, InviteState, MemberRole, User } from '@prisma/client';
+import { Server } from 'socket.io';
 import {
   AcceptInviteInput,
   CreateInviteInput,
   FindAllUserInvitesQuery,
   FindAllWorkspaceInvitesQuery,
   RejectInviteInput,
+  UpdateInviteInput,
 } from './dto';
 
 @Injectable()
@@ -24,6 +27,9 @@ export class InvitesService {
     private readonly mailer: MailerService,
     private readonly membersService: MembersService,
   ) {}
+
+  @WebSocketServer()
+  socket: Server;
 
   public async findAllUserInvites(
     dto: FindAllUserInvitesQuery,
@@ -165,7 +171,6 @@ export class InvitesService {
     return invite;
   }
 
-  // Batch accept
   public async acceptMany(dto: AcceptInviteInput, user: User) {
     return await Promise.all(
       dto.invites.map(async (inviteId) => {
@@ -174,12 +179,70 @@ export class InvitesService {
     );
   }
 
-  public async rejectMany(dto:RejectInviteInput, user:User) {
+  public async rejectMany(dto: RejectInviteInput, user: User) {
     return await Promise.all(
       dto.invites.map(async (inviteId) => {
         return this.rejectById(inviteId, user);
       }),
     );
+  }
+
+  public async update(dto: UpdateInviteInput, userId: string) {
+    const invite = await this.findInviteAndValidate(dto.inviteId, userId);
+
+    if (invite.state !== InviteState.PENDING) {
+      throw new ForbiddenException('Invite is no longer valid');
+    }
+
+    const updatedInvite = await this.prisma.invites.update({
+      where: {
+        id: dto.inviteId,
+      },
+      data: {
+        role: dto.role,
+      },
+    });
+
+    this.socket.to(userId).emit(SocketEvents.INVITE_UPDATED, updatedInvite);
+
+    return updatedInvite;
+  }
+
+  public async delete(inviteId: string, userId: string) {
+    const invite = await this.findInviteAndValidate(inviteId, userId);
+
+    await this.prisma.invites.delete({
+      where: {
+        id: inviteId,
+      },
+    });
+
+    this.socket.to(invite.userId).emit(SocketEvents.INVITE_DELETED, inviteId);
+
+    return invite;
+  }
+  private async findInviteAndValidate(inviteId: string, userId: string) {
+    const invite = await this.prisma.invites.findUnique({
+      where: {
+        id: inviteId,
+        workspace: {
+          members: {
+            some: {
+              userId,
+              role: {
+                in: [MemberRole.ADMIN, MemberRole.OWNER],
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!invite) {
+      throw new NotFoundException('Invite not found');
+    }
+
+    return invite;
   }
 
   // TODO: check for limits, if workspace is full and workspace without subscription then throw an error
@@ -222,14 +285,14 @@ export class InvitesService {
           : ActivityType.JOIN_PROJECT,
         workspaceId: invite.workspaceId,
         data: `**${user.username}** joined the workspace.`,
-        userId:user.id,
+        userId: user.id,
       },
     });
 
     return updatedInvite;
   }
 
-  private async rejectById(inviteId: string, user:User) {
+  private async rejectById(inviteId: string, user: User) {
     const invite = await this.prisma.invites.findUnique({
       where: {
         id: inviteId,

@@ -30,6 +30,7 @@ export const Routes = {
 	WORKSPACE_SETTINGS: (slug: string) => `/${slug}/settings`,
 	WORKSPACE_EXPORTS: (slug: string) => `/${slug}/settings/exports`,
 	WORKSPACE_MEMBERS: (slug: string) => `/${slug}/settings/members`,
+	WORKSPACE_INVITES: (slug: string) => `/${slug}/settings/invites`,
 	WORKSPACE_BILLING: (slug: string) => `/${slug}/settings/billing`,
 	WORKSPACE_PROJECTS: (slug: string) => `/${slug}/projects`,
 	WORKSPACE_VIEWS_ALL: (slug: string) => `/${slug}/workspace-views/all-issues`,
@@ -94,6 +95,7 @@ export const ApiRoutes = {
 		USER: '/invites/user',
 		WORKSPACE: '/invites/workspace',
 		ACCEPT: '/invites/accept',
-		REJECT: '/invites/reject'
+		REJECT: '/invites/reject',
+		BY_ID: (id: string) => `/invites/${id}`,
 	}
 } as const

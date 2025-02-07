@@ -2,7 +2,7 @@ import { InvitesApi } from '@/api'
 import { useUserInvitesStore } from '@/features/invites'
 import { useMutation } from '@/hooks'
 
-export const useRejectInvites = () => {
+export const useRejectInvitesMutation = () => {
 	const remove = useUserInvitesStore((s) => s.removeMany)
 	return useMutation({
 		mutationFn: InvitesApi.reject,

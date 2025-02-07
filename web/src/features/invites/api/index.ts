@@ -1,3 +1,4 @@
-export * from './useAcceptInvites'
-export * from './useRejectInvites'
-export * from './useUserInvitesQuery'
+export * from './useAcceptInvitesMutation'
+export * from './useDeleteInviteMutation'
+export * from './useRejectInvitesMutation'
+export * from './useWorkspaceInvitesQuery'

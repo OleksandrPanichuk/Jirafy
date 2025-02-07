@@ -7,7 +7,6 @@ import {
 	useRemoveFromFavoritesMutation
 } from '@/features/favorites/api'
 import { useCurrentWorkspaceMember } from '@/features/members'
-import { toast } from '@/features/toast'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { useCopy } from '@/hooks'
 import { absoluteUrl } from '@/lib'
@@ -51,8 +50,6 @@ export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 
 	const handleLinkCopy = () => {
 		copy(absoluteUrl(Routes.PROJECT_ISSUES(slug, projectId)))
-
-		toast.success('Link copied to clipboard')
 	}
 
 	const handleSettings = () => {

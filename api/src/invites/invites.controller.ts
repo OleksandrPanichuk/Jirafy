@@ -1,14 +1,26 @@
-import { CurrentUser } from '@/shared/decorators'
-import { AuthenticatedGuard } from '@/shared/guards'
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common'
-import { User } from '@prisma/client'
+import { CurrentUser } from '@/shared/decorators';
+import { AuthenticatedGuard } from '@/shared/guards';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { User } from '@prisma/client';
 import {
   AcceptInviteInput,
+  DeleteInviteParams,
   FindAllUserInvitesQuery,
   FindAllWorkspaceInvitesQuery,
   RejectInviteInput,
-} from './dto'
-import { InvitesService } from './invites.service'
+  UpdateInviteInput,
+} from './dto';
+import { InvitesService } from './invites.service';
 
 @UseGuards(AuthenticatedGuard)
 @Controller('invites')
@@ -37,7 +49,20 @@ export class InvitesController {
   }
 
   @Post('/reject')
-  reject(@Body() dto: RejectInviteInput, @CurrentUser() user:User) {
+  reject(@Body() dto: RejectInviteInput, @CurrentUser() user: User) {
     return this.invitesService.rejectMany(dto, user);
+  }
+
+  @Patch() 
+  update(@Body() dto: UpdateInviteInput, @CurrentUser('id') userId:string) {
+    return this.invitesService.update(dto, userId);
+  }
+
+  @Delete('/:inviteId')
+  delete(
+    @Param() params: DeleteInviteParams,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.invitesService.delete(params.inviteId, userId);
   }
 }

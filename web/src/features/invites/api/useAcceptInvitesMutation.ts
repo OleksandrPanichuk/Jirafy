@@ -4,7 +4,7 @@ import { toast } from '@/features/toast'
 import { useWorkspacesStore } from '@/features/workspaces'
 import { useLazyQuery, useMutation } from '@/hooks'
 
-export const useAcceptInvites = () => {
+export const useAcceptInvitesMutation = () => {
 	const removeInvites = useUserInvitesStore((s) => s.removeMany)
 	const setWorkspaces = useWorkspacesStore((s) => s.setWorkspaces)
 
