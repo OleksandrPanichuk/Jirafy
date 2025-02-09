@@ -5,12 +5,13 @@ import { EmailTemplates } from '@app/mailer/mailer.constants';
 import { PrismaService } from '@app/prisma';
 import {
   ForbiddenException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { WebSocketServer, WsException } from '@nestjs/websockets';
+import { WsException } from '@nestjs/websockets';
 import { ActivityType, InviteState, MemberRole, User } from '@prisma/client';
-import { Server } from 'socket.io';
 import {
   AcceptInviteInput,
   CreateInviteInput,
@@ -19,17 +20,17 @@ import {
   RejectInviteInput,
   UpdateInviteInput,
 } from './dto';
+import { InvitesGateway } from './invites.gateway';
 
 @Injectable()
 export class InvitesService {
   constructor(
+    @Inject(forwardRef(() => InvitesGateway))
+    private readonly invitesGateway: InvitesGateway,
     private readonly prisma: PrismaService,
     private readonly mailer: MailerService,
     private readonly membersService: MembersService,
   ) {}
-
-  @WebSocketServer()
-  socket: Server;
 
   public async findAllUserInvites(
     dto: FindAllUserInvitesQuery,
@@ -203,7 +204,9 @@ export class InvitesService {
       },
     });
 
-    this.socket.to(userId).emit(SocketEvents.INVITE_UPDATED, updatedInvite);
+    this.invitesGateway.server
+      .to(userId)
+      .emit(SocketEvents.INVITE_UPDATED, updatedInvite);
 
     return updatedInvite;
   }
@@ -217,10 +220,13 @@ export class InvitesService {
       },
     });
 
-    this.socket.to(invite.userId).emit(SocketEvents.INVITE_DELETED, inviteId);
+    this.invitesGateway.server
+      .to(invite.userId)
+      .emit(SocketEvents.INVITE_DELETED, inviteId);
 
     return invite;
   }
+
   private async findInviteAndValidate(inviteId: string, userId: string) {
     const invite = await this.prisma.invites.findUnique({
       where: {

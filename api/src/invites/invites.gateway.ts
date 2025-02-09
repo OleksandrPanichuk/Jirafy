@@ -8,6 +8,8 @@ import {
 import { WsAuthenticatedGuard } from '@/shared/guards';
 import { WsUserInterceptor } from '@/shared/interceptors';
 import {
+  forwardRef,
+  Inject,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -35,7 +37,9 @@ import { InvitesService } from './invites.service';
   cors: corsConfig,
 } as GatewayMetadata)
 export class InvitesGateway {
-  constructor(private readonly invitesService: InvitesService) {}
+  constructor(
+    @Inject(forwardRef(() => InvitesService))
+    private readonly invitesService: InvitesService) {}
 
   @WebSocketServer()
   server: Server;

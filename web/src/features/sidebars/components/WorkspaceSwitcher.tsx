@@ -2,11 +2,12 @@
 
 import { Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
+import { useCurrentWorkspaceMember } from '@/features/members'
 import { useWorkspaceSidebarStore } from '@/features/sidebars'
-import { useWorkspacesStore, WorkspaceLogo } from '@/features/workspaces'
+import { useCurrentWorkspace, useWorkspacesStore, WorkspaceLogo } from '@/features/workspaces'
 import { useDisclosure } from '@/hooks'
-import { cn } from '@/lib'
-import { MemberRole, TypeWorkspace } from '@/types'
+import { checkMemberPermissions, cn } from '@/lib'
+import { TypeWorkspace } from '@/types'
 import {
 	Button,
 	Dropdown,
@@ -38,9 +39,8 @@ export const WorkspaceSwitcher = () => {
 
 	const workspaces = useWorkspacesStore((s) => s.workspaces)
 	const selectWorkspace = useWorkspacesStore((s) => s.selectWorkspace)
-	const getCurrentWorkspace = useWorkspacesStore((s) => s.getCurrentWorkspace)
-
-	const currentWorkspace = getCurrentWorkspace() ?? workspaces[0]
+	const currentWorkspace = useCurrentWorkspace()
+	const currentMember = useCurrentWorkspaceMember()
 
 	const isCurrentWorkspace = (workspace: TypeWorkspace) => {
 		return workspace.id === currentWorkspace.id
@@ -64,11 +64,7 @@ export const WorkspaceSwitcher = () => {
 		return null
 	}
 
-	const currentMember = currentWorkspace.members[0]
-
-	const hasAccess =
-		currentMember.role === MemberRole.ADMIN ||
-		currentMember.role === MemberRole.OWNER
+	const hasAccess = checkMemberPermissions(currentMember.role)
 
 	return (
 		<Dropdown
@@ -89,7 +85,11 @@ export const WorkspaceSwitcher = () => {
 					variant="light"
 					isIconOnly={isCollapsed}
 				>
-					<WorkspaceLogo size={24} name={currentWorkspace.name} src={currentWorkspace.logo?.url} />
+					<WorkspaceLogo
+						size={24}
+						name={currentWorkspace.name}
+						src={currentWorkspace.logo?.url}
+					/>
 					{!isCollapsed && (
 						<>
 							<p className="flex-1 text-start">{currentWorkspace.name}</p>

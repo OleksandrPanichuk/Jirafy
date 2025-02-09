@@ -1,11 +1,14 @@
-import { memberRolesMap, Routes } from '@/constants'
+import { Routes } from '@/constants'
+import {
+	InviteMemberRoleCell,
+	WorkspaceInviteActions
+} from '@/features/invites'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { formatDate } from '@/lib'
-import { InviteState, MemberRole, TypeInviteWithUser } from '@/types'
+import { InviteState, TypeInviteWithUser } from '@/types'
 import { Avatar, Chip } from '@nextui-org/react'
 import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
-import { WorkspaceInviteActions } from '../WorkspaceInviteActions'
 
 const chipColorToStateMap = {
 	[InviteState.PENDING]: 'warning',
@@ -54,8 +57,8 @@ export const columns: ColumnDef<TypeInviteWithUser>[] = [
 					color={chipColorToStateMap[state]}
 					variant="flat"
 					className="badge"
-					size='sm'
-					radius='sm'
+					size="sm"
+					radius="sm"
 				>
 					{state}
 				</Chip>
@@ -65,22 +68,19 @@ export const columns: ColumnDef<TypeInviteWithUser>[] = [
 	{
 		accessorKey: 'role',
 		header: 'Role',
-		cell: ({ row }) => {
-			const role = memberRolesMap.get(
-				row.original.role as unknown as MemberRole
-			)
-			return <p className='text-sm'>{role}</p>
-		}
+		cell: ({ row }) => <InviteMemberRoleCell {...row.original} />
 	},
 	{
 		accessorKey: 'createdAt',
 		header: 'Invite Date',
 		cell: ({ row }) => (
-			<p className="text-tw-text-350 text-sm">{formatDate(row.original.createdAt)}</p>
+			<p className="text-tw-text-350 text-sm">
+				{formatDate(row.original.createdAt)}
+			</p>
 		)
 	},
 	{
 		id: 'actions',
-		cell: () => <WorkspaceInviteActions  />
+		cell: ({ row }) => <WorkspaceInviteActions inviteId={row.original.id} />
 	}
 ]

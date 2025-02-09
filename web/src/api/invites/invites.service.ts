@@ -38,6 +38,7 @@ const findAllWorkspaceInvite = async (input: FindAllWorkspaceInvitesInput) => {
 		query: input
 	})
 
+
 	return (await axios.get<TypeInviteWithUser[]>(url)).data
 }
 
@@ -62,7 +63,7 @@ const deleteInvite = async (input: DeleteInviteInput) => {
 const update = async (input: UpdateInviteInput) => {
 	updateInviteSchema.parse(input)
 
-	return await axios.patch(ApiRoutes.INVITES.ROOT, input)
+	return await axios.patch<TypeInvite>(ApiRoutes.INVITES.ROOT, input)
 }
 
 export const InvitesApi = {

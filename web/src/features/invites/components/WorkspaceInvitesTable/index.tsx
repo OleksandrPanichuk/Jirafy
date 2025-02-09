@@ -1,6 +1,7 @@
 'use client'
 
 import {
+	Button,
 	Table,
 	TableBody,
 	TableCell,
@@ -11,7 +12,8 @@ import {
 import {
 	InviteMemberRoleSelect,
 	InvitesStatusSelect,
-	useWorkspaceInvitesQuery
+	useWorkspaceInvitesQuery,
+	useWorkspaceInvitesStore
 } from '@/features/invites'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { InviteMemberRole, InviteState } from '@/types'
@@ -22,32 +24,43 @@ import {
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
+	getPaginationRowModel,
 	useReactTable
 } from '@tanstack/react-table'
 import { useState } from 'react'
 import { columns } from './WorkspaceInvitesTable.columns'
 
 export const WorkspaceInvitesTable = () => {
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
 	const currentWorkspace = useCurrentWorkspace()
-	const { data = [], isFetching } = useWorkspaceInvitesQuery({
+
+	const { isLoading } = useWorkspaceInvitesQuery({
 		workspaceId: currentWorkspace?.id
 	})
 
-	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+	const data = useWorkspaceInvitesStore((s) => s.invites).reverse()
 
 	const table = useReactTable({
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
 		onColumnFiltersChange: setColumnFilters,
 		state: {
 			columnFilters
+		},
+		initialState: {
+			pagination: {
+				pageSize: 6
+			}
 		}
 	})
 	return (
 		<div>
 			<div className="flex items-center gap-2">
+				<h2 className="flex-1">Invites</h2>
 				<Input
 					size="sm"
 					placeholder="Search by name"
@@ -58,10 +71,9 @@ export const WorkspaceInvitesTable = () => {
 					}
 					className="max-w-[20rem]"
 				/>
-				<div className="flex-1" />
 				<InvitesStatusSelect
 					value={table.getColumn('state')?.getFilterValue() as InviteState}
-					onChange={(value) => table.getColumn('status')?.setFilterValue(value)}
+					onChange={(value) => table.getColumn('state')?.setFilterValue(value)}
 				/>
 				<InviteMemberRoleSelect
 					value={table.getColumn('role')?.getFilterValue() as InviteMemberRole}
@@ -89,7 +101,7 @@ export const WorkspaceInvitesTable = () => {
 						))}
 					</TableHeader>
 					<TableBody>
-						{!isFetching ? (
+						{!isLoading ? (
 							table.getRowModel().rows?.length ? (
 								table.getRowModel().rows.map((row) => (
 									<TableRow
@@ -126,6 +138,24 @@ export const WorkspaceInvitesTable = () => {
 						)}
 					</TableBody>
 				</Table>
+			</div>
+			<div className="flex items-center justify-end space-x-2 py-4">
+				<Button
+					variant="ghost"
+					size="sm"
+					onClick={() => table.previousPage()}
+					isDisabled={!table.getCanPreviousPage()}
+				>
+					Previous
+				</Button>
+				<Button
+					variant="ghost"
+					size="sm"
+					onClick={() => table.nextPage()}
+					isDisabled={!table.getCanNextPage()}
+				>
+					Next
+				</Button>
 			</div>
 		</div>
 	)

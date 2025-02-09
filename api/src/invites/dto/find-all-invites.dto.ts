@@ -1,5 +1,5 @@
 import { InviteState } from '@prisma/client';
-import { IsEnum, IsMongoId } from 'class-validator';
+import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
 
 export class FindAllUserInvitesQuery {
   @IsEnum(InviteState)
@@ -7,8 +7,9 @@ export class FindAllUserInvitesQuery {
 }
 
 export class FindAllWorkspaceInvitesQuery {
+  @IsOptional()
   @IsEnum(InviteState)
-  readonly state: InviteState = InviteState.PENDING;
+  readonly state: InviteState;
 
   @IsMongoId()
   readonly workspaceId: string;

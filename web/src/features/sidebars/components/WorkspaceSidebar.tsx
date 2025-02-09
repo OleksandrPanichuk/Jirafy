@@ -90,10 +90,14 @@ function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 	const workspaceSlug = useCurrentWorkspaceSlug()
 	const user = useAuth((s) => s.user)
 
+	if (!user) {
+		return null
+	}
+
 	return (
 		<aside
 			className={cn(
-				'border-tw-border-200 border-r bg-tw-bg-100 pt-4 h-full',
+				'border-tw-border-200 border-r bg-tw-bg-100 pt-4 h-full ',
 				!isCollapsed && 'min-w-[240px]',
 				className
 			)}
@@ -103,7 +107,7 @@ function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 					<WorkspaceSwitcher />
 					<UserMenu />
 				</div>
-				<div className="overflow-x-hidden  h-full w-full overflow-y-auto py-0.5 px-4 flex-1">
+				<div className="overflow-x-hidden  h-full w-full overflow-y-auto py-0.5 px-4 flex-1 no-scroll">
 					<div className="flex flex-col gap-0.5 mt-2.5">
 						<SidebarItem
 							href={Routes.WORKSPACE_BY_SLUG(workspaceSlug)}
@@ -111,7 +115,7 @@ function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 							icon={<IconHome className="size-4" />}
 						/>
 						<SidebarItem
-							href={Routes.YOUR_WORK(workspaceSlug, user!.id)}
+							href={Routes.YOUR_WORK(workspaceSlug, user.id)}
 							text="Your work"
 							icon={<IconUserBolt className="size-4" />}
 						/>

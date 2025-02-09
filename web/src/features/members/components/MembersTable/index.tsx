@@ -85,24 +85,24 @@ export const MembersTable = ({
 
 	return (
 		<div className={'overflow-hidden'}>
-			<div className={'flex justify-between w-full'}>
-				<h2>Members</h2>
-				<div className={'flex gap-2'}>
-					<Input
-						size="sm"
-						placeholder="Search..."
-						startContent={<IconSearch />}
-						onChange={handleSearchValueChange}
-					/>
-					{checkMemberPermissions(currentMemberRole) &&
-						type === MemberType.WORKSPACE && (
-							<InvitationModal>
-								<Button variant="primary" size="sm" className={'px-5'}>
-									Add member
-								</Button>
-							</InvitationModal>
-						)}
-				</div>
+			<div className={'flex w-full gap-2 items-center'}>
+				<h2 className="flex-1">Members</h2>
+
+				<Input
+					size="sm"
+					placeholder="Search..."
+					className="max-w-[20rem]"
+					startContent={<IconSearch />}
+					onChange={handleSearchValueChange}
+				/>
+				{checkMemberPermissions(currentMemberRole) &&
+					type === MemberType.WORKSPACE && (
+						<InvitationModal>
+							<Button variant="primary" size="sm" className={'px-5'}>
+								Add member
+							</Button>
+						</InvitationModal>
+					)}
 			</div>
 			{/* TODO: separate into custom component */}
 			<div className="rounded-md border border-tw-border-300 mt-4">
