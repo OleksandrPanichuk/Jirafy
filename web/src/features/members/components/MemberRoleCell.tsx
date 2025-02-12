@@ -40,6 +40,7 @@ export const MemberRoleCell = (member: TypeMember) => {
 					trigger: 'min-w-16 flex justify-start'
 				}}
 				headlessTrigger
+				withArrow
 			/>
 		)
 	}

@@ -1,4 +1,5 @@
 import { currentUser, getAllWorkspaces } from '@/api'
+import { ProgressBar } from '@/components/common'
 import { AuthProvider } from '@/features/auth'
 import { Notifications } from '@/features/toast'
 import { WorkspacesProvider } from '@/features/workspaces'
@@ -50,6 +51,7 @@ export default async function RootLayout({
 			<body
 				className={`${inter.variable} ${inter.className} antialiased bg-tw-bg-90 min-h-screen`}
 			>
+				<ProgressBar />
 				<Notifications />
 				<QueryProvider>
 					<AuthProvider initialUser={user}>

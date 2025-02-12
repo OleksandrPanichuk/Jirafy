@@ -80,7 +80,7 @@ export class EmailService {
     const clientUrl = this.config.get<string>('CLIENT_URL');
     const link = `${clientUrl}/verify-email?token=${token}`;
 
-    await this.mailer.sendHTML(
+    await this.mailer.sendMail(
       EmailTemplates.VERIFY_EMAIL,
       {
         to: user.email,

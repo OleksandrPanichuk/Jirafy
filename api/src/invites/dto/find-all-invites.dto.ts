@@ -1,5 +1,5 @@
-import { InviteState } from '@prisma/client';
-import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
+import { InviteState } from '@prisma/client'
+import { IsEnum, IsMongoId, IsOptional } from 'class-validator'
 
 export class FindAllUserInvitesQuery {
   @IsEnum(InviteState)

@@ -10,6 +10,7 @@ import {
 	DropdownMenu,
 	DropdownTrigger
 } from '@nextui-org/react'
+import { IconChevronDown } from '@tabler/icons-react'
 import { useEffect, useMemo, useState } from 'react'
 
 interface IMemberRolesSelectProps {
@@ -20,6 +21,7 @@ interface IMemberRolesSelectProps {
 		trigger?: string
 	}
 	headlessTrigger?: boolean
+	withArrow?: boolean
 }
 
 const options = Array.from(memberRolesMap, ([key, value]) => ({
@@ -32,8 +34,10 @@ export const MemberRoleSelect = ({
 	isDisabled,
 	classNames,
 	headlessTrigger,
-	value
+	value,
+	withArrow
 }: IMemberRolesSelectProps) => {
+	const [isOpen, setIsOpen] = useState(false)
 	const [selected, setSelected] = useState<Set<MemberRole>>(
 		new Set(value ? [value] : [MemberRole.MEMBER])
 	)
@@ -64,13 +68,14 @@ export const MemberRoleSelect = ({
 				base: 'mr-2'
 			}}
 			isDisabled={isDisabled}
+			onOpenChange={setIsOpen}
 		>
 			<DropdownTrigger>
 				<Button
 					className={cn(
 						'min-w-20',
 						headlessTrigger &&
-							'border-none hover:bg-transparent text-tw-text-350 text-sm p-0 data-[pressed=true]:scale-100 data-[focus-visible=true]:outline-none min-w-0 aria-expanded:opacity-100 aria-expanded:scale-100',
+							'border-none hover:bg-transparent text-tw-text-350 text-sm p-0 data-[pressed=true]:scale-100 data-[focus-visible=true]:outline-none min-w-0 aria-expanded:opacity-100 aria-expanded:scale-100 gap-1',
 						classNames?.trigger
 					)}
 					variant={'ghost'}
@@ -79,6 +84,14 @@ export const MemberRoleSelect = ({
 					disableRipple={headlessTrigger}
 				>
 					<p>{selectedValue}</p>
+					{withArrow && (
+						<IconChevronDown
+							className={cn(
+								'transition-transform rotate-0 size-4',
+								isOpen && 'rotate-180'
+							)}
+						/>
+					)}
 				</Button>
 			</DropdownTrigger>
 			<DropdownMenu

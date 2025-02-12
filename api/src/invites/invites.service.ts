@@ -1,17 +1,17 @@
-import { MembersService } from '@/members/members.service';
-import { SocketEvents } from '@/shared/enums';
-import { MailerService } from '@app/mailer';
-import { EmailTemplates } from '@app/mailer/mailer.constants';
-import { PrismaService } from '@app/prisma';
+import { MembersService } from '@/members/members.service'
+import { SocketEvents } from '@/shared/enums'
+import { MailerService } from '@app/mailer'
+import { EmailTemplates } from '@app/mailer/mailer.constants'
+import { PrismaService } from '@app/prisma'
 import {
   ForbiddenException,
   forwardRef,
   Inject,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { WsException } from '@nestjs/websockets';
-import { ActivityType, InviteState, MemberRole, User } from '@prisma/client';
+} from '@nestjs/common'
+import { WsException } from '@nestjs/websockets'
+import { ActivityType, InviteState, MemberRole, User } from '@prisma/client'
 import {
   AcceptInviteInput,
   CreateInviteInput,
@@ -19,8 +19,8 @@ import {
   FindAllWorkspaceInvitesQuery,
   RejectInviteInput,
   UpdateInviteInput,
-} from './dto';
-import { InvitesGateway } from './invites.gateway';
+} from './dto'
+import { InvitesGateway } from './invites.gateway'
 
 @Injectable()
 export class InvitesService {
@@ -157,7 +157,7 @@ export class InvitesService {
       })
     ).name;
 
-    await this.mailer.sendHTML(
+    await this.mailer.sendMail(
       EmailTemplates.INVITATION,
       {
         to: dto.email,

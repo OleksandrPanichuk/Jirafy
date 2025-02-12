@@ -5,26 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a363602-2642-4ffb-ac94-9c72f6370b36" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/invites/invites.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/invites/invites.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/api/invites/invites.actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/api/invites/invites.actions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/api/invites/invites.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/api/invites/invites.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/(main)/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/(platform)/(main)/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/(setup)/create-workspace/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/(platform)/(setup)/create-workspace/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/invitations/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/app/(platform)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/(platform)/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/constants/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/constants/routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/invites/components/InvitationModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/invites/components/InvitationModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/invites/components/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/invites/components/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/invites/providers/InvitesProvider.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/invites/providers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/invites/providers/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/members/components/MembersTable/MemberRoleCell.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/components/MemberRoleCell.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/members/components/MembersTable/columns.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/components/MembersTable/columns.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/members/components/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/members/components/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/sidebars/components/WorkspaceSwitcher.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/sidebars/components/WorkspaceSwitcher.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/components/UpdateWorkspaceForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/components/UpdateWorkspaceForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/features/workspaces/components/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/features/workspaces/components/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/bun.lockb" beforeDir="false" afterPath="$PROJECT_DIR$/api/bun.lockb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/libs/mailer/src/mailer.service.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/api/libs/mailer/src/mailer.service.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/auth/email/email.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/auth/email/email.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/auth/password/password.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/auth/password/password.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/invites/dto/find-all-invites.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/invites/dto/find-all-invites.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/invites/invites.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/invites/invites.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,6 +141,7 @@
       <workItem from="1738417214585" duration="4163000" />
       <workItem from="1738701262306" duration="3557000" />
       <workItem from="1738749683137" duration="4815000" />
+      <workItem from="1739210843416" duration="999000" />
     </task>
     <servers />
   </component>
