@@ -3,7 +3,7 @@ import { WorkspacesApi } from '@/api'
 import { Routes } from '@/constants'
 import { toast } from '@/features/toast'
 import { useMutation } from '@/hooks'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 
 export const useDeleteWorkspaceMutation = () => {
 	const router = useRouter()

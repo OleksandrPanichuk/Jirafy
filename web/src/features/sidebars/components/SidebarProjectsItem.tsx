@@ -55,6 +55,7 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 								classNames={{
 									content: 'pl-3'
 								}}
+								isCollapsed={isCollapsed}
 							/>
 							<SidebarItem
 								icon={<IconInnerShadowRight className="size-4" />}
@@ -63,6 +64,8 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 								classNames={{
 									content: 'pl-3'
 								}}
+								
+								isCollapsed={isCollapsed}
 							/>
 							<SidebarItem
 								icon={<IconStack2 className="size-4" />}
@@ -71,6 +74,7 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 								classNames={{
 									content: 'pl-3'
 								}}
+								isCollapsed={isCollapsed}
 							/>
 							<SidebarItem
 								icon={<IconFileText className="size-4" />}
@@ -79,6 +83,7 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 								classNames={{
 									content: 'pl-3'
 								}}
+								isCollapsed={isCollapsed}
 							/>
 						</>
 					)}

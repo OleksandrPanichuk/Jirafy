@@ -13,7 +13,7 @@ import {
 } from '@/components/ui'
 import { useChangeEmailMutation, useVerifyIdentityStore } from '@/features/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 import { useForm } from 'react-hook-form'
 
 export const ChangeEmailForm = () => {

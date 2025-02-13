@@ -56,7 +56,6 @@ export const SidebarGroup = ({
 			selectedKeys={isCollapsed && shouldBeOpenWhenCollapsed ? [title] : undefined}
 		>
 			<AccordionItem
-			
 				key={title}
 				title={
 					<div

@@ -16,7 +16,7 @@ import {
 } from '@/features/workspaces'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@nextui-org/react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 

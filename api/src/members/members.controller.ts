@@ -33,7 +33,7 @@ export class MembersController {
       {
         ...query,
         identifier: slug,
-        type: MemberType.WORKSPACE,
+        type: MemberType.WORKSPACE,        
       },
       userId,
     );

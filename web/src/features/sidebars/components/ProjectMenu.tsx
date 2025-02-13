@@ -24,7 +24,7 @@ import {
 	IconStar,
 	IconStarFilled
 } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 import { useMemo } from 'react'
 
 interface IProjectMenuProps {

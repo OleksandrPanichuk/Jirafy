@@ -9,7 +9,7 @@ import {
 	useUserInvitesStore
 } from '@/features/invites'
 import { useConfirm } from '@/hooks'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 import { useState } from 'react'
 
 export const UserInvitesList = () => {
@@ -19,8 +19,10 @@ export const UserInvitesList = () => {
 	const invites = useUserInvitesStore((s) => s.invites)
 	const [selected, setSelected] = useState<Set<string>>(new Set())
 
-	const { mutateAsync: acceptInvites, isPending: isAccepting } = useAcceptInvitesMutation()
-	const { mutate: rejectInvites, isPending: isRejecting } = useRejectInvitesMutation()
+	const { mutateAsync: acceptInvites, isPending: isAccepting } =
+		useAcceptInvitesMutation()
+	const { mutate: rejectInvites, isPending: isRejecting } =
+		useRejectInvitesMutation()
 
 	const handleToggle = (id: string) => {
 		if (selected.has(id)) {

@@ -2,13 +2,13 @@ import { Routes } from '@/constants'
 import { IconBriefcase, IconBulb, IconChartBar, IconMessage, IconStack2 } from '@tabler/icons-react'
 import { ReactNode } from 'react'
 
-type WorkspaceLink = {
+type WorkspaceSidebarLink = {
 	text: string
 	href: string
 	icon: ReactNode
 }
 
-export const getWorkspaceLinks = (slug: string): WorkspaceLink[] => [
+export const getWorkspaceSidebarLinks = (slug: string): WorkspaceSidebarLink[] => [
 	{
 		href: Routes.WORKSPACE_PROJECTS(slug),
 		text: 'Projects',

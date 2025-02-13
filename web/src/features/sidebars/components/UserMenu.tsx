@@ -13,7 +13,7 @@ import {
 	DropdownTrigger
 } from '@nextui-org/react'
 import { IconLogout, IconSettings } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 
 export const UserMenu = () => {
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
@@ -58,10 +58,10 @@ export const UserMenu = () => {
 					variant="flat"
 					className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
 					onPress={() => {
-						router.push(Routes.PROFILE_SETTINGS)
+						router.push(Routes.PROFILE)
 					}}
 					key="user-settings"
-					href={Routes.PROFILE_SETTINGS}
+					href={Routes.PROFILE}
 					startContent={<IconSettings className="size-4 text-tw-text-200" />}
 					showDivider
 				>

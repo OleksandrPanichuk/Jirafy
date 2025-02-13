@@ -5,7 +5,7 @@ import { useAuth } from '@/features/auth'
 import { toast } from '@/features/toast'
 import { useMutation } from '@/hooks'
 import { useSockets } from '@/providers'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 
 export const useSignOutMutation = () => {
 	const setUser = useAuth((s) => s.setUser)

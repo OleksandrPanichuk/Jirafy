@@ -60,7 +60,7 @@ export const WorkspaceInvitesTable = () => {
 	return (
 		<div>
 			<div className="flex items-center gap-2">
-				<h2 className="flex-1">Invites</h2>
+				<h2 className="flex-1 hidden sm:block">Invites</h2>
 				<Input
 					size="sm"
 					placeholder="Search by name"
@@ -71,6 +71,7 @@ export const WorkspaceInvitesTable = () => {
 					}
 					className="max-w-[20rem]"
 				/>
+				<div className='flex-1 sm:flex-none sm:hidden' />
 				<InvitesStatusSelect
 					value={table.getColumn('state')?.getFilterValue() as InviteState}
 					onChange={(value) => table.getColumn('state')?.setFilterValue(value)}

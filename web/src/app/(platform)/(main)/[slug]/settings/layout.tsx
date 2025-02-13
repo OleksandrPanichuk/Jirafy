@@ -2,12 +2,12 @@
 import { useCurrentWorkspaceMember } from '@/features/members'
 import {
 	WorkspaceSettingsHeader,
-	WorkspaceSettingsNavigation
+	WorkspaceSettingsNavigation,
+	WorkspaceSettingsNavigationMobile
 } from '@/features/workspaces'
 import { checkMemberPermissions } from '@/lib'
 
 import { PropsWithChildren } from 'react'
-import { WorkspaceSettingsNavigationMobile } from '../../../../../features/workspaces/components/WorkspaceSettingsNavigation'
 
 export default function Layout({ children }: PropsWithChildren) {
 	const currentMember = useCurrentWorkspaceMember()

@@ -1,7 +1,5 @@
 'use client'
 
-import { useWorkspaceSidebarStore } from '@/features/sidebars'
-
 import { cn } from '@/lib'
 import { Tooltip } from '@nextui-org/react'
 import Link from 'next/link'
@@ -13,6 +11,7 @@ interface ISidebarItemProps {
 	text: string
 	href: string
 	action?: ReactNode
+	isCollapsed?: boolean
 	classNames?: {
 		base?: string
 		container?: string
@@ -24,13 +23,12 @@ interface ISidebarItemProps {
 export const SidebarItem = ({
 	text,
 	classNames,
+	isCollapsed,
 	href,
 	icon,
 	action
 }: ISidebarItemProps) => {
 	const pathname = usePathname()
-	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
-
 	const isActive = useMemo(() => {
 		return pathname === href
 	}, [href, pathname])

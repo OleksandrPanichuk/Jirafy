@@ -1,8 +1,5 @@
-import { redirect } from 'next/navigation'
-import { Routes } from '@/constants'
-
 const ProfilePage = () => {
-	return redirect(Routes.CREATE_WORKSPACE)
+	return <>Hello</>
 }
 
 export default ProfilePage

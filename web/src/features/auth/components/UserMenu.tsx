@@ -11,7 +11,7 @@ import {
 	User
 } from '@nextui-org/react'
 import { IconEdit, IconLogout } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 
 interface IUserMenuProps {
 	onlySignOut?: boolean

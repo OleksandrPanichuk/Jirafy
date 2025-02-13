@@ -4,7 +4,7 @@ import { Routes } from '@/constants'
 import { toast } from '@/features/toast'
 import { useWorkspacesStore } from '@/features/workspaces'
 import { useMutation } from '@/hooks'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 
 export const useCreateWorkspaceMutation = () => {
 	const addWorkspace = useWorkspacesStore((s) => s.addWorkspace)

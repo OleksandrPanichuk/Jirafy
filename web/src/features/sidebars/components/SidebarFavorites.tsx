@@ -32,6 +32,7 @@ export const SidebarFavorites = () => {
 					icon={favorite.project.emoji}
 					text={favorite.project.name}
 					action={<FavoritesItemMenu favorite={favorite} />}
+					isCollapsed={isCollapsed}
 				/>
 			))}
 		</SidebarGroup>

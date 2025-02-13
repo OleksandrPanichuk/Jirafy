@@ -7,7 +7,7 @@ import { toast } from '@/features/toast'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { useMutation } from '@/hooks'
 import { MemberRole } from '@/types'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 
 export const useCreateProjectMutation = () => {
 	const router = useRouter()

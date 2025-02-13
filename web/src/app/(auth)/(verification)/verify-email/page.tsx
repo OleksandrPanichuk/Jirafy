@@ -9,7 +9,8 @@ import {
 	VerificationProcess
 } from '@/features/auth'
 import { toast } from '@/features/toast'
-import { redirect, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
+import { redirect, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function Page() {

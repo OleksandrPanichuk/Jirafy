@@ -86,7 +86,7 @@ export const MembersTable = ({
 	return (
 		<div className={'overflow-hidden'}>
 			<div className={'flex w-full gap-2 items-center'}>
-				<h2 className="flex-1">Members</h2>
+				<h2 className="flex-1 hidden sm:block">Members</h2>
 
 				<Input
 					size="sm"
@@ -95,6 +95,7 @@ export const MembersTable = ({
 					startContent={<IconSearch />}
 					onChange={handleSearchValueChange}
 				/>
+				<div className="flex-1 sm:flex-none sm:hidden" />
 				{checkMemberPermissions(currentMemberRole) &&
 					type === MemberType.WORKSPACE && (
 						<InvitationModal>

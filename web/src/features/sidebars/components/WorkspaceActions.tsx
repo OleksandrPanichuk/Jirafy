@@ -9,7 +9,7 @@ import {
 	DropdownTrigger
 } from '@nextui-org/react'
 import { IconDots, IconSettings } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 
 export const WorkspaceActions = () => {
 	const workspaceSlug = useCurrentWorkspaceSlug()

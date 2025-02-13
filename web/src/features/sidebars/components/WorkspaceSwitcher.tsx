@@ -4,7 +4,11 @@ import { Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
 import { useCurrentWorkspaceMember } from '@/features/members'
 import { useWorkspaceSidebarStore } from '@/features/sidebars'
-import { useCurrentWorkspace, useWorkspacesStore, WorkspaceLogo } from '@/features/workspaces'
+import {
+	useCurrentWorkspace,
+	useWorkspacesStore,
+	WorkspaceLogo
+} from '@/features/workspaces'
 import { useDisclosure } from '@/hooks'
 import { checkMemberPermissions, cn } from '@/lib'
 import { TypeWorkspace } from '@/types'
@@ -24,7 +28,7 @@ import {
 	IconSettings,
 	IconSquarePlus
 } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 
 // TODO: when adding a subscription check whether user can create new workspace or not
 export const WorkspaceSwitcher = () => {

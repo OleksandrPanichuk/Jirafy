@@ -4,7 +4,7 @@ import { Drawer, DrawerContent } from '@/components/ui'
 import { breakpoints, Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
 import {
-	getWorkspaceLinks,
+	getWorkspaceSidebarLinks,
 	SidebarFavorites,
 	SidebarGroup,
 	SidebarItem,
@@ -60,7 +60,7 @@ export const WorkspaceSidebarMobile = () => {
 	if (!isMobile) return null
 
 	return (
-		<WorkspaceSidebarProvider>
+		<>
 			<Button
 				className="size-8 md:hidden"
 				onPress={open}
@@ -80,7 +80,7 @@ export const WorkspaceSidebarMobile = () => {
 					<WorkspaceSidebar alwaysOpen />
 				</DrawerContent>
 			</Drawer>
-		</WorkspaceSidebarProvider>
+		</>
 	)
 }
 
@@ -113,21 +113,28 @@ function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 							href={Routes.WORKSPACE_BY_SLUG(workspaceSlug)}
 							text="Home"
 							icon={<IconHome className="size-4" />}
+							isCollapsed={isCollapsed}
 						/>
 						<SidebarItem
 							href={Routes.YOUR_WORK(workspaceSlug, user.id)}
 							text="Your work"
 							icon={<IconUserBolt className="size-4" />}
+							isCollapsed={isCollapsed}
 						/>
 						<SidebarItem
 							href={Routes.NOTIFICATIONS(workspaceSlug)}
 							text="Inbox"
 							icon={<IconInbox className="size-4" />}
+							isCollapsed={isCollapsed}
 						/>
 					</div>
 					<SidebarGroup title="Workspace" action={<WorkspaceActions />}>
-						{getWorkspaceLinks(workspaceSlug).map((link) => (
-							<SidebarItem key={link.href} {...link} />
+						{getWorkspaceSidebarLinks(workspaceSlug).map((link) => (
+							<SidebarItem
+								key={link.href}
+								isCollapsed={isCollapsed}
+								{...link}
+							/>
 						))}
 					</SidebarGroup>
 					<SidebarFavorites />
