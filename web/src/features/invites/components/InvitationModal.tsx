@@ -1,6 +1,8 @@
 'use client'
 
 import { InviteMembersInput, inviteMembersSchema } from '@/api'
+import { SocketEvents } from '@/constants'
+import { MemberRoleSelect } from '@/features/members'
 import {
 	Button,
 	Form,
@@ -8,9 +10,7 @@ import {
 	FormError,
 	FormField,
 	FormItem
-} from '@/components/ui'
-import { SocketEvents } from '@/constants'
-import { MemberRoleSelect } from '@/features/members'
+} from '@/features/shared'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { useChildrenWithProps, useDisclosure } from '@/hooks'
 import { useSocket } from '@/providers'

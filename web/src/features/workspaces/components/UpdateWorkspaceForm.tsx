@@ -1,6 +1,8 @@
 'use client'
 
 import { UpdateWorkspaceInput, updateWorkspaceSchema } from '@/api'
+import { Routes } from '@/constants'
+import { ImageUploader } from '@/features/images'
 import {
 	Button,
 	FieldWrapper,
@@ -11,9 +13,7 @@ import {
 	FormItem,
 	FormLabel,
 	Label
-} from '@/components/ui'
-import { Routes } from '@/constants'
-import { ImageUploader } from '@/features/images'
+} from '@/features/shared'
 import { toast } from '@/features/toast'
 import {
 	SizeSelect,
@@ -88,7 +88,7 @@ export const UpdateWorkspaceForm = () => {
 						{workspace.logo ? (
 							<Image
 								src={workspace.logo.url}
-								objectFit={'cover'}
+								className="object-cover"
 								alt={'workspace url'}
 								fill
 							/>

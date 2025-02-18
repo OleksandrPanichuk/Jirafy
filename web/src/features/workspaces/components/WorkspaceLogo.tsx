@@ -1,8 +1,8 @@
 'use client'
 
 import { cn } from '@/lib'
-import randomColor from 'randomcolor'
 import Image from 'next/image'
+import randomColor from 'randomcolor'
 
 interface IWorkspaceLogoProps {
 	size: number
@@ -20,7 +20,7 @@ export const WorkspaceLogo = ({ name, src, size }: IWorkspaceLogoProps) => {
 					height: `${size}px`
 				}}
 			>
-				<Image src={src} objectFit={'cover'} alt={`${name} logo`} fill />
+				<Image src={src} className='object-cover' alt={`${name} logo`} fill />
 			</div>
 		)
 	}

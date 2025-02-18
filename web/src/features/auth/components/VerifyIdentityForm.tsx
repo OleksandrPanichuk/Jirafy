@@ -1,5 +1,6 @@
 'use client'
 
+import { VerifyIdentityInput, verifyIdentitySchema } from '@/api'
 import {
 	useVerifyIdentityMutation,
 	useVerifyIdentityStore
@@ -13,10 +14,9 @@ import {
 	FormItem,
 	FormLabel,
 	Input
-} from '@/components/ui'
-import { useForm } from 'react-hook-form'
+} from '@/features/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { VerifyIdentityInput, verifyIdentitySchema } from '@/api'
+import { useForm } from 'react-hook-form'
 
 // Form where user inputs his password to verify his identity. After verification he will access ChangeEmailForm
 export const VerifyIdentityForm = () => {
@@ -26,7 +26,7 @@ export const VerifyIdentityForm = () => {
 			password: ''
 		}
 	})
-	const { isIdentityVerified } = useVerifyIdentityStore(s => s)
+	const { isIdentityVerified } = useVerifyIdentityStore((s) => s)
 
 	const { mutate: verifyIdentity, isPending } = useVerifyIdentityMutation()
 

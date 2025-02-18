@@ -1,10 +1,10 @@
 'use client'
 
-import { Button } from '@/components/ui'
 import {
 	useCurrentWorkspaceMember,
 	useDeleteMemberMutation
 } from '@/features/members'
+import { Button } from '@/features/shared'
 import { useConfirm } from '@/hooks'
 import { checkMemberPermissions } from '@/lib'
 import { MemberRole } from '@/types'

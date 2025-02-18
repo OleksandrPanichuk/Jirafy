@@ -1,7 +1,6 @@
 'use client'
-import { Logo } from '@/components/common'
-import { useSendVerificationLinkMutation } from '@/features/auth'
-import { useAuth } from '@/features/auth'
+import { useAuth, useSendVerificationLinkMutation } from '@/features/auth'
+import { Logo } from '@/features/shared'
 import { Button, Card, CardBody, CardHeader } from '@nextui-org/react'
 import { useState } from 'react'
 

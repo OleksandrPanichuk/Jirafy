@@ -1,6 +1,12 @@
 'use client'
 
 import {
+	InviteMemberRoleSelect,
+	InvitesStatusSelect,
+	useWorkspaceInvitesQuery,
+	useWorkspaceInvitesStore
+} from '@/features/invites'
+import {
 	Button,
 	Table,
 	TableBody,
@@ -8,13 +14,7 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow
-} from '@/components/ui'
-import {
-	InviteMemberRoleSelect,
-	InvitesStatusSelect,
-	useWorkspaceInvitesQuery,
-	useWorkspaceInvitesStore
-} from '@/features/invites'
+} from '@/features/shared'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { InviteMemberRole, InviteState } from '@/types'
 import { Input, Spinner } from '@nextui-org/react'
@@ -71,7 +71,7 @@ export const WorkspaceInvitesTable = () => {
 					}
 					className="max-w-[20rem]"
 				/>
-				<div className='flex-1 sm:flex-none sm:hidden' />
+				<div className="flex-1 sm:flex-none sm:hidden" />
 				<InvitesStatusSelect
 					value={table.getColumn('state')?.getFilterValue() as InviteState}
 					onChange={(value) => table.getColumn('state')?.setFilterValue(value)}

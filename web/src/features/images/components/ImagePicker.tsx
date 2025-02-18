@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@/components/ui'
 import { IMAGE_MIME_TYPES } from '@/constants'
+import { Button } from '@/features/shared'
 import { cn } from '@/lib'
 import { TypeFile } from '@/types'
 import { useRef, useState } from 'react'

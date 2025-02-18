@@ -1,6 +1,6 @@
 import { currentUser, getAllWorkspaces } from '@/api'
-import { ProgressBar } from '@/components/common'
 import { AuthProvider } from '@/features/auth'
+import { ProgressBar } from '@/features/shared'
 import { Notifications } from '@/features/toast'
 import { WorkspacesProvider } from '@/features/workspaces'
 import { QueryProvider, SocketsProvider } from '@/providers'

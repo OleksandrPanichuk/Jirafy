@@ -1,6 +1,7 @@
 'use client'
 
 import { ChangeEmailInput, changeEmailSchema } from '@/api'
+import { useChangeEmailMutation, useVerifyIdentityStore } from '@/features/auth'
 import {
 	BottomGradientButton,
 	Form,
@@ -10,8 +11,7 @@ import {
 	FormItem,
 	FormLabel,
 	Input
-} from '@/components/ui'
-import { useChangeEmailMutation, useVerifyIdentityStore } from '@/features/auth'
+} from '@/features/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next-nprogress-bar'
 import { useForm } from 'react-hook-form'

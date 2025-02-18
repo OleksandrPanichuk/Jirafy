@@ -1,13 +1,13 @@
 'use client'
 
 import { ReorderProjectsInput } from '@/api'
-import { DragHandle, SortableItem, SortableList } from '@/components/ui'
 import {
 	CreateProjectModal,
 	useCreateProjectModalStore,
 	useProjectsStore,
 	useReorderProjectsMutation
 } from '@/features/projects'
+import { DragHandle, SortableItem, SortableList } from '@/features/shared'
 import {
 	SidebarGroup,
 	SidebarProjectsItem,

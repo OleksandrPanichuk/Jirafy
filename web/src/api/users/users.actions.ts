@@ -11,7 +11,7 @@ export const currentUser = async (): Promise<TypeUser | null> => {
 		const { has } = await cookies()
 
 		if (has(SESSION_COOKIE_NAME)) {
-			user = await UsersApi.currentUser()
+			user = await UsersApi.current()
 		}
 	} finally {
 		return user

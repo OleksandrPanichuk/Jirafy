@@ -1,5 +1,11 @@
+import { CurrentProfileForm } from '@/features/profile'
+
 const ProfilePage = () => {
-	return <>Hello</>
+	return (
+		<>
+			<CurrentProfileForm />
+		</>
+	)
 }
 
 export default ProfilePage

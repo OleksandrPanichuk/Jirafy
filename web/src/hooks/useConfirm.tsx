@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/ui'
+import { Button } from '@/features/shared'
 import {
 	Modal,
 	ModalContent,
@@ -56,18 +56,10 @@ export const useConfirm = ({
 					</p>
 				</ModalHeader>
 				<ModalFooter>
-					<Button
-						variant={'ghost'}
-						onClick={handleCancel}
-						size="sm"
-					>
+					<Button variant={'ghost'} onClick={handleCancel} size="sm">
 						Cancel
 					</Button>
-					<Button
-						onClick={handleConfirm}
-						variant="danger"
-						size="sm"
-					>
+					<Button onClick={handleConfirm} variant="danger" size="sm">
 						Confirm
 					</Button>
 				</ModalFooter>

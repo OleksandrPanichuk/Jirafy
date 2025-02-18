@@ -1,7 +1,7 @@
 'use client'
 
-import { Input } from '@/components/ui'
 import { useGetUnsplashImagesQuery } from '@/features/images'
+import { Input } from '@/features/shared'
 import { useDebounce } from '@/hooks'
 import { Skeleton } from '@nextui-org/react'
 import { IconSearch } from '@tabler/icons-react'
@@ -51,7 +51,7 @@ export const UnsplashPicker = ({ onChange }: IUnsplashPickerProps) => {
 							<Image
 								src={image.urls.small}
 								alt={image.alt_description ?? 'unsplash-image'}
-								objectFit="cover"
+								className='object-cover'
 								fill
 							/>
 						</li>

@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@/components/ui'
 import { memberRolesMap } from '@/constants'
+import { Button } from '@/features/shared'
 import { cn } from '@/lib'
 import { MemberRole } from '@/types'
 import {

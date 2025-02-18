@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui'
 import { Routes } from '@/constants'
 import {
 	useAcceptInvitesMutation,
@@ -8,6 +7,7 @@ import {
 	UserInviteCard,
 	useUserInvitesStore
 } from '@/features/invites'
+import { Button } from '@/features/shared'
 import { useConfirm } from '@/hooks'
 import { useRouter } from 'next-nprogress-bar'
 import { useState } from 'react'

@@ -1,10 +1,10 @@
 'use client'
-import { PropsWithChildren } from 'react'
 import { Routes } from '@/constants'
-import { Logo } from '@/components/common'
+import { useAuth } from '@/features/auth'
+import { Logo } from '@/features/shared'
 import { useWorkspacesStore } from '@/features/workspaces'
 import Link from 'next/link'
-import { useAuth } from '@/features/auth'
+import { PropsWithChildren } from 'react'
 
 const Layout = ({ children }: PropsWithChildren) => {
 	const user = useAuth((s) => s.user)

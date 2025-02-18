@@ -8,7 +8,7 @@ import {
 	FormField,
 	FormItem,
 	FormLabel
-} from '@/components/ui'
+} from '@/features/shared'
 import {
 	SizeSelect,
 	SlugInput,

@@ -4,7 +4,7 @@ import { Modal, ModalContent } from '@nextui-org/react'
 import { PropsWithChildren, useRef, useState } from 'react'
 import ReactCrop, { Crop, PixelCrop } from 'react-image-crop'
 
-import { Button } from '@/components/ui'
+import { Button } from '@/features/shared'
 
 import 'react-image-crop/dist/ReactCrop.css'
 

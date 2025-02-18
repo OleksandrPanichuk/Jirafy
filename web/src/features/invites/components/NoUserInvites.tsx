@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui'
-import Link from 'next/link'
 import { Routes } from '@/constants'
+import { Button } from '@/features/shared'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export const NoUserInvites = () => {
 	return (

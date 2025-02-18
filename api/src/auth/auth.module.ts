@@ -1,4 +1,4 @@
-import { UsersService } from '@/users/users.service';
+import { UsersModule } from '@/users/users.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -26,6 +26,7 @@ import { SessionSerializer } from './utils/session.serializer';
     }),
     PasswordModule,
     EmailModule,
+    UsersModule,
   ],
   providers: [
     AuthService,
@@ -33,7 +34,6 @@ import { SessionSerializer } from './utils/session.serializer';
     LocalStrategy,
     GoogleStrategy,
     GithubStrategy,
-    UsersService,
   ],
   controllers: [AuthController],
 })

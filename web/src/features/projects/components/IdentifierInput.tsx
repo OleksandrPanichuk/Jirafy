@@ -1,7 +1,7 @@
 'use client'
 
 import { createProjectSchema } from '@/api'
-import { Input } from '@/components/ui'
+import { Input } from '@/features/shared'
 import { ChangeEvent, useEffect } from 'react'
 import { Control, ControllerRenderProps, useWatch } from 'react-hook-form'
 import { z } from 'zod'

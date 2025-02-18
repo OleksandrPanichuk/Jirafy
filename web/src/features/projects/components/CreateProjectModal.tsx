@@ -1,17 +1,6 @@
 'use client'
 
 import { CreateProjectInput, createProjectSchema } from '@/api'
-import { EmojiPicker } from '@/components/common'
-import {
-	Button,
-	Form,
-	FormControl,
-	FormError,
-	FormField,
-	FormItem,
-	Input,
-	Textarea
-} from '@/components/ui'
 import { CoverPicker, useGetRandomImageQuery } from '@/features/images'
 import {
 	IdentifierInput,
@@ -20,6 +9,17 @@ import {
 	useCreateProjectModalStore,
 	useCreateProjectMutation
 } from '@/features/projects'
+import {
+	Button,
+	EmojiPicker,
+	Form,
+	FormControl,
+	FormError,
+	FormField,
+	FormItem,
+	Input,
+	Textarea
+} from '@/features/shared'
 import { useUploadFileMutation } from '@/features/storage'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { Network, TypeFile } from '@/types'

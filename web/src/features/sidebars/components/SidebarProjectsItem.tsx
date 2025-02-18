@@ -1,7 +1,7 @@
 'use client'
 
-import { DragHandle } from '@/components/ui'
 import { Routes } from '@/constants'
+import { DragHandle } from '@/features/shared'
 import {
 	ProjectMenu,
 	SidebarGroup,
@@ -64,7 +64,6 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 								classNames={{
 									content: 'pl-3'
 								}}
-								
 								isCollapsed={isCollapsed}
 							/>
 							<SidebarItem

@@ -1,8 +1,8 @@
 'use client'
 
-import { Drawer, DrawerContent } from '@/components/ui'
 import { breakpoints, Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
+import { Drawer, DrawerContent } from '@/features/shared'
 import {
 	getWorkspaceSidebarLinks,
 	SidebarFavorites,

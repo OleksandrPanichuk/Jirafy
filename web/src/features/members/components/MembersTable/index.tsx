@@ -1,5 +1,6 @@
 'use client'
 
+import { useInfiniteMembersQuery } from '@/features/members'
 import {
 	Button,
 	Table,
@@ -8,8 +9,7 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow
-} from '@/components/ui'
-import { useInfiniteMembersQuery } from '@/features/members'
+} from '@/features/shared'
 import { useDebounce } from '@/hooks'
 import { MemberRole, MemberType } from '@/types'
 import { Input, Spinner } from '@nextui-org/react'

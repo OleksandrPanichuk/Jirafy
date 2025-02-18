@@ -1,8 +1,8 @@
 'use client'
 
-import { Drawer, DrawerContent } from '@/components/ui'
 import { breakpoints, Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
+import { Drawer, DrawerContent } from '@/features/shared'
 import {
 	profileSidebarLinks,
 	ProfileSidebarProvider,
@@ -107,7 +107,7 @@ const SidebarContent = ({ alwaysOpen, className }: IProfileSidebarProps) => {
 				<div className="overflow-x-hidden mt-2  h-full w-full overflow-y-auto py-0.5 px-4 flex-1 no-scroll">
 					<div className="flex flex-col gap-0.5 mt-2.5">
 						{!isCollapsed && (
-							<span className="text-tw-text-400 text-sm font-semibold">
+							<span className="text-tw-text-400 mb-3 text-sm font-medium">
 								Your account
 							</span>
 						)}
@@ -117,7 +117,7 @@ const SidebarContent = ({ alwaysOpen, className }: IProfileSidebarProps) => {
 					</div>
 					<div className="flex flex-col gap-0.5 mt-4">
 						{!isCollapsed && (
-							<span className="text-tw-text-400 text-sm font-semibold">
+							<span className="text-tw-text-400 text-sm mb-3 font-medium">
 								Workspaces
 							</span>
 						)}

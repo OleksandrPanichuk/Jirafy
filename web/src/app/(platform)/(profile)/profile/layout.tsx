@@ -1,4 +1,3 @@
-import { ProfileLayout } from "@/components/layout"
-
+import { ProfileLayout } from '@/features/profile'
 
 export default ProfileLayout

@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/ui'
+import { Button } from '@/features/shared'
 import { cn } from '@/lib'
 import { InviteState } from '@/types'
 import {

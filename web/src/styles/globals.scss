@@ -3,77 +3,81 @@
 @tailwind utilities;
 
 :root {
-	--dark: #131313;
-	--gray: #2e333d;
-	--blue: rgb(107, 138, 253);
+  --dark: #131313;
+  --gray: #2e333d;
+  --blue: rgb(107, 138, 253);
 
-	--bg-100: rgb(25, 25, 25);
-	--bg-90: rgb(32, 32, 32);
-	--bg-80: rgb(44, 44, 44);
+  --bg-100: rgb(25, 25, 25);
+  --bg-90: rgb(32, 32, 32);
+  --bg-80: rgb(44, 44, 44);
 
-	--text-100: rgb(229, 229, 229);
-	--text-200: rgb(163, 163, 163);
-	--text-300: rgb(115, 115, 115);
-	--text-350: rgb(130, 130, 130);
-	--text-400: rgb(82, 82, 82);
-	--scrollbar: rgb(82, 82, 82);
+  --text-100: rgb(229, 229, 229);
+  --text-200: rgb(163, 163, 163);
+  --text-300: rgb(115, 115, 115);
+  --text-350: rgb(130, 130, 130);
+  --text-400: rgb(82, 82, 82);
+  --scrollbar: rgb(82, 82, 82);
 
-	--border-100: #222222; // rgb(34, 34, 34)
-	--border-200: #262626; // rgb(38, 38, 38)
-	--border-300: #2e2e2e; // rgb(46, 46, 46)
-	--border-400: #3a3a3a; // rgb(58, 58, 58)
+  --border-100: #222222; // rgb(34, 34, 34)
+  --border-200: #262626; // rgb(38, 38, 38)
+  --border-300: #2e2e2e; // rgb(46, 46, 46)
+  --border-400: #3a3a3a; // rgb(58, 58, 58)
 
-	--primary-10: #ecf1ff; // rgb(236, 241, 255)
-	--primary-20: #d9e4ff; // rgb(217, 228, 255)
-	--primary-30: #c5d6ff; // rgb(197, 214, 255)
-	--primary-40: #b2c8ff; // rgb(178, 200, 255)
-	--primary-50: #9fbbff; // rgb(159, 187, 255)
-	--primary-60: #8cadff; // rgb(140, 173, 255)
-	--primary-70: #799fff; // rgb(121, 159, 255)
-	--primary-80: #6591ff; // rgb(101, 145, 255)
-	--primary-90: #5284ff; // rgb(82, 132, 255)
-	--primary-100: #3f76ff; // rgb(63, 118, 255)
-	--primary-200: #396ae6; // rgb(57, 106, 230)
-	--primary-300: #325ecc; // rgb(50, 94, 204)
-	--primary-400: #2c53b3; // rgb(44, 83, 179)
-	--primary-500: #264799; // rgb(38, 71, 153)
-	--primary-600: #203b80; // rgb(32, 59, 128)
-	--primary-700: #192f66; // rgb(25, 47, 102)
-	--primary-800: #13234c; // rgb(19, 35, 76)
-	--primary-900: #0d1833; // rgb(13, 24, 51)
+  --primary-10: #ecf1ff; // rgb(236, 241, 255)
+  --primary-20: #d9e4ff; // rgb(217, 228, 255)
+  --primary-30: #c5d6ff; // rgb(197, 214, 255)
+  --primary-40: #b2c8ff; // rgb(178, 200, 255)
+  --primary-50: #9fbbff; // rgb(159, 187, 255)
+  --primary-60: #8cadff; // rgb(140, 173, 255)
+  --primary-70: #799fff; // rgb(121, 159, 255)
+  --primary-80: #6591ff; // rgb(101, 145, 255)
+  --primary-90: #5284ff; // rgb(82, 132, 255)
+  --primary-100: #3f76ff; // rgb(63, 118, 255)
+  --primary-200: #396ae6; // rgb(57, 106, 230)
+  --primary-300: #325ecc; // rgb(50, 94, 204)
+  --primary-400: #2c53b3; // rgb(44, 83, 179)
+  --primary-500: #264799; // rgb(38, 71, 153)
+  --primary-600: #203b80; // rgb(32, 59, 128)
+  --primary-700: #192f66; // rgb(25, 47, 102)
+  --primary-800: #13234c; // rgb(19, 35, 76)
+  --primary-900: #0d1833; // rgb(13, 24, 51)
 
-	--editor-gray-background: #404144;
-	--editor-peach-background: #593032;
-	--editor-pink-background: #562e3d;
-	--editor-orange-background: #583e2a;
-	--editor-green-background: #1d4a3b;
-	--editor-light-blue-background: #1f495c;
-	--editor-dark-blue-background: #223558;
-	--editor-purple-background: #3d325a;
+  --editor-gray-background: #404144;
+  --editor-peach-background: #593032;
+  --editor-pink-background: #562e3d;
+  --editor-orange-background: #583e2a;
+  --editor-green-background: #1d4a3b;
+  --editor-light-blue-background: #1f495c;
+  --editor-dark-blue-background: #223558;
+  --editor-purple-background: #3d325a;
 }
 
 .no-scroll::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
-body {
-	::-webkit-scrollbar {
-		width: 17px;
-	}
-	::-webkit-scrollbar-track {
-		background-color: transparent;
-	}
-	::-webkit-scrollbar-button {
-		display: none;
-	}
-	::-webkit-scrollbar-thumb {
-		background-color: var(--bg-80);
-		border: 6px solid transparent;
-		border-radius: 20px;
-		background-clip: content-box;
-		transition: all 0.3s ease-in-out;
-	}
-	::-webkit-scrollbar-thumb:hover {
-		background-color: var(--bg-90);
-	}
+body, html {
+  ::-webkit-scrollbar {
+    width: 17px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--bg-80);
+    border: 6px solid transparent;
+    border-radius: 20px;
+    background-clip: content-box;
+    transition: all 0.3s ease-in-out;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bg-90);
+  }
 }

@@ -1,11 +1,14 @@
 'use client'
-import { DeleteConfirmationModal } from '@/components/common'
+import { DeleteConfirmationModal } from '@/features/shared'
+import {
+	useCurrentWorkspace,
+	useDeleteWorkspaceMutation
+} from '@/features/workspaces'
 import { Accordion, AccordionItem, Button } from '@nextui-org/react'
-import { useCurrentWorkspace, useDeleteWorkspaceMutation } from '@/features/workspaces'
 
 export const DeleteWorkspaceAccordion = () => {
 	const workspace = useCurrentWorkspace()
-	const { mutateAsync: deleteWorkspace} = useDeleteWorkspaceMutation()
+	const { mutateAsync: deleteWorkspace } = useDeleteWorkspaceMutation()
 	return (
 		<>
 			<Accordion isCompact>
@@ -22,14 +25,17 @@ export const DeleteWorkspaceAccordion = () => {
 						retrieve any of it for you. Proceed only if you are sure you want
 						your workspace deleted.
 					</p>
-					<DeleteConfirmationModal onConfirm={async () => deleteWorkspace(workspace.id)} type='workspace' name={workspace.name} >
+					<DeleteConfirmationModal
+						onConfirm={async () => deleteWorkspace(workspace.id)}
+						type="workspace"
+						name={workspace.name}
+					>
 						<Button
 							color={'danger'}
 							className={
 								' rounded text-xs font-medium py-1.5 px-4  focus:bg-red-600 focus:text-red-200 bg-red-500 hover:bg-red-600 text-white'
 							}
 							size={'sm'}
-							
 						>
 							Delete my workspace
 						</Button>

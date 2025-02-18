@@ -2,22 +2,30 @@
 import { ImagePicker, UnsplashPicker } from '@/features/images'
 import { useDisclosure } from '@/hooks'
 import { TypeFile } from '@/types'
-import { Button, Modal, ModalContent, Tab, Tabs } from '@nextui-org/react'
+import {
+	Button,
+	Modal,
+	ModalContent,
+	Skeleton,
+	Tab,
+	Tabs
+} from '@nextui-org/react'
 import { IconX } from '@tabler/icons-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 interface ICoverPickerProps {
 	value?: string | File
+	text?: string
 	onChange?: (url: string | File) => void
 	onClose?: () => void
 }
-// Url to add, if initialValue is not provided
-const DEFAULT_COVER_URL =
-	'https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w2NzMxMDl8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MzE0NDkzMjR8&ixlib=rb-4.0.3&q=85'
+
+const DEFAULT_COVER_URL = '/default_cover.jpg'
 
 export const CoverPicker = ({
 	value: initialValue,
+	text = 'Cover image',
 	onChange
 }: ICoverPickerProps) => {
 	const { isOpen, toggle, close, open } = useDisclosure()
@@ -30,6 +38,8 @@ export const CoverPicker = ({
 					url: DEFAULT_COVER_URL
 				}
 	)
+
+	const [isLoadingCover, setIsLoadingCover] = useState(true)
 
 	const handleUnsplashChange = (url: string) => {
 		setValue({ url })
@@ -58,11 +68,16 @@ export const CoverPicker = ({
 	return (
 		<div className="flex flex-col w-full overflow-auto relative">
 			<div className="relative h-44">
+				{isLoadingCover && (
+					<Skeleton className="absolute inset-0 w-full h-full rounded-md" />
+				)}
 				<Image
 					src={url}
 					objectFit="cover"
 					className="rounded-md"
 					alt="cover-image"
+					onLoadingComplete={() => setIsLoadingCover(false)}
+					onLoadStart={() => setIsLoadingCover(true)}
 					fill
 				/>
 			</div>
@@ -72,7 +87,7 @@ export const CoverPicker = ({
 				size="sm"
 				onClick={open}
 			>
-				Cover image
+				{text}
 			</Button>
 			<Modal
 				isOpen={isOpen}

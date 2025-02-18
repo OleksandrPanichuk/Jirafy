@@ -1,6 +1,8 @@
 'use client'
 
 import { AuthApi, SignInInput, signInSchema } from '@/api'
+import { Routes } from '@/constants'
+import { useSignInMutation } from '@/features/auth'
 import {
 	BottomGradientButton,
 	Form,
@@ -10,9 +12,7 @@ import {
 	FormItem,
 	FormLabel,
 	Input
-} from '@/components/ui'
-import { Routes } from '@/constants'
-import { useSignInMutation } from '@/features/auth'
+} from '@/features/shared'
 import { cn } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react'

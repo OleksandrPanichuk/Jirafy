@@ -1,13 +1,19 @@
+import { ApiRoutes } from '@/constants'
 import { axios } from '@/lib'
 import { TypeUser } from '@/types'
-import { ApiRoutes } from '@/constants'
+import { UpdateCurrentUserInput, updateCurrentUserSchema } from './users.dto'
 
-const currentUser = async () => {
-	return (
-		await axios.get<TypeUser>(ApiRoutes.USERS.CURRENT)
-	).data
+const current = async () => {
+	return (await axios.get<TypeUser>(ApiRoutes.USERS.CURRENT)).data
+}
+
+const updateCurrent = async (input: UpdateCurrentUserInput) => {
+	updateCurrentUserSchema.parse(input)
+
+	return await axios.put<TypeUser>(ApiRoutes.USERS.CURRENT, input)
 }
 
 export const UsersApi = {
-	currentUser
+	current,
+	updateCurrent
 } as const
