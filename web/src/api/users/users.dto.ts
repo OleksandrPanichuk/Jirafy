@@ -1,5 +1,6 @@
 import { FormErrors } from '@/constants'
-import { zUploadedFile } from '@/lib'
+import { zRequired, zUploadedFile } from '@/lib'
+import { isStrongPassword } from 'validator'
 import { z } from 'zod'
 
 export const updateCurrentUserSchema = z.object({
@@ -11,3 +12,18 @@ export const updateCurrentUserSchema = z.object({
 })
 
 export type UpdateCurrentUserInput = z.infer<typeof updateCurrentUserSchema>
+
+export const updateUserPasswordSchema = z
+	.object({
+		currentPassword: z.string().min(6, FormErrors.length.password),
+		newPassword: zRequired(FormErrors.required.password)
+			.min(8, FormErrors.length.password)
+			.refine(isStrongPassword, FormErrors.invalid.password),
+		confirmPassword: zRequired(FormErrors.required.confirmPassword)
+	})
+	.refine((data) => data.newPassword === data.confirmPassword, {
+		message: FormErrors.match.passwords,
+		path: ['confirmPassword']
+	})
+
+export type UpdateUserPasswordInput = z.infer<typeof updateUserPasswordSchema>

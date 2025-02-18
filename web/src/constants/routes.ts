@@ -66,7 +66,8 @@ export const ApiRoutes = {
 	},
 	USERS: {
 		ROOT: '/users',
-		CURRENT: '/users/current'
+		CURRENT: '/users/current',
+		CURRENT_PASSWORD:'/users/current/password',
 	},
 	WORKSPACES: {
 		ROOT: '/workspaces',

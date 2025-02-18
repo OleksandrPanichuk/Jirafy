@@ -47,7 +47,7 @@ export class PasswordService {
     });
 
     const clientUrl = this.config.get<string>('CLIENT_URL');
-    const link = `${clientUrl}/reset-password?token=${token}`
+    const link = `${clientUrl}/reset-password?token=${token}`;
 
     await this.mailer.sendMail(
       EmailTemplates.RESET_PASSWORD,
