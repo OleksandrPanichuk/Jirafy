@@ -2,12 +2,18 @@ import { ApiRoutes } from '@/constants'
 import { axios } from '@/lib'
 import { TypeUser } from '@/types'
 import {
+	ResetPasswordInput,
+	resetPasswordSchema,
+	SendResetPasswordTokenInput,
+	sendResetPasswordTokenSchema,
 	SignInInput,
 	signInSchema,
 	SignUpInput,
 	signUpSchema,
 	VerifyIdentityInput,
-	verifyIdentitySchema
+	verifyIdentitySchema,
+	VerifyResetPasswordTokenInput,
+	verifyResetPasswordTokenSchema
 } from './auth.dto'
 
 const signIn = async (input: SignInInput) => {
@@ -38,11 +44,32 @@ const verifyIdentity = async (input: VerifyIdentityInput) => {
 	return await axios.post<boolean>(ApiRoutes.AUTH.VERIFY_IDENTITY, input)
 }
 
+const sendResetPasswordToken = async (input: SendResetPasswordTokenInput) => {
+	sendResetPasswordTokenSchema.parse(input)
+	return await axios.post(ApiRoutes.AUTH.FORGOT_PASSWORD, input)
+}
+
+const resetPassword = async (input: ResetPasswordInput) => {
+	resetPasswordSchema.parse(input)
+	return await axios.patch(ApiRoutes.AUTH.RESET_PASSWORD, input)
+}
+
+const verifyResetPasswordToken = async (
+	input: VerifyResetPasswordTokenInput
+) => {
+	verifyResetPasswordTokenSchema.parse(input)
+
+	return await axios.post(ApiRoutes.AUTH.VERIFY_RESET_PASSWORD_TOKEN, input)
+}
+
 export const AuthApi = {
 	signIn,
 	signUp,
 	signOut,
 	googleOAuth,
 	githubOAuth,
-	verifyIdentity
+	verifyIdentity,
+	sendResetPasswordToken,
+	resetPassword,
+	verifyResetPasswordToken
 } as const

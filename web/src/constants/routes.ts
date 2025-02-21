@@ -2,7 +2,7 @@ export const Routes = {
 	ROOT: '/',
 	SIGN_IN: '/sign-in',
 	SIGN_UP: '/sign-up',
-	FORGET_PASSWORD: '/forget-password',
+	FORGOT_PASSWORD: '/forgot-password',
 	RESET_PASSWORD: '/reset-password',
 	VERIFY_EMAIL: '/verify-email',
 	CHANGE_EMAIL: '/change-email',
@@ -12,7 +12,7 @@ export const Routes = {
 	NOT_IMPLEMENTED: '/not-implemented',
 
 	PROFILE: '/profile',
-	PROFILE_SECURITY:'/profile/security',
+	PROFILE_SECURITY: '/profile/security',
 	PROFILE_ACTIVITY: '/profile/activity',
 	PROFILE_APPEARANCE: '/profile/appearance',
 	PROFILE_NOTIFICATIONS: '/profile/notifications',
@@ -54,8 +54,9 @@ export const ApiRoutes = {
 		SIGN_UP: '/auth/sign-up',
 		GOOGLE: '/api/auth/sign-in/google',
 		GITHUB: '/api/auth/sign-in/github',
-		FORGOT_PASSWORD: '/auth/forgot-password',
-		RESET_PASSWORD: '/auth/reset-password',
+		FORGOT_PASSWORD: '/auth/password/send-token',
+		RESET_PASSWORD: '/auth/password/reset',
+		VERIFY_RESET_PASSWORD_TOKEN: '/auth/password/verify-token',
 		SIGN_OUT: '/auth/sign-out',
 		VERIFY_IDENTITY: '/auth/verify-identity'
 	},
@@ -67,7 +68,7 @@ export const ApiRoutes = {
 	USERS: {
 		ROOT: '/users',
 		CURRENT: '/users/current',
-		CURRENT_PASSWORD:'/users/current/password',
+		CURRENT_PASSWORD: '/users/current/password'
 	},
 	WORKSPACES: {
 		ROOT: '/workspaces',

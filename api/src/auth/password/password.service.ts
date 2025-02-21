@@ -61,7 +61,7 @@ export class PasswordService {
     return 'Check your email for the reset password link';
   }
 
-  public async verifyToken(dto: VerifyTokenInput): Promise<string> {
+  public async verifyToken(dto: VerifyTokenInput) {
     const reset = await this.prisma.passwordReset.findUnique({
       where: { token: dto.token },
     });
@@ -74,7 +74,7 @@ export class PasswordService {
       throw new BadRequestException('Token expired');
     }
 
-    return 'Token is valid';
+    return true;
   }
 
   public async resetPassword(dto: ResetPasswordInput): Promise<string> {

@@ -1,6 +1,9 @@
 'use client'
 
-import { useSelectWorkspaceMutation } from '@/features/workspaces'
+import {
+	useSelectWorkspaceMutation,
+	useWorkspacesQuery
+} from '@/features/workspaces'
 import { useSafeContext } from '@/hooks'
 import { TypeWorkspaceWithMembers } from '@/types'
 import { createContext, PropsWithChildren, useState } from 'react'
@@ -91,6 +94,13 @@ export const WorkspacesProvider = ({
 			}
 		}))
 	)
+
+	useWorkspacesQuery({
+		onSuccess: (data) => {
+			store.getState().setWorkspaces(data)
+		},
+		enabled: !initialWorkspaces
+	})
 
 	return (
 		<WorkspacesContext.Provider value={store}>

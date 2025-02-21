@@ -54,3 +54,34 @@ export const verifyIdentitySchema = z.object({
 })
 
 export type VerifyIdentityInput = z.infer<typeof verifyIdentitySchema>
+
+export const sendResetPasswordTokenSchema = z.object({
+	email: zRequired(FormErrors.required.email).email(FormErrors.invalid.email)
+})
+
+export type SendResetPasswordTokenInput = z.infer<
+	typeof sendResetPasswordTokenSchema
+>
+
+export const verifyResetPasswordTokenSchema = z.object({
+	token: zRequired()
+})
+
+export type VerifyResetPasswordTokenInput = z.infer<
+	typeof verifyResetPasswordTokenSchema
+>
+
+export const resetPasswordSchema = z
+	.object({
+		password: zRequired(FormErrors.required.password)
+			.min(8, FormErrors.length.password)
+			.refine(isStrongPassword, FormErrors.invalid.password),
+		confirmPassword: zRequired(FormErrors.required.confirmPassword),
+		token: zRequired()
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: FormErrors.match.passwords,
+		path: ['confirmPassword']
+	})
+
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>

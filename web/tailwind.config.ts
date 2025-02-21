@@ -68,12 +68,6 @@ const config: Config = {
 						content1: {
 							DEFAULT: 'rgb(25, 25, 25)'
 						}
-						// default: {
-						// 	DEFAULT: '#191919'
-						// }
-						// focus: {
-						// 	DEFAULT: '#396ae6'
-						// }
 					}
 				}
 			}

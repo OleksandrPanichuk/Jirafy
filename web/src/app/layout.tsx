@@ -1,8 +1,7 @@
-import { currentUser, getAllWorkspaces } from '@/api'
+import { currentUser } from '@/api'
 import { AuthProvider } from '@/features/auth'
 import { ProgressBar } from '@/features/shared'
 import { Notifications } from '@/features/toast'
-import { WorkspacesProvider } from '@/features/workspaces'
 import { QueryProvider, SocketsProvider } from '@/providers'
 import '@/styles/globals.scss'
 import { NextUIProvider } from '@nextui-org/react'
@@ -27,8 +26,6 @@ export default async function RootLayout({
 	children: ReactNode
 }>) {
 	const user = await currentUser()
-
-	const workspaces = user?.verified ? await getAllWorkspaces() : []
 
 	return (
 		<html lang="en" className={'dark'} suppressHydrationWarning>
@@ -56,9 +53,7 @@ export default async function RootLayout({
 				<QueryProvider>
 					<AuthProvider initialUser={user}>
 						<SocketsProvider>
-							<WorkspacesProvider initialWorkspaces={workspaces}>
-								<NextUIProvider>{children}</NextUIProvider>
-							</WorkspacesProvider>
+							<NextUIProvider>{children}</NextUIProvider>
 						</SocketsProvider>
 					</AuthProvider>
 				</QueryProvider>

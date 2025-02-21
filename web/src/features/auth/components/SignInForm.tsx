@@ -11,7 +11,8 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-	Input
+	Input,
+	PasswordInput
 } from '@/features/shared'
 import { cn } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -69,11 +70,10 @@ export const SignInForm = () => {
 							<FormItem>
 								<FormLabel>Password</FormLabel>
 								<FormControl>
-									<Input
-										{...field}
+									<PasswordInput
 										placeholder="••••••••"
-										type="password"
 										disabled={isPending}
+										{...field}
 									/>
 								</FormControl>
 								<FormError />
@@ -86,7 +86,7 @@ export const SignInForm = () => {
 							'text-sm  self-end mt-2 text-neutral-300 hover:text-neutral-400 transition-colors mb-4',
 							isPending && 'pointer-events-none cursor-not-allowed'
 						)}
-						href={Routes.FORGET_PASSWORD}
+						href={Routes.FORGOT_PASSWORD}
 					>
 						Forgot password?
 					</Link>

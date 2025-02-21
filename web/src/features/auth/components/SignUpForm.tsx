@@ -11,7 +11,8 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-	Input
+	Input,
+	PasswordInput
 } from '@/features/shared'
 import { cn } from '@/lib'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -137,11 +138,10 @@ export const SignUpForm = ({
 							<FormItem className="mb-4">
 								<FormLabel>Password</FormLabel>
 								<FormControl>
-									<Input
-										{...field}
-										type="password"
+									<PasswordInput
 										placeholder="••••••••"
 										disabled={isPending}
+										{...field}
 									/>
 								</FormControl>
 								<FormError />
@@ -155,9 +155,8 @@ export const SignUpForm = ({
 							<FormItem className="mb-4">
 								<FormLabel>Confirm password</FormLabel>
 								<FormControl>
-									<Input
+									<PasswordInput
 										{...field}
-										type="password"
 										placeholder="••••••••"
 										disabled={isPending}
 									/>

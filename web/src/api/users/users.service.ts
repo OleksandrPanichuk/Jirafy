@@ -3,8 +3,8 @@ import { axios } from '@/lib'
 import { TypeUser } from '@/types'
 import {
 	UpdateCurrentUserInput,
-	UpdateUserPasswordInput,
 	updateCurrentUserSchema,
+	UpdateUserPasswordInput,
 	updateUserPasswordSchema
 } from './users.dto'
 
@@ -20,7 +20,6 @@ const updateCurrent = async (input: UpdateCurrentUserInput) => {
 
 const updatePassword = async (input: UpdateUserPasswordInput) => {
 	updateUserPasswordSchema.parse(input)
-
 
 	return await axios.patch<TypeUser>(ApiRoutes.USERS.CURRENT_PASSWORD, input)
 }

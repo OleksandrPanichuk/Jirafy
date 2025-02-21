@@ -64,11 +64,11 @@ export const WorkspaceSwitcher = () => {
 			}
 		})
 
-	if (!user || !workspaces.length) {
+	if (!user || !workspaces.length || !currentWorkspace) {
 		return null
 	}
 
-	const hasAccess = checkMemberPermissions(currentMember.role)
+	const hasAccess = checkMemberPermissions(currentMember?.role)
 
 	return (
 		<Dropdown
