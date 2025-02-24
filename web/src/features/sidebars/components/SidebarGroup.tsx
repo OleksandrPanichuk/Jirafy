@@ -3,6 +3,7 @@
 import { useWorkspaceSidebarStore } from '@/features/sidebars'
 import { cn } from '@/lib'
 import { Accordion, AccordionItem } from '@nextui-org/react'
+import Link from 'next/link'
 import { PropsWithChildren, ReactNode } from 'react'
 
 interface ISidebarGroupProps extends PropsWithChildren {
@@ -11,6 +12,7 @@ interface ISidebarGroupProps extends PropsWithChildren {
 	className?: string
 	onTitleClick?: () => void
 	emoji?: string
+	emojiLink?: string
 	classNames?: {
 		trigger?: string
 		content?: string
@@ -32,6 +34,7 @@ export const SidebarGroup = ({
 	classNames,
 	onTitleClick,
 	emoji,
+	emojiLink,
 	uppercase = true,
 	shouldBeOpenWhenCollapsed = true
 }: ISidebarGroupProps) => {
@@ -53,7 +56,9 @@ export const SidebarGroup = ({
 				indicator: classNames?.indicator
 			}}
 			defaultSelectedKeys={undefined}
-			selectedKeys={isCollapsed && shouldBeOpenWhenCollapsed ? [title] : undefined}
+			selectedKeys={
+				isCollapsed && shouldBeOpenWhenCollapsed ? [title] : undefined
+			}
 		>
 			<AccordionItem
 				key={title}
@@ -65,7 +70,15 @@ export const SidebarGroup = ({
 							classNames?.titleWrapper
 						)}
 					>
-						{emoji && <span className={cn(classNames?.emoji)}>{emoji}</span>}
+						{emoji &&
+							(emojiLink ? (
+								<Link href={emojiLink} className={cn(classNames?.emoji)}>
+									{emoji}
+								</Link>
+							) : (
+								<span className={cn(classNames?.emoji)}>{emoji}</span>
+							))}
+
 						<span
 							className={cn(
 								'text-[0.675rem]',

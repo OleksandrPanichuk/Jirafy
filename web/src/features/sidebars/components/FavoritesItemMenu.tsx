@@ -21,9 +21,9 @@ export const FavoritesItemMenu = ({ favorite }: IFavoritesItemMenuProps) => {
 	const handleRemoveFromFavorites = () => {
 		removeFromFavorites({
 			favoriteId: favorite.id,
-			memberId: favorite.memberId
 		})
 	}
+			memberId: favorite.memberId
 
 	return (
 		<Dropdown

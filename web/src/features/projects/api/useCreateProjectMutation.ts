@@ -20,7 +20,7 @@ export const useCreateProjectMutation = () => {
 		mutationFn: ProjectsApi.create,
 		onSuccess: ({ data }, variables) => {
 			toast.success('Project created')
-
+			// TODO: refetch all projects
 			addProject({
 				...data,
 				members: [

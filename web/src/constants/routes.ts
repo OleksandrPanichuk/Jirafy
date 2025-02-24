@@ -79,6 +79,8 @@ export const ApiRoutes = {
 	PROJECTS: {
 		ROOT: '/projects',
 		BY_WORKSPACE_SLUG: (slug: string) => `/projects/by-workspace-slug/${slug}`,
+		BY_WORKSPACE_SLUG_WITH_FILTERS: (slug: string) =>
+			`/projects/by-workspace-slug/${slug}/with-filters`,
 		REORDER: '/projects/reorder'
 	},
 	STORAGE: {

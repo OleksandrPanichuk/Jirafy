@@ -1,11 +1,12 @@
-import { PrismaService } from '@app/prisma';
+import { PrismaService } from '@app/prisma'
 import {
   ConflictException,
   ForbiddenException,
   Injectable,
-} from '@nestjs/common';
-import { MemberRole, MemberType } from '@prisma/client';
-import { CreateProjectInput, ReorderProjectInput } from './dto';
+} from '@nestjs/common'
+import { MemberRole, MemberType, Prisma } from '@prisma/client'
+import { CreateProjectInput, ReorderProjectInput } from './dto'
+import { FindAllProjectsWithFiltersInput } from './dto/find-all-projects-with-filters.dto'
 
 @Injectable()
 export class ProjectsService {
@@ -37,6 +38,116 @@ export class ProjectsService {
           },
         },
       },
+    });
+  }
+
+  public async findAllByWorkspaceSlugWithFilters(
+    dto: FindAllProjectsWithFiltersInput,
+    slug: string,
+    userId: string,
+  ) {
+    const {
+      leadersIds,
+      network,
+      onlyMyProjects,
+      searchValue,
+      sortBy,
+      sortOrder,
+      takeMembers,
+    } = dto;
+
+    let orderBy: Prisma.ProjectOrderByWithRelationInput;
+
+    switch (sortBy) {
+      case 'name': {
+        orderBy = {
+          name: sortOrder,
+        };
+        break;
+      }
+      case 'createdAt': {
+        orderBy = {
+          createdAt: sortOrder,
+        };
+        break;
+      }
+      case 'membersCount': {
+        orderBy = {
+          members: {
+            _count: sortOrder,
+          },
+        };
+        break;
+      }
+
+      default: {
+        orderBy = {};
+        break;
+      }
+    }
+
+    return this.prisma.project.findMany({
+      where: {
+        network: {
+          in: network,
+        },
+
+        workspace: {
+          slug,
+        },
+
+        name: {
+          mode: 'insensitive',
+          contains: searchValue,
+        },
+
+        ...(onlyMyProjects && {
+          members: {
+            some: {
+              userId,
+              role: MemberRole.OWNER,
+            },
+          },
+        }),
+
+        ...(leadersIds?.length > 0 &&
+          !onlyMyProjects && {
+            members: {
+              some: {
+                isLead: true,
+                id: {
+                  in: leadersIds,
+                },
+              },
+            },
+          }),
+      },
+      include: {
+        _count: {
+          select: {
+            members: true,
+          },
+        },
+        members: {
+          where: {
+            type: MemberType.PROJECT,
+          },
+          select: {
+            id: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                username: true,
+                firstName:true,
+                lastName:true
+              },
+            },
+          },
+          take: takeMembers,
+        },
+      },
+      orderBy,
     });
   }
 

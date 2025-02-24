@@ -26,3 +26,8 @@ export enum SocketNamespace {
 	INVITES = 'invites',
 	CHAT = 'chat'
 }
+
+export enum SortOrder {
+	ASC = 'asc',
+	DESC = 'desc'
+}

@@ -1,4 +1,5 @@
 'use client'
+import { DEFAULT_COVER_URL } from '@/constants'
 import { ImagePicker, UnsplashPicker } from '@/features/images'
 import { useDisclosure } from '@/hooks'
 import { TypeFile } from '@/types'
@@ -21,7 +22,7 @@ interface ICoverPickerProps {
 	onClose?: () => void
 }
 
-const DEFAULT_COVER_URL = '/default_cover.jpg'
+
 
 export const CoverPicker = ({
 	value: initialValue,

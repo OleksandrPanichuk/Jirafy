@@ -6,3 +6,8 @@ export enum SocketEvents {
   JOIN_ROOM = 'join-room',
   LEAVE_ROOM = 'leave-room',
 }
+
+export enum SortOrder {
+  ASC = 'asc',
+  DESC = 'desc',
+}

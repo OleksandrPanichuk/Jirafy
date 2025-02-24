@@ -1,1 +1,2 @@
-export*  from './ProjectsProvider'
+export * from './ProjectsFiltersProvider'
+export * from './ProjectsProvider'

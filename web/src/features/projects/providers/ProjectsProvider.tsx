@@ -1,25 +1,25 @@
 'use client'
 
 import { useSafeContext } from '@/hooks'
-import { TypeProjectWithMembers } from '@/types'
+import { TypeProjectWithCurrentMember } from '@/types'
 import { createContext, PropsWithChildren, useState } from 'react'
 import { createStore, StoreApi, useStore } from 'zustand'
 
 interface IProjectsStore {
-	projects: TypeProjectWithMembers[]
-	setProjects: (data: TypeProjectWithMembers[]) => void
-	addProject: (data: TypeProjectWithMembers) => void
+	projects: TypeProjectWithCurrentMember[]
+	setProjects: (data: TypeProjectWithCurrentMember[]) => void
+	addProject: (data: TypeProjectWithCurrentMember) => void
 	removeProject: (id: string) => void
 	updateProject: (
 		id: string,
-		data: Partial<Omit<TypeProjectWithMembers, 'id'>>
+		data: Partial<Omit<TypeProjectWithCurrentMember, 'id'>>
 	) => void
 }
 
 type ProjectsContext = StoreApi<IProjectsStore>
 
 interface IProjectsProviderProps {
-	initialProjects?: TypeProjectWithMembers[]
+	initialProjects?: TypeProjectWithCurrentMember[]
 }
 
 const ProjectsContext = createContext<ProjectsContext>({} as ProjectsContext)
@@ -30,7 +30,10 @@ export const ProjectsProvider = ({
 }: PropsWithChildren<IProjectsProviderProps>) => {
 	const [store] = useState(
 		createStore<IProjectsStore>((set) => ({
-			projects: initialProjects?.sort((a, b) => a.members[0].projectOrder - b.members[0].projectOrder) || [],
+			projects:
+				initialProjects?.sort(
+					(a, b) => a.members[0].projectOrder - b.members[0].projectOrder
+				) || [],
 			setProjects: (data) => set({ projects: data }),
 			addProject: (data) =>
 				set((state) => ({ projects: [...state.projects, data] })),

@@ -17,6 +17,8 @@ export const breakpoints: Record<BreakpointsType, string> = {
 	'max-xs': '(max-width: 439.98px)'
 }
 
+export const DEFAULT_COVER_URL = '/default_cover.jpg'
+
 
 
 export const memberRolesMap = new Map<MemberRole, string>([

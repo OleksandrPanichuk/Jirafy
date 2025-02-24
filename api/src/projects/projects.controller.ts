@@ -9,7 +9,11 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { CreateProjectInput, ReorderProjectInput } from './dto';
+import {
+  CreateProjectInput,
+  FindAllProjectsWithFiltersInput,
+  ReorderProjectInput,
+} from './dto';
 import { ProjectsService } from './projects.service';
 
 @UseGuards(AuthenticatedGuard)
@@ -23,6 +27,19 @@ export class ProjectsController {
     @CurrentUser('id') userId: string,
   ) {
     return this.projectsService.findAllByWorkspaceSlug(slug, userId);
+  }
+
+  @Post('by-workspace-slug/:slug/with-filters')
+  findAllProjectsByWorkspaceSlugWithMembers(
+    @Param('slug') slug: string,
+    @Body() filters: FindAllProjectsWithFiltersInput,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.projectsService.findAllByWorkspaceSlugWithFilters(
+      filters,
+      slug,
+      userId,
+    );
   }
 
   @Post('')

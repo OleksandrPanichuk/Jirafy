@@ -92,6 +92,8 @@ export const CreateProjectModal = () => {
 			if (values.cover instanceof File) {
 				const { data } = await uploadFile(values.cover)
 				cover = data
+			} else {
+				cover = values.cover
 			}
 
 			await createProject({

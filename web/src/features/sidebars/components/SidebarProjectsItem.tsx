@@ -41,6 +41,7 @@ export const SidebarProjectsItem = ({ data }: ISidebarProjectsItemProps) => {
 						indicator: cn(isCollapsed && 'hidden')
 					}}
 					action={<ProjectMenu projectId={data.id} />}
+					emojiLink={Routes.PROJECT_ISSUES(slug, data.id)}
 					title={data.name}
 					emoji={data.emoji}
 					uppercase={false}

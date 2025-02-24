@@ -58,6 +58,7 @@
     "babel-plugin-react-compiler": "^19.0.0-beta-a7bf2bd-20241110",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cookies-next": "^5.1.0",
     "date-fns": "^4.1.0",
     "emoji-picker-react": "^4.12.0",
     "framer-motion": "^11.5.4",

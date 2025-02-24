@@ -108,7 +108,7 @@ function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 					<UserMenu />
 				</div>
 				<div className="overflow-x-hidden  h-full w-full overflow-y-auto py-0.5 px-4 flex-1 no-scroll">
-					<div className="flex flex-col gap-0.5 mt-2.5">
+					<div className="flex flex-col gap-0.5 mt-2.5 mb-2">
 						<SidebarItem
 							href={Routes.WORKSPACE_BY_SLUG(workspaceSlug)}
 							text="Home"
@@ -128,15 +128,23 @@ function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 							isCollapsed={isCollapsed}
 						/>
 					</div>
-					<SidebarGroup title="Workspace" action={<WorkspaceActions />}>
-						{getWorkspaceSidebarLinks(workspaceSlug).map((link) => (
-							<SidebarItem
-								key={link.href}
-								isCollapsed={isCollapsed}
-								{...link}
-							/>
-						))}
-					</SidebarGroup>
+				
+						<SidebarGroup
+							title="Workspace"
+							classNames={{
+								trigger: 'mb-1'
+							}}
+							action={<WorkspaceActions />}
+						>
+							{getWorkspaceSidebarLinks(workspaceSlug).map((link) => (
+								<SidebarItem
+									key={link.href}
+									isCollapsed={isCollapsed}
+									{...link}
+								/>
+							))}
+						</SidebarGroup>
+					
 					<SidebarFavorites />
 					<SidebarProjects />
 				</div>

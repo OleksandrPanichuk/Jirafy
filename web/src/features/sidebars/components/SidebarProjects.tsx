@@ -14,7 +14,7 @@ import {
 	useWorkspaceSidebarStore
 } from '@/features/sidebars'
 import { useCurrentWorkspace } from '@/features/workspaces'
-import { TypeProjectWithMembers } from '@/types'
+import { TypeProjectWithCurrentMember } from '@/types'
 import { Button, Tooltip } from '@nextui-org/react'
 import { IconPlus } from '@tabler/icons-react'
 
@@ -28,7 +28,7 @@ export const SidebarProjects = () => {
 
 	const { mutate: executeReorder } = useReorderProjectsMutation()
 
-	const onDragEnd = (items: TypeProjectWithMembers[]) => {
+	const onDragEnd = (items: TypeProjectWithCurrentMember[]) => {
 		const projects = items.map((item, index) => ({
 			...item,
 			members: item.members.map((m) => ({ ...m, projectOrder: index + 1 }))
@@ -51,6 +51,9 @@ export const SidebarProjects = () => {
 			<CreateProjectModal />
 			<SidebarGroup
 				title="Your projects"
+				classNames={{
+					trigger: 'mb-1'
+				}}
 				action={
 					<Tooltip content={<span className="text-sm">Create project</span>}>
 						<Button
