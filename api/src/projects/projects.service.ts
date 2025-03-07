@@ -1,12 +1,12 @@
-import { PrismaService } from '@app/prisma'
+import { PrismaService } from '@app/prisma';
 import {
   ConflictException,
   ForbiddenException,
   Injectable,
-} from '@nestjs/common'
-import { MemberRole, MemberType, Prisma } from '@prisma/client'
-import { CreateProjectInput, ReorderProjectInput } from './dto'
-import { FindAllProjectsWithFiltersInput } from './dto/find-all-projects-with-filters.dto'
+} from '@nestjs/common';
+import { MemberRole, MemberType, Prisma } from '@prisma/client';
+import { CreateProjectInput, ReorderProjectInput } from './dto';
+import { FindAllProjectsWithFiltersInput } from './dto/find-all-projects-with-filters.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -86,6 +86,8 @@ export class ProjectsService {
       }
     }
 
+    console.log({ dto });
+
     return this.prisma.project.findMany({
       where: {
         network: {
@@ -96,10 +98,12 @@ export class ProjectsService {
           slug,
         },
 
-        name: {
-          mode: 'insensitive',
-          contains: searchValue,
-        },
+        ...(searchValue && {
+          name: {
+            mode: 'insensitive',
+            contains: searchValue,
+          },
+        }),
 
         ...(onlyMyProjects && {
           members: {
@@ -139,8 +143,8 @@ export class ProjectsService {
                 id: true,
                 avatar: true,
                 username: true,
-                firstName:true,
-                lastName:true
+                firstName: true,
+                lastName: true,
               },
             },
           },

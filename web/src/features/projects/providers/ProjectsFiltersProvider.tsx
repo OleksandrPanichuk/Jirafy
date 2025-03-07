@@ -1,36 +1,79 @@
 'use client'
 
-import type { ProjectFilters } from '@/features/projects'
 import { useSafeContext } from '@/hooks'
+import { OmitTyped, SortOrder } from '@/types'
 import { useGetCookie } from 'cookies-next'
 import { createContext, PropsWithChildren, useMemo, useState } from 'react'
+import { createStore, StoreApi, useStore } from 'zustand'
+import { TypeProjectsFilters } from '@/features/projects'
 
-interface IProjectsFiltersContext {
-	filters: ProjectFilters
-	setFilters: (value: ProjectFilters) => void
+interface IProjectsFiltersStore extends TypeProjectsFilters {
+	setSearchValue: (value: TypeProjectsFilters['searchValue']) => void
+	setNetwork: (value: TypeProjectsFilters['network']) => void
+	setSortOrder: (value: TypeProjectsFilters['sortOrder']) => void
+	setSortBy: (value: TypeProjectsFilters['sortBy']) => void
+	addLeaderId: (value: string) => void
+	removeLeaderId: (value: string) => void
+	toggleOnlyMyProjects: () => void
 }
 
-export const ProjectsFiltersContext = createContext<IProjectsFiltersContext>(
-	{} as IProjectsFiltersContext
+type ProjectsFiltersContext = StoreApi<IProjectsFiltersStore>
+
+const ProjectsFiltersContext = createContext<ProjectsFiltersContext>(
+	{} as ProjectsFiltersContext
 )
+
+const defaultFilters = {
+	sortBy: 'createdAt',
+	sortOrder: SortOrder.ASC,
+	leadersIds: [],
+	network: [],
+	onlyMyProjects: false,
+	searchValue: ''
+} satisfies OmitTyped<TypeProjectsFilters, 'takeMembers'>
 
 export const ProjectsFiltersProvider = ({ children }: PropsWithChildren) => {
 	const getCookie = useGetCookie()
-	const filtersString = useMemo(
-		() => getCookie('projects-filters'),
-		[getCookie]
-	)
-	const [filters, setFilters] = useState<ProjectFilters>(
-		filtersString ? JSON.parse(filtersString) : {}
+
+	const filtersString = getCookie('projects-filters')
+
+	const filters: OmitTyped<TypeProjectsFilters, 'takeMembers'> = useMemo(
+		() => (filtersString ? JSON.parse(filtersString) : defaultFilters),
+		[filtersString]
 	)
 
+	const [store] = useState(
+		createStore<IProjectsFiltersStore>((set, get) => ({
+			...filters,
+			setSearchValue: (value) => set({ searchValue: value }),
+			setNetwork: (value) => set({ network: value }),
+			setSortOrder: (value) => set({ sortOrder: value }),
+			setSortBy: (value) => set({ sortBy: value }),
+			addLeaderId: (value) => set(() => ({
+				leadersIds: [...(get().leadersIds ?? []), value]
+			})),
+			removeLeaderId: (value) => set(() => ({
+				leadersIds: get().leadersIds?.filter((id) => id !== value)
+			})),
+			toggleOnlyMyProjects: () => set(() => ({
+				onlyMyProjects: !get().onlyMyProjects
+			})),
+		}))
+	)
 	return (
-		<ProjectsFiltersContext.Provider value={{ filters, setFilters }}>
+		<ProjectsFiltersContext.Provider value={store}>
 			{children}
 		</ProjectsFiltersContext.Provider>
 	)
 }
 
-export const useProjectsFiltersContext = () => {
-	return useSafeContext(ProjectsFiltersContext)
+const defaultSelector = (state: IProjectsFiltersStore) => state
+
+export const useProjectsFiltersStore = <T = IProjectsFiltersStore,>(
+	selector: (store: IProjectsFiltersStore) => T = defaultSelector as (
+		store: IProjectsFiltersStore
+	) => T
+): T => {
+	const context = useSafeContext(ProjectsFiltersContext)
+	return useStore(context, selector)
 }

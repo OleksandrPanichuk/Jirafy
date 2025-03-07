@@ -1,5 +1,7 @@
-import { FindAllProjectsWithFiltersInput } from "@/api"
-import { OmitTyped } from "@/types"
+import { FindAllProjectsWithFiltersInput } from '@/api'
+import { OmitTyped } from '@/types'
 
-
-export type ProjectFilters = OmitTyped<FindAllProjectsWithFiltersInput,	'slug'>
+export type TypeProjectsFilters = OmitTyped<
+	FindAllProjectsWithFiltersInput,
+	'slug'
+>

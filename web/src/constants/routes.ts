@@ -48,6 +48,8 @@ export const Routes = {
 
 export type Routes = (typeof Routes)[keyof typeof Routes]
 
+
+
 export const ApiRoutes = {
 	AUTH: {
 		SIGN_IN: '/auth/sign-in',

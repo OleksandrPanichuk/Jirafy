@@ -20,7 +20,6 @@ export const breakpoints: Record<BreakpointsType, string> = {
 export const DEFAULT_COVER_URL = '/default_cover.jpg'
 
 
-
 export const memberRolesMap = new Map<MemberRole, string>([
 	[MemberRole.ADMIN, 'Admin'],
 	[MemberRole.MEMBER, 'Member'],

@@ -156,6 +156,7 @@ export const ProjectsListItem = ({ project }: IProjectListItemProps) => {
 							</Tooltip>
 						))}
 					</AvatarGroup>
+					{/* TODO: show settings icon if current user */}
 					<Link
 						href={Routes.PROJECT_SETTINGS(slug, project.id)}
 						className="flex items-center justify-center rounded p-1 text-tw-text-400 hover:bg-tw-bg-80 hover:text-tw-text-200"
