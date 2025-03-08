@@ -44,7 +44,6 @@ export const CreateProjectModal = () => {
 
 	const { isOpen, close } = useCreateProjectModalStore()
 	const [isNameInputFocused, setIsNameInputFocused] = useState(false)
-
 	const form = useForm<FormValues>({
 		resolver: zodResolver(createProjectSchema),
 		mode: 'onBlur',

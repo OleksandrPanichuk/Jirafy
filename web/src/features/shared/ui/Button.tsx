@@ -11,7 +11,9 @@ const buttonVariants = cva('rounded', {
 			ghost:
 				'bg-transparent border-tw-border-200 hover:bg-tw-border-200  border',
 			danger:
-				'focus:bg-red-600 focus:text-red-200 bg-red-500 hover:bg-red-600 text-white'
+				'focus:bg-red-600 focus:text-red-200 bg-red-500 hover:bg-red-600 text-white',
+			light:
+				"bg-transparent border border-transparent hover:bg-tw-border-200",
 		}
 	},
 	defaultVariants: {

@@ -86,13 +86,13 @@ export class ProjectsService {
       }
     }
 
-    console.log({ dto });
-
     return this.prisma.project.findMany({
       where: {
-        network: {
-          in: network,
-        },
+        ...(network?.length && {
+          network: {
+            in: network,
+          },
+        }),
 
         workspace: {
           slug,
