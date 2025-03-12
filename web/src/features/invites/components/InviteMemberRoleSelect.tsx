@@ -9,7 +9,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { useEffect, useMemo, useState } from 'react'
 
 type TypeInviteMemberRole = 'ALL' | `${InviteMemberRole}`

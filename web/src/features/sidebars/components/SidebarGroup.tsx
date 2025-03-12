@@ -2,7 +2,7 @@
 
 import { useWorkspaceSidebarStore } from '@/features/sidebars'
 import { cn } from '@/lib'
-import { Accordion, AccordionItem } from '@nextui-org/react'
+import { Accordion, AccordionItem } from "@heroui/react"
 import Link from 'next/link'
 import { PropsWithChildren, ReactNode } from 'react'
 

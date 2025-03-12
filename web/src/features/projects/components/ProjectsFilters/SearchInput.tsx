@@ -1,9 +1,9 @@
 'use client'
 
+import { useProjectsFiltersStore } from '@/features/projects'
 import { IconSearch, IconX } from '@tabler/icons-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ElementRef, useEffect, useRef, useState } from 'react'
-import { useProjectsFiltersStore } from '@/features/projects'
 
 export const SearchInput = () => {
 	const [isExpanded, setIsExpanded] = useState(false)

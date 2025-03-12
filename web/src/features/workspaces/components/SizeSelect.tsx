@@ -1,7 +1,7 @@
 'use client'
 
 import { CreateWorkspaceInput } from '@/api'
-import { Select, SelectItem } from '@nextui-org/react'
+import { Select, SelectItem } from "@heroui/react"
 import { IconArrowsUpDown } from '@tabler/icons-react'
 import { ControllerRenderProps } from 'react-hook-form'
 

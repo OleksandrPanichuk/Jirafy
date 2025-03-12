@@ -10,7 +10,7 @@ import {
 	Skeleton,
 	Tab,
 	Tabs
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { IconX } from '@tabler/icons-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'

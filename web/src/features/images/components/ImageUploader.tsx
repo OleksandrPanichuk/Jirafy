@@ -16,7 +16,7 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { IconUserCircle } from '@tabler/icons-react'
 import { PropsWithChildren, useRef, useState } from 'react'
 import Dropzone, { DropzoneRef } from 'react-dropzone'

@@ -1,7 +1,8 @@
 'use client'
 
 import { cn } from '@/lib'
-import { Tooltip } from '@nextui-org/react'
+import { Tooltip } from "@heroui/react"
+import { useRouter } from 'next-nprogress-bar'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode, useMemo } from 'react'
@@ -11,6 +12,7 @@ interface ISidebarItemProps {
 	text: string
 	href: string
 	action?: ReactNode
+	isFullLink?: boolean
 	isCollapsed?: boolean
 	classNames?: {
 		base?: string
@@ -26,12 +28,23 @@ export const SidebarItem = ({
 	isCollapsed,
 	href,
 	icon,
-	action
+	action,
+	isFullLink = true
 }: ISidebarItemProps) => {
 	const pathname = usePathname()
+	const router = useRouter()
 	const isActive = useMemo(() => {
 		return pathname === href
 	}, [href, pathname])
+
+	const WrapperComp = isFullLink ? Link : 'div'
+	const TextComp = !isFullLink ? Link : 'p'
+
+	const onWrapperClick = () => {
+		if (!isFullLink) {
+			router.push(href)
+		}
+	}
 
 	return (
 		<Tooltip
@@ -39,9 +52,10 @@ export const SidebarItem = ({
 			content={<span className="text-sm">{text}</span>}
 			placement="right"
 		>
-			<Link
-				href={href}
+			<WrapperComp
+				href={isFullLink ? href : '#'}
 				className={cn(!isCollapsed && 'w-full', classNames?.base)}
+				onClick={onWrapperClick}
 			>
 				<div
 					className={cn(
@@ -62,20 +76,21 @@ export const SidebarItem = ({
 						{icon}
 						{!isCollapsed && (
 							<>
-								<p
+								<TextComp
+									href={!isFullLink ? href : '#'}
 									className={cn(
 										'text-xs leading-5 font-medium',
 										classNames?.text
 									)}
 								>
 									{text}
-								</p>
+								</TextComp>
 								{action}
 							</>
 						)}
 					</div>
 				</div>
-			</Link>
+			</WrapperComp>
 		</Tooltip>
 	)
 }

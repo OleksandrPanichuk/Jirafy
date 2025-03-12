@@ -1,7 +1,7 @@
 'use client'
 
 import { WorkspaceSidebarMobile } from '@/features/sidebars'
-import { BreadcrumbItem, Breadcrumbs, Tooltip } from '@nextui-org/react'
+import { BreadcrumbItem, Breadcrumbs, Tooltip } from "@heroui/react"
 import { IconSettings } from '@tabler/icons-react'
 
 export const WorkspaceSettingsHeader = () => {

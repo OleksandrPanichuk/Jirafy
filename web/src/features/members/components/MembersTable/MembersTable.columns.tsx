@@ -3,7 +3,7 @@ import { MemberActions, MemberRoleCell } from '@/features/members'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { formatDate } from '@/lib'
 import { TypeMemberWithUser } from '@/types'
-import { Avatar } from '@nextui-org/react'
+import { Avatar } from "@heroui/react"
 import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 

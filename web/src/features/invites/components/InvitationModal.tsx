@@ -16,7 +16,7 @@ import { useChildrenWithProps, useDisclosure } from '@/hooks'
 import { useSocket } from '@/providers'
 import { MemberRole, SocketNamespace } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Input, Modal, ModalContent } from '@nextui-org/react'
+import { Input, Modal, ModalContent } from "@heroui/react"
 import { IconPlus, IconX } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { PropsWithChildren } from 'react'

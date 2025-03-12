@@ -9,7 +9,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { IconChevronDown } from '@tabler/icons-react'
 import { useEffect, useMemo, useState } from 'react'
 

@@ -8,6 +8,7 @@ import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { useMutation } from '@/hooks'
 import { MemberRole } from '@/types'
 import { useRouter } from 'next-nprogress-bar'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const useCreateProjectMutation = () => {
 	const router = useRouter()
@@ -16,6 +17,7 @@ export const useCreateProjectMutation = () => {
 	const addProject = useProjectsStore((s) => s.addProject)
 	const count = useProjectsStore((s) => s.projects.length)
 
+	const queryClient = useQueryClient()
 	return useMutation({
 		mutationFn: ProjectsApi.create,
 		onSuccess: ({ data }, variables) => {
@@ -31,6 +33,10 @@ export const useCreateProjectMutation = () => {
 						projectOrder: count + 1
 					}
 				]
+			})
+
+			queryClient.invalidateQueries({
+				queryKey: ['projects', 'with-filters']
 			})
 
 			router.push(Routes.PROJECT_ISSUES(workspaceSlug, data.id))

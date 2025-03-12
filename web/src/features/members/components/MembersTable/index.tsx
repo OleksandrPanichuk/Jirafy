@@ -12,7 +12,7 @@ import {
 } from '@/features/shared'
 import { useDebounce } from '@/hooks'
 import { MemberRole, MemberType } from '@/types'
-import { Input, Spinner } from '@nextui-org/react'
+import { Input, Spinner } from "@heroui/react"
 import { IconSearch } from '@tabler/icons-react'
 import {
 	flexRender,

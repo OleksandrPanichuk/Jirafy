@@ -1,11 +1,14 @@
 'use client'
 
+import {
+	CreateDateSelectOptions,
+	TypeProjectsFilters
+} from '@/features/projects'
 import { useSafeContext } from '@/hooks'
 import { OmitTyped, SortOrder } from '@/types'
 import { useGetCookie } from 'cookies-next'
 import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 import { createStore, StoreApi, useStore } from 'zustand'
-import { TypeProjectsFilters } from '@/features/projects'
 
 interface IProjectsFiltersStore extends TypeProjectsFilters {
 	setSearchValue: (value: TypeProjectsFilters['searchValue']) => void
@@ -15,6 +18,11 @@ interface IProjectsFiltersStore extends TypeProjectsFilters {
 	addLeaderId: (value: string) => void
 	removeLeaderId: (value: string) => void
 	toggleOnlyMyProjects: () => void
+	setBeforeDate: (value: Date | undefined) => void
+	setAfterDate: (value: Date | undefined) => void
+
+	selectedDateOption: CreateDateSelectOptions | undefined
+	setSelectedDateOption: (value: CreateDateSelectOptions | undefined) => void
 }
 
 type ProjectsFiltersContext = StoreApi<IProjectsFiltersStore>
@@ -49,15 +57,31 @@ export const ProjectsFiltersProvider = ({ children }: PropsWithChildren) => {
 			setNetwork: (value) => set({ network: value }),
 			setSortOrder: (value) => set({ sortOrder: value }),
 			setSortBy: (value) => set({ sortBy: value }),
-			addLeaderId: (value) => set(() => ({
-				leadersIds: [...(get().leadersIds ?? []), value]
-			})),
-			removeLeaderId: (value) => set(() => ({
-				leadersIds: get().leadersIds?.filter((id) => id !== value)
-			})),
-			toggleOnlyMyProjects: () => set(() => ({
-				onlyMyProjects: !get().onlyMyProjects
-			})),
+			addLeaderId: (value) =>
+				set(() => ({
+					leadersIds: [...(get().leadersIds ?? []), value]
+				})),
+			removeLeaderId: (value) =>
+				set(() => ({
+					leadersIds: get().leadersIds?.filter((id) => id !== value)
+				})),
+			toggleOnlyMyProjects: () =>
+				set(() => ({
+					onlyMyProjects: !get().onlyMyProjects
+				})),
+			setBeforeDate: (value) =>
+				set(() => ({
+					beforeDate: value
+				})),
+			setAfterDate: (value) =>
+				set(() => ({
+					afterDate: value
+				})),
+			setSelectedDateOption: (value) =>
+				set(() => ({
+					selectedDateOption: value
+				})),
+			selectedDateOption: CreateDateSelectOptions.NONE
 		}))
 	)
 	return (

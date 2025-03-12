@@ -8,7 +8,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { IconDots, IconStarFilled } from '@tabler/icons-react'
 
 interface IFavoritesItemMenuProps {

@@ -7,7 +7,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { IconGlobe, IconLock, TablerIcon } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'

@@ -7,7 +7,7 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { IconDots, IconSettings } from '@tabler/icons-react'
 import { useRouter } from 'next-nprogress-bar'
 

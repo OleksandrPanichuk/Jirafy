@@ -11,7 +11,7 @@ import {
 } from '@/features/shared'
 import { useChildrenWithProps, useDisclosure } from '@/hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Modal, ModalContent } from '@nextui-org/react'
+import { Modal, ModalContent } from "@heroui/react"
 import { IconAlertTriangle } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'

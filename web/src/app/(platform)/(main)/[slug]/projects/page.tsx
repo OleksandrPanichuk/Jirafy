@@ -22,10 +22,14 @@ const ProjectsPage = async ({ params }: IProjectsPageProps) => {
 	const queryClient = new QueryClient()
 
 	await queryClient.prefetchQuery({
-		queryKey: ['projects', 'with-filters', {
-			slug,
-			takeMembers: 5
-		}],
+		queryKey: [
+			'projects',
+			'with-filters',
+			{
+				slug,
+				takeMembers: 5
+			}
+		],
 		queryFn: () => getAllProjectsWithFiltersByWorkspaceSlug(slug)
 	})
 
@@ -34,7 +38,7 @@ const ProjectsPage = async ({ params }: IProjectsPageProps) => {
 			<ProjectsFiltersProvider>
 				<div className={'flex flex-col w-full overflow-hidden'}>
 					<ProjectsPageHeader />
-					<div className={'mt-4 overflow-auto'}>
+					<div className={'mt-4 overflow-auto h-full'}>
 						<ProjectsList />
 					</div>
 				</div>

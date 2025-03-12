@@ -18,7 +18,7 @@ import {
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { useDisclosure, useMediaQuery } from '@/hooks'
 import { cn } from '@/lib'
-import { Button, Tooltip } from '@nextui-org/react'
+import { Button, Tooltip } from "@heroui/react"
 import {
 	IconArrowRight,
 	IconHeart,

@@ -4,7 +4,7 @@ import {
 	useCurrentWorkspace,
 	useDeleteWorkspaceMutation
 } from '@/features/workspaces'
-import { Accordion, AccordionItem, Button } from '@nextui-org/react'
+import { Accordion, AccordionItem, Button } from "@heroui/react"
 
 export const DeleteWorkspaceAccordion = () => {
 	const workspace = useCurrentWorkspace()

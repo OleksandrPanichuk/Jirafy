@@ -1,11 +1,13 @@
 'use client'
 
 import { ProjectsApi } from '@/api'
-import { ProjectFilters } from '@/features/projects'
+import { TypeProjectsFilters } from '@/features/projects'
 import { useQuery } from '@/hooks'
 import { useParams } from 'next/navigation'
 
-export const useProjectsWithFiltersQuery = (variables: ProjectFilters = {}) => {
+export const useProjectsWithFiltersQuery = (
+	variables: TypeProjectsFilters = {}
+) => {
 	const { slug } = useParams<{ slug: string }>()
 	return useQuery({
 		queryKey: ['projects', 'with-filters', { slug, ...variables }],

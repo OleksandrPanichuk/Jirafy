@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib'
-import { Button, ButtonVariantProps, Tooltip } from '@nextui-org/react'
+import { Button, ButtonVariantProps, Tooltip } from "@heroui/react"
 import Link from 'next/link'
 
 interface ISidebarNavButtonProps {

@@ -16,7 +16,7 @@ import {
 	PopoverTrigger,
 	Skeleton,
 	User
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { IconSearch } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'

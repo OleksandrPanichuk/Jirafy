@@ -3,7 +3,7 @@
 import { forwardRef } from 'react'
 
 import { cn } from '@/lib'
-import { ButtonProps, Button as NextUIButton } from '@nextui-org/react'
+import { ButtonProps, Button as NextUIButton } from "@heroui/react"
 import { BottomGradient } from './BottomGradient'
 
 export const BottomGradientButton = forwardRef<HTMLButtonElement, ButtonProps>(

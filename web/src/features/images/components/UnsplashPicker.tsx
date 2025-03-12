@@ -3,7 +3,7 @@
 import { useGetUnsplashImagesQuery } from '@/features/images'
 import { Input } from '@/features/shared'
 import { useDebounce } from '@/hooks'
-import { Skeleton } from '@nextui-org/react'
+import { Skeleton } from "@heroui/react"
 import { IconSearch } from '@tabler/icons-react'
 import Image from 'next/image'
 import { useState } from 'react'

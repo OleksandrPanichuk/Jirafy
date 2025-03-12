@@ -4,7 +4,7 @@ import { ProgressBar } from '@/features/shared'
 import { Notifications } from '@/features/toast'
 import { QueryProvider, SocketsProvider } from '@/providers'
 import '@/styles/globals.scss'
-import { NextUIProvider } from '@nextui-org/react'
+import { HeroUIProvider } from '@heroui/react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ReactNode } from 'react'
@@ -53,7 +53,7 @@ export default async function RootLayout({
 				<QueryProvider>
 					<AuthProvider initialUser={user}>
 						<SocketsProvider>
-							<NextUIProvider>{children}</NextUIProvider>
+							<HeroUIProvider>{children}</HeroUIProvider>
 						</SocketsProvider>
 					</AuthProvider>
 				</QueryProvider>

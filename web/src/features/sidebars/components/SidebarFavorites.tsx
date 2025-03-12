@@ -8,6 +8,8 @@ import { FavoritesItemMenu } from './FavoritesItemMenu'
 import { SidebarGroup } from './SidebarGroup'
 import { SidebarItem } from './SidebarItem'
 
+
+
 export const SidebarFavorites = () => {
 	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
 	const favorites = useFavoritesStore((s) => s.favorites)
@@ -33,6 +35,7 @@ export const SidebarFavorites = () => {
 					text={favorite.project.name}
 					action={<FavoritesItemMenu favorite={favorite} />}
 					isCollapsed={isCollapsed}
+					isFullLink={false}
 				/>
 			))}
 		</SidebarGroup>

@@ -1,5 +1,13 @@
 'use client'
 
+import { breakpoints } from '@/constants'
+import {
+	TypeProjectsFilters,
+	useProjectsFiltersStore
+} from '@/features/projects'
+import { Button } from '@/features/shared'
+import { useDisclosure, useMediaQuery } from '@/hooks'
+import { cn } from '@/lib'
 import {
 	Divider,
 	Listbox,
@@ -7,18 +15,13 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger
-} from '@nextui-org/react'
-import { Button } from '@/features/shared'
+} from "@heroui/react"
 import { IconChevronDown, IconSortDescending } from '@tabler/icons-react'
-import { useDisclosure } from '@/hooks'
-import { cn } from '@/lib'
-import {
-	TypeProjectsFilters,
-	useProjectsFiltersStore
-} from '@/features/projects'
 
 export const OrderSelect = () => {
 	const { isOpen, setIsOpen } = useDisclosure()
+
+	const [isMobile] = useMediaQuery(breakpoints['max-md'])
 
 	const sortBy = useProjectsFiltersStore((s) => s.sortBy)
 	const sortOrder = useProjectsFiltersStore((s) => s.sortOrder)
@@ -31,15 +34,18 @@ export const OrderSelect = () => {
 				<Button
 					startContent={<IconSortDescending className={'size-3'} />}
 					endContent={
-						<IconChevronDown
-							className={cn('transition-all size-3', isOpen && 'rotate-180')}
-						/>
+						!isMobile && (
+							<IconChevronDown
+								className={cn('transition-all size-3', isOpen && 'rotate-180')}
+							/>
+						)
 					}
 					className={'px-2 text-tw-text-200 text-xs gap-1 h-7'}
 					variant={'ghost'}
 					size={'sm'}
+					isIconOnly={isMobile}
 				>
-					Order by
+					{!isMobile && 'Order by'}
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent

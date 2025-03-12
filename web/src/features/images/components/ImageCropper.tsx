@@ -1,6 +1,6 @@
 'use client'
 import { useChildrenWithProps, useDisclosure } from '@/hooks'
-import { Modal, ModalContent } from '@nextui-org/react'
+import { Modal, ModalContent } from "@heroui/react"
 import { PropsWithChildren, useRef, useState } from 'react'
 import ReactCrop, { Crop, PixelCrop } from 'react-image-crop'
 

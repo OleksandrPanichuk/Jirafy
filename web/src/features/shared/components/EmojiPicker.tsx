@@ -5,7 +5,7 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger
-} from '@nextui-org/react'
+} from "@heroui/react"
 import Picker, { EmojiClickData, Theme } from 'emoji-picker-react'
 import { useState } from 'react'
 

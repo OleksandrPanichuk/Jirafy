@@ -6,7 +6,7 @@ import {
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { formatDate } from '@/lib'
 import { InviteState, TypeInviteWithUser } from '@/types'
-import { Avatar, Chip } from '@nextui-org/react'
+import { Avatar, Chip } from "@heroui/react"
 import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 

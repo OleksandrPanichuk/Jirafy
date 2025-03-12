@@ -3,7 +3,7 @@
 import { CreateWorkspaceInput } from '@/api'
 import { APP_DOMAIN } from '@/constants'
 import { generateSlug } from '@/features/workspaces'
-import { Input } from '@nextui-org/react'
+import { Input } from "@heroui/react"
 import { useEffect } from 'react'
 import { Control, ControllerRenderProps, useWatch } from 'react-hook-form'
 

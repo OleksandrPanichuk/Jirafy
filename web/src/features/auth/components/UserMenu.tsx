@@ -9,7 +9,7 @@ import {
 	DropdownSection,
 	DropdownTrigger,
 	User
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { IconEdit, IconLogout } from '@tabler/icons-react'
 import { useRouter } from 'next-nprogress-bar'
 

@@ -19,7 +19,7 @@ import {
 	DropdownMenu,
 	DropdownSection,
 	DropdownTrigger
-} from '@nextui-org/react'
+} from "@heroui/react"
 import {
 	IconCheck,
 	IconChevronDown,

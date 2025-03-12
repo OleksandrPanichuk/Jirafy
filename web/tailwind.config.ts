@@ -1,4 +1,4 @@
-import { nextui } from '@nextui-org/react'
+import { heroui } from "@heroui/react"
 import { Config } from 'tailwindcss'
 import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette'
 import { PluginAPI } from 'tailwindcss/types/config'
@@ -6,7 +6,7 @@ import { PluginAPI } from 'tailwindcss/types/config'
 const config: Config = {
 	content: [
 		'./src/**/*.{js,ts,jsx,tsx,mdx}',
-		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
+		"./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}"
 	],
 	darkMode: 'class',
 	theme: {
@@ -57,7 +57,7 @@ const config: Config = {
 	},
 	plugins: [
 		addVariablesForColors,
-		nextui({
+		heroui({
 			themes: {
 				dark: {
 					colors: {

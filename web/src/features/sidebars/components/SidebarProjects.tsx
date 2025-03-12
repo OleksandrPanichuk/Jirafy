@@ -15,7 +15,7 @@ import {
 } from '@/features/sidebars'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { TypeProjectWithCurrentMember } from '@/types'
-import { Button, Tooltip } from '@nextui-org/react'
+import { Button, Tooltip } from "@heroui/react"
 import { IconPlus } from '@tabler/icons-react'
 
 export const SidebarProjects = () => {

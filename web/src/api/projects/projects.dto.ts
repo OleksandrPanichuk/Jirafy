@@ -59,7 +59,9 @@ export const findAllProjectWithFiltersSchema = z.object({
 	network: z.array(z.nativeEnum(Network)).optional(),
 	leadersIds: z.array(zMongoId()).optional(),
 	slug: z.string(),
-	takeMembers: z.number().positive().optional()
+	takeMembers: z.number().positive().optional(),
+	beforeDate: z.date().optional(),
+	afterDate: z.date().optional()
 })
 
 export type FindAllProjectsWithFiltersInput = z.infer<

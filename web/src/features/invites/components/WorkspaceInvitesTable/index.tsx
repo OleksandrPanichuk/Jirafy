@@ -17,7 +17,7 @@ import {
 } from '@/features/shared'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { InviteMemberRole, InviteState } from '@/types'
-import { Input, Spinner } from '@nextui-org/react'
+import { Input, Spinner } from "@heroui/react"
 import { IconSearch } from '@tabler/icons-react'
 import {
 	ColumnFiltersState,

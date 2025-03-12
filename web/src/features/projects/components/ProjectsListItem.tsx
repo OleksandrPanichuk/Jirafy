@@ -19,7 +19,7 @@ import {
 	CardFooter,
 	Image,
 	Tooltip
-} from '@nextui-org/react'
+} from "@heroui/react"
 import {
 	IconLink,
 	IconSettings,

@@ -86,6 +86,7 @@ export class ProjectsService {
       }
     }
 
+
     return this.prisma.project.findMany({
       where: {
         ...(network?.length && {
@@ -96,6 +97,10 @@ export class ProjectsService {
 
         workspace: {
           slug,
+        },
+        createdAt: {
+          lte: dto.beforeDate,
+          gte: dto.afterDate,
         },
 
         ...(searchValue && {
@@ -197,14 +202,28 @@ export class ProjectsService {
     });
 
     if (leadId && leadId !== userId) {
-      await this.createFirstMember(dto.workspaceId, userId, project.id);
+      await this.createMember(
+        dto.workspaceId,
+        userId,
+        project.id,
+        MemberRole.OWNER,
+      );
+      await this.createMember(
+        dto.workspaceId,
+        leadId,
+        project.id,
+        MemberRole.ADMIN,
+        true,
+      );
+    } else {
+      await this.createMember(
+        dto.workspaceId,
+        userId,
+        project.id,
+        MemberRole.OWNER,
+        true,
+      );
     }
-    await this.createFirstMember(
-      dto.workspaceId,
-      leadId ?? userId,
-      project.id,
-      true,
-    );
 
     return project;
   }
@@ -274,10 +293,11 @@ export class ProjectsService {
     }
   }
 
-  private async createFirstMember(
+  private async createMember(
     workspaceId: string,
     userId: string,
     projectId: string,
+    role: MemberRole,
     isLead: boolean = false,
   ) {
     const projectsCount = await this.prisma.project.count({
@@ -294,7 +314,7 @@ export class ProjectsService {
     await this.prisma.member.create({
       data: {
         userId,
-        role: MemberRole.ADMIN,
+        role,
         type: MemberType.PROJECT,
         projectId,
         isLead,

@@ -1,7 +1,10 @@
 import { SortOrder } from '@/shared/enums';
+import { Network } from '@prisma/client';
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
+  IsDate,
   IsEnum,
   IsMongoId,
   IsNotEmpty,
@@ -10,8 +13,6 @@ import {
   IsPositive,
   IsString,
 } from 'class-validator';
-import { Network } from '@prisma/client';
-
 
 export class FindAllProjectsWithFiltersInput {
   @IsOptional()
@@ -45,4 +46,14 @@ export class FindAllProjectsWithFiltersInput {
   @IsNumber()
   @IsPositive()
   readonly takeMembers?: number;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  readonly beforeDate?: Date;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  readonly afterDate?: Date;
 }

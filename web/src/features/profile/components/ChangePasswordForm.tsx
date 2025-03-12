@@ -13,7 +13,7 @@ import {
 	PasswordInput
 } from '@/features/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Divider } from '@nextui-org/react'
+import { Divider } from "@heroui/react"
 import { useForm } from 'react-hook-form'
 
 const defaultValues = {

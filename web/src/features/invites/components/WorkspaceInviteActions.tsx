@@ -2,7 +2,7 @@
 
 import { useDeleteInviteMutation } from '@/features/invites'
 import { useConfirm } from '@/hooks'
-import { Tooltip } from '@nextui-org/react'
+import { Tooltip } from "@heroui/react"
 import { IconTrash } from '@tabler/icons-react'
 
 interface IWorkspaceInviteActionsProps {

@@ -24,7 +24,7 @@ import { useUploadFileMutation } from '@/features/storage'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { Network, TypeFile } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Divider, Modal, ModalContent, Tooltip } from '@nextui-org/react'
+import { Divider, Modal, ModalContent, Tooltip } from "@heroui/react"
 import { IconInfoCircle, IconX } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -39,6 +39,7 @@ const defaultValues: Partial<CreateProjectInput> = {
 
 type FormValues = z.infer<typeof createProjectSchema>
 
+// TODO: fix mobile view
 export const CreateProjectModal = () => {
 	const currentWorkspace = useCurrentWorkspace()
 
@@ -60,6 +61,8 @@ export const CreateProjectModal = () => {
 		reset,
 		formState: { isValid }
 	} = form
+
+	// TODO: fix bug: when i open the modal, enter name and choose cover, the form is invalid
 
 	const { data: initialImage } = useGetRandomImageQuery({
 		onSuccess: (url) => {

@@ -24,7 +24,7 @@ import { useCopy } from '@/hooks'
 import { absoluteUrl, domainUrl } from '@/lib'
 import { TypeFile } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Divider, Input } from '@nextui-org/react'
+import { Divider, Input } from "@heroui/react"
 import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 
