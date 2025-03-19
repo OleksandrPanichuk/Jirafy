@@ -14,4 +14,5 @@ export const envSchema = Yup.object().shape({
   CLOUDINARY_API_KEY: Yup.string().required(),
   CLOUDINARY_API_SECRET: Yup.string().required(),
   CLOUDINARY_FOLDER: Yup.string().required(),
+  REDIS_URL: Yup.string().required(),
 });

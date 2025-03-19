@@ -1,10 +1,16 @@
 import { ApiRoutes } from '@/constants'
 import { axios } from '@/lib'
-import { TypeProject, TypeProjectWithCurrentMember, TypeProjectWithMembers } from '@/types'
+import {
+	TypeProject,
+	TypeProjectWithCurrentMember,
+	TypeProjectWithMembers
+} from '@/types'
 import {
 	CreateProjectInput,
 	createProjectSchema,
 	FindAllProjectsWithFiltersInput,
+	JoinProjectInput,
+	joinProjectSchema,
 	ReorderProjectsInput,
 	reorderProjectsSchema
 } from './projects.dto'
@@ -17,11 +23,15 @@ const findAllByWorkspaceSlug = async (slug: string) => {
 	).data
 }
 
-const findAllByWorkspaceSlugWithFilters = async (input: FindAllProjectsWithFiltersInput) => {
-
+const findAllByWorkspaceSlugWithFilters = async (
+	input: FindAllProjectsWithFiltersInput
+) => {
 	const { slug, ...rest } = input
 	return (
-		await axios.post<TypeProjectWithMembers[]>(ApiRoutes.PROJECTS.BY_WORKSPACE_SLUG_WITH_FILTERS(slug), rest)
+		await axios.post<TypeProjectWithMembers[]>(
+			ApiRoutes.PROJECTS.BY_WORKSPACE_SLUG_WITH_FILTERS(slug),
+			rest
+		)
 	).data
 }
 
@@ -35,9 +45,18 @@ const reorder = async (input: ReorderProjectsInput) => {
 	return await axios.put(ApiRoutes.PROJECTS.REORDER, input)
 }
 
+const join = async (input: JoinProjectInput) => {
+	joinProjectSchema.parse(input)
+	return await axios.post<TypeProjectWithCurrentMember>(
+		ApiRoutes.PROJECTS.JOIN,
+		input
+	)
+}
+
 export const ProjectsApi = {
 	findAllByWorkspaceSlug,
 	findAllByWorkspaceSlugWithFilters,
 	create,
-	reorder
+	reorder,
+	join
 } as const

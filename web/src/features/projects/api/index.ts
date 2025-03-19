@@ -1,3 +1,4 @@
 export * from './useCreateProjectMutation'
-export * from './useReorderProjectsMutation'
+export * from './useJoinProjectMutation'
 export * from './useProjectsWithFiltersQuery'
+export * from './useReorderProjectsMutation'

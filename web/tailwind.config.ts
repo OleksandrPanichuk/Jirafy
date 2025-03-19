@@ -1,19 +1,29 @@
-import { heroui } from "@heroui/react"
+import { heroui } from '@heroui/react'
+import fluid, { extract, fontSize, screens } from 'fluid-tailwind'
 import { Config } from 'tailwindcss'
 import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette'
 import { PluginAPI } from 'tailwindcss/types/config'
 
 const config: Config = {
-	content: [
-		'./src/**/*.{js,ts,jsx,tsx,mdx}',
-		"./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}"
-	],
+	// content: [
+	// 	'./src/**/*.{js,ts,jsx,tsx,mdx}',
+	// 	'./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
+	// ],
+	content: {
+		files: [
+			'./src/**/*.{js,ts,jsx,tsx,mdx}',
+			'./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}'
+		],
+		extract
+	},
 	darkMode: 'class',
 	theme: {
 		extend: {
 			screens: {
-				xs: '440px'
+				xs: '27.5rem',
+				...screens
 			},
+			fontSize,
 			colors: {
 				'tw-dark': 'var(--dark)',
 				'tw-gray': 'var(--gray)',
@@ -57,6 +67,7 @@ const config: Config = {
 	},
 	plugins: [
 		addVariablesForColors,
+		fluid,
 		heroui({
 			themes: {
 				dark: {

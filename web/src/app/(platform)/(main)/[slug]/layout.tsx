@@ -3,7 +3,7 @@ import {
 	getAllProjectsByWorkspaceSlug
 } from '@/api'
 import { FavoritesProvider } from '@/features/favorites'
-import { ProjectsProvider } from '@/features/projects'
+import { CreateProjectModal, ProjectsProvider } from '@/features/projects'
 import { WorkspaceLayout } from '@/features/workspaces'
 import { PropsWithChildren } from 'react'
 
@@ -24,7 +24,10 @@ const Layout = async ({ children, params }: ILayoutProps) => {
 	return (
 		<ProjectsProvider initialProjects={projects}>
 			<FavoritesProvider initialData={favorites}>
-				<WorkspaceLayout>{children}</WorkspaceLayout>
+				<WorkspaceLayout>
+					<CreateProjectModal />
+					{children}
+				</WorkspaceLayout>
 			</FavoritesProvider>
 		</ProjectsProvider>
 	)

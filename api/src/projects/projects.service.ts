@@ -3,9 +3,14 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
-import { MemberRole, MemberType, Prisma } from '@prisma/client';
-import { CreateProjectInput, ReorderProjectInput } from './dto';
+import { MemberRole, MemberType, Network, Prisma } from '@prisma/client';
+import {
+  CreateProjectInput,
+  JoinProjectInput,
+  ReorderProjectInput,
+} from './dto';
 import { FindAllProjectsWithFiltersInput } from './dto/find-all-projects-with-filters.dto';
 
 @Injectable()
@@ -86,13 +91,47 @@ export class ProjectsService {
       }
     }
 
+    const member = await this.prisma.member.findFirst({
+      where: {
+        userId,
+        workspace: {
+          slug,
+        },
+      },
+    });
+
+    const hasAccess =
+      member.role === MemberRole.ADMIN || member.role === MemberRole.OWNER;
 
     return this.prisma.project.findMany({
       where: {
-        ...(network?.length && {
-          network: {
-            in: network,
-          },
+        ...(network?.length &&
+          hasAccess && {
+            network: {
+              in: network,
+            },
+          }),
+
+        ...(!hasAccess && {
+          OR: [
+            {
+              ...(!network?.includes(Network.PRIVATE) && {
+                network: Network.PUBLIC,
+              }),
+            },
+            {
+              members: {
+                some: {
+                  userId,
+                },
+              },
+              ...(network?.length && {
+                network: {
+                  in: network,
+                },
+              }),
+            },
+          ],
         }),
 
         workspace: {
@@ -187,14 +226,6 @@ export class ProjectsService {
       );
     }
 
-    const role = currentMember.role as MemberRole;
-
-    if (role !== MemberRole.ADMIN && role !== MemberRole.OWNER) {
-      throw new ForbiddenException(
-        'You do not have permission to create projects in this workspace',
-      );
-    }
-
     const { leadId, ...data } = dto;
 
     const project = await this.prisma.project.create({
@@ -226,6 +257,47 @@ export class ProjectsService {
     }
 
     return project;
+  }
+
+  public async join(dto: JoinProjectInput, userId: string) {
+    const project = await this.prisma.project.findUnique({
+      where: {
+        id: dto.projectId,
+      },
+    });
+
+    if (!project) {
+      throw new NotFoundException('Project to join not found');
+    }
+
+    const currentWorkspaceMember = await this.prisma.member.findFirst({
+      where: {
+        userId,
+        workspaceId: project.workspaceId,
+      },
+    });
+
+    const hasAccess =
+      currentWorkspaceMember.role === MemberRole.ADMIN ||
+      currentWorkspaceMember.role === MemberRole.OWNER;
+
+    if (project.network === Network.PRIVATE && !hasAccess) {
+      throw new ForbiddenException(
+        'You do not have permission to join this project',
+      );
+    }
+
+    const member = await this.createMember(
+      project.workspaceId,
+      userId,
+      project.id,
+      hasAccess ? MemberRole.ADMIN : MemberRole.MEMBER,
+    );
+
+    return {
+      ...project,
+      members: [member],
+    };
   }
 
   public async reorder(dto: ReorderProjectInput, userId: string) {

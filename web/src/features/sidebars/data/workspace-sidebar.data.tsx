@@ -1,5 +1,11 @@
 import { Routes } from '@/constants'
-import { IconBriefcase, IconBulb, IconChartBar, IconMessage, IconStack2 } from '@tabler/icons-react'
+import {
+	IconBriefcase,
+	IconBulb,
+	IconChartBar,
+	IconMessage,
+	IconStack2
+} from '@tabler/icons-react'
 import { ReactNode } from 'react'
 
 type WorkspaceSidebarLink = {
@@ -8,7 +14,9 @@ type WorkspaceSidebarLink = {
 	icon: ReactNode
 }
 
-export const getWorkspaceSidebarLinks = (slug: string): WorkspaceSidebarLink[] => [
+export const getWorkspaceSidebarLinks = (
+	slug: string
+): WorkspaceSidebarLink[] => [
 	{
 		href: Routes.WORKSPACE_PROJECTS(slug),
 		text: 'Projects',
@@ -20,7 +28,7 @@ export const getWorkspaceSidebarLinks = (slug: string): WorkspaceSidebarLink[] =
 		icon: <IconStack2 className="size-4" />
 	},
 	{
-		href: Routes.WORKSPACE_CHAT(slug),
+		href: Routes.WORKSPACE_CHANNELS(slug),
 		text: 'Chat',
 		icon: <IconMessage className="size-4" />
 	},

@@ -1,12 +1,13 @@
 import { ConfigService } from '@nestjs/config';
-// @ts-expect-error Works fine
-import { create as createMongoDBStore } from 'connect-mongo';
+import { RedisStore } from 'connect-redis';
 import { SessionOptions } from 'express-session';
-import { SESSION_COOKIE_NAME } from '../constants'
+import { SESSION_COOKIE_NAME } from '@/shared/constants';
+import { Redis } from '@/shared/helpers';
 
 const MAX_AGE = 1000 * 60 * 60 * 24 * 7;
 
 export function getSessionConfig(config: ConfigService): SessionOptions {
+  const redis = Redis.getInstance(config);
   return {
     secret: config.get<string>('SESSION_SECRET'),
     resave: false,
@@ -15,10 +16,8 @@ export function getSessionConfig(config: ConfigService): SessionOptions {
       maxAge: MAX_AGE,
     },
     name: SESSION_COOKIE_NAME,
-    store: createMongoDBStore({
-      mongoUrl: config.get<string>('DATABASE_URL'),
-      collectionName: 'sessions',
-      ttl: MAX_AGE / 1000,
+    store: new RedisStore({
+      client: redis,
     }),
   };
 }

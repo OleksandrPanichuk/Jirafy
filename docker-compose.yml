@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    env_file:
+      - ./web/.env
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - api
+    container_name: kpi_web
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    env_file:
+      - ./api/.env
+    environment:
+      - NODE_ENV=development
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    container_name: kpi_api
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    container_name: kpi_redis
+
+volumes:
+  redis_data:

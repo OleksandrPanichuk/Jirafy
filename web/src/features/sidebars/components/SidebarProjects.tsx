@@ -2,7 +2,6 @@
 
 import { ReorderProjectsInput } from '@/api'
 import {
-	CreateProjectModal,
 	useCreateProjectModalStore,
 	useProjectsStore,
 	useReorderProjectsMutation
@@ -15,7 +14,7 @@ import {
 } from '@/features/sidebars'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { TypeProjectWithCurrentMember } from '@/types'
-import { Button, Tooltip } from "@heroui/react"
+import { Button, Tooltip } from '@heroui/react'
 import { IconPlus } from '@tabler/icons-react'
 
 export const SidebarProjects = () => {
@@ -48,7 +47,6 @@ export const SidebarProjects = () => {
 
 	return (
 		<>
-			<CreateProjectModal />
 			<SidebarGroup
 				title="Your projects"
 				classNames={{

@@ -18,7 +18,7 @@ import {
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { useDisclosure, useMediaQuery } from '@/hooks'
 import { cn } from '@/lib'
-import { Button, Tooltip } from "@heroui/react"
+import { Button, Tooltip } from '@heroui/react'
 import {
 	IconArrowRight,
 	IconHeart,
@@ -103,9 +103,9 @@ function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 			)}
 		>
 			<div className="flex flex-col h-full">
-				<div className="px-4 flex gap-2">
-					<WorkspaceSwitcher />
-					<UserMenu />
+				<div className={cn('px-4 flex gap-2', isCollapsed && 'flex-col')}>
+					<WorkspaceSwitcher isCollapsed={isCollapsed} />
+					<UserMenu isCollapsed={isCollapsed} />
 				</div>
 				<div className="overflow-x-hidden  h-full w-full overflow-y-auto py-0.5 px-4 flex-1 no-scroll">
 					<div className="flex flex-col gap-0.5 mt-2.5 mb-2">
@@ -128,23 +128,23 @@ function SidebarContent({ alwaysOpen, className }: IWorkspaceSidebarProps) {
 							isCollapsed={isCollapsed}
 						/>
 					</div>
-				
-						<SidebarGroup
-							title="Workspace"
-							classNames={{
-								trigger: 'mb-1'
-							}}
-							action={<WorkspaceActions />}
-						>
-							{getWorkspaceSidebarLinks(workspaceSlug).map((link) => (
-								<SidebarItem
-									key={link.href}
-									isCollapsed={isCollapsed}
-									{...link}
-								/>
-							))}
-						</SidebarGroup>
-					
+
+					<SidebarGroup
+						title="Workspace"
+						classNames={{
+							trigger: 'mb-1'
+						}}
+						action={<WorkspaceActions />}
+					>
+						{getWorkspaceSidebarLinks(workspaceSlug).map((link) => (
+							<SidebarItem
+								key={link.href}
+								isCollapsed={isCollapsed}
+								{...link}
+							/>
+						))}
+					</SidebarGroup>
+
 					<SidebarFavorites />
 					<SidebarProjects />
 				</div>

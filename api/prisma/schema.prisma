@@ -94,16 +94,6 @@ enum IssueStatus {
   PUBLISHED
 }
 
-model Session {
-  id String @id @map("_id") @db.String
-
-  expires DateTime
-
-  session String
-
-  @@map("sessions")
-}
-
 model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -254,7 +244,6 @@ model Invites {
 
   workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String?    @db.ObjectId
-
 
   @@map("invites")
 }

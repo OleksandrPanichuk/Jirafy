@@ -12,6 +12,7 @@ import {
 import {
   CreateProjectInput,
   FindAllProjectsWithFiltersInput,
+  JoinProjectInput,
   ReorderProjectInput,
 } from './dto';
 import { ProjectsService } from './projects.service';
@@ -45,6 +46,11 @@ export class ProjectsController {
   @Post('')
   create(@Body() dto: CreateProjectInput, @CurrentUser('id') userId: string) {
     return this.projectsService.create(dto, userId);
+  }
+
+  @Post('join')
+  join(@Body() dto: JoinProjectInput, @CurrentUser('id') userId: string) {
+    return this.projectsService.join(dto, userId);
   }
 
   @Put('reorder')

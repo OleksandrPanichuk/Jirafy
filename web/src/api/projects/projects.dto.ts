@@ -67,3 +67,9 @@ export const findAllProjectWithFiltersSchema = z.object({
 export type FindAllProjectsWithFiltersInput = z.infer<
 	typeof findAllProjectWithFiltersSchema
 >
+
+export const joinProjectSchema = z.object({
+	projectId: zMongoId()
+})
+
+export type JoinProjectInput = z.infer<typeof joinProjectSchema>

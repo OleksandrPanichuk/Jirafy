@@ -3,7 +3,6 @@
 import { Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
 import { useCurrentWorkspaceMember } from '@/features/members'
-import { useWorkspaceSidebarStore } from '@/features/sidebars'
 import {
 	useCurrentWorkspace,
 	useWorkspacesStore,
@@ -19,7 +18,7 @@ import {
 	DropdownMenu,
 	DropdownSection,
 	DropdownTrigger
-} from "@heroui/react"
+} from '@heroui/react'
 import {
 	IconCheck,
 	IconChevronDown,
@@ -30,13 +29,19 @@ import {
 } from '@tabler/icons-react'
 import { useRouter } from 'next-nprogress-bar'
 
+interface IWorkspaceSwitcherProps {
+	variant?: 'default' | 'compact'
+	isCollapsed?: boolean
+}
+
 // TODO: when adding a subscription check whether user can create new workspace or not
-export const WorkspaceSwitcher = () => {
+export const WorkspaceSwitcher = ({
+	isCollapsed = false,
+	variant = 'default'
+}: IWorkspaceSwitcherProps) => {
 	const { isOpen, toggle, close } = useDisclosure()
 
 	const router = useRouter()
-
-	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
 	const user = useAuth((s) => s.user)
 
 	const { mutate: signOut, isPending: isSigningOut } = useSignOutMutation()
@@ -63,6 +68,7 @@ export const WorkspaceSwitcher = () => {
 				close()
 			}
 		})
+	const isCompact = variant === 'compact' || isCollapsed
 
 	if (!user || !workspaces.length || !currentWorkspace) {
 		return null
@@ -84,17 +90,17 @@ export const WorkspaceSwitcher = () => {
 				<Button
 					className={cn(
 						'rounded-md group-trigger w-full justify-start min-w-8 h-8 p-1',
-						isCollapsed && 'justify-center'
+						isCompact && 'justify-center'
 					)}
 					variant="light"
-					isIconOnly={isCollapsed}
+					isIconOnly={isCompact}
 				>
 					<WorkspaceLogo
 						size={24}
 						name={currentWorkspace.name}
 						src={currentWorkspace.logo?.url}
 					/>
-					{!isCollapsed && (
+					{!isCompact && (
 						<>
 							<p className="flex-1 text-start">{currentWorkspace.name}</p>
 							<IconChevronDown
@@ -111,7 +117,11 @@ export const WorkspaceSwitcher = () => {
 				<DropdownItem key={'email'} className="cursor-default" isReadOnly>
 					<p className="text-xs text-tw-text-400">{user.email}</p>
 				</DropdownItem>
-				<DropdownSection aria-label="Workspace select" showDivider>
+				<DropdownSection
+					className="max-h-[480px] overflow-auto"
+					aria-label="Workspace select"
+					showDivider
+				>
 					{/* TODO: if too many workspaces show overflow  */}
 					{workspaces.map((workspace) => (
 						<DropdownItem

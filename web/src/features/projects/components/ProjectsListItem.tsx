@@ -7,10 +7,14 @@ import {
 	useRemoveFromFavoritesMutation
 } from '@/features/favorites'
 import { useCurrentWorkspaceMember } from '@/features/members'
+import {
+	ProjectJoinConfirmationModal,
+	useProjectsStore
+} from '@/features/projects'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
 import { useCopy } from '@/hooks'
 import { absoluteUrl, formatDate } from '@/lib'
-import { TypeProjectWithMembers } from '@/types'
+import { Network, TypeProjectWithMembers } from '@/types'
 import {
 	Avatar,
 	AvatarGroup,
@@ -19,9 +23,10 @@ import {
 	CardFooter,
 	Image,
 	Tooltip
-} from "@heroui/react"
+} from '@heroui/react'
 import {
 	IconLink,
+	IconLock,
 	IconSettings,
 	IconStar,
 	IconStarFilled
@@ -38,6 +43,8 @@ export const ProjectsListItem = ({ project }: IProjectListItemProps) => {
 	const favorites = useFavoritesStore((s) => s.favorites)
 	const currentMember = useCurrentWorkspaceMember()
 	const slug = useCurrentWorkspaceSlug()
+
+	const projects = useProjectsStore((s) => s.projects)
 
 	const router = useRouter()
 
@@ -90,6 +97,9 @@ export const ProjectsListItem = ({ project }: IProjectListItemProps) => {
 							</h5>
 							<span className="flex items-center gap-1.5 text-xs font-medium text-white">
 								{project.identifier}
+								{project.network === Network.PRIVATE && (
+									<IconLock className={'size-3.5'} />
+								)}
 							</span>
 						</div>
 					</div>
@@ -156,13 +166,29 @@ export const ProjectsListItem = ({ project }: IProjectListItemProps) => {
 							</Tooltip>
 						))}
 					</AvatarGroup>
-					{/* TODO: show settings icon if current user */}
-					<Link
-						href={Routes.PROJECT_SETTINGS(slug, project.id)}
-						className="flex items-center justify-center rounded p-1 text-tw-text-400 hover:bg-tw-bg-80 hover:text-tw-text-200"
-					>
-						<IconSettings className="size-3.5" />
-					</Link>
+					{projects.find((p) => p.id === project.id) ? (
+						<>
+							<Link
+								href={Routes.PROJECT_SETTINGS(slug, project.id)}
+								className="flex items-center justify-center rounded p-1 text-tw-text-400 hover:bg-tw-bg-80 hover:text-tw-text-200"
+							>
+								<IconSettings className="size-3.5" />
+							</Link>
+						</>
+					) : (
+						<ProjectJoinConfirmationModal
+							name={project.name}
+							projectId={project.id}
+						>
+							<button
+								className={
+									'text-tw-primary-100 bg-tw-bg-100 hover:text-tw-primary-200 focus:text-tw-primary-80 px-4 py-1.5 text-xs rounded flex items-center gap-1.5 whitespace-nowrap transition-all justify-center !p-0 font-semibold'
+								}
+							>
+								Join
+							</button>
+						</ProjectJoinConfirmationModal>
+					)}
 				</div>
 			</CardFooter>
 		</Card>

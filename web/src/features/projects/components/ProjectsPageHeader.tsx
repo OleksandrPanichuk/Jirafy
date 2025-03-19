@@ -6,6 +6,7 @@ import {
 } from '@/features/projects'
 import { Button } from '@/features/shared'
 import { IconBriefcase } from '@tabler/icons-react'
+import { WorkspaceSidebarMobile } from '@/features/sidebars'
 
 export const ProjectsPageHeader = () => {
 	const openCreateProjectModal = useCreateProjectModalStore((s) => s.open)
@@ -16,9 +17,12 @@ export const ProjectsPageHeader = () => {
 			}
 		>
 			<div className="flex w-full justify-between items-center gap-2 h-[3.75rem]">
-				<div className="flex cursor-default items-center gap-1 text-sm font-medium text-tw-text-100">
-					<IconBriefcase className="size-5" />
-					Projects
+				<div className={'flex gap-2 items-center'}>
+					<WorkspaceSidebarMobile />
+					<div className="flex cursor-default items-center gap-1 text-sm font-medium text-tw-text-100">
+						<IconBriefcase className="size-5" />
+						Projects
+					</div>
 				</div>
 				<div className="flex items-center gap-2">
 					<ProjectsFilters />

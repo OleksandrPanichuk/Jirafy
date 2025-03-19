@@ -1,3 +1,4 @@
+import { DEFAULT_CHANNEL_NAME } from '@/shared/constants';
 import { CloudinaryService } from '@app/cloudinary';
 import { PrismaService } from '@app/prisma';
 import {
@@ -19,9 +20,6 @@ export class WorkspacesService {
     private readonly prisma: PrismaService,
     private readonly storage: CloudinaryService,
   ) {}
-
-
-  
 
   public async findAll(userId: string) {
     return await this.prisma.workspace.findMany({
@@ -47,6 +45,7 @@ export class WorkspacesService {
     });
   }
 
+  // TODO: when creating a workspace, initialize initial channel for the workspace
   public async create(dto: CreateWorkspaceInput, userId: string) {
     const { slug, name, size } = dto;
     const existingWorkspace = await this.prisma.workspace.findUnique({
@@ -92,6 +91,14 @@ export class WorkspacesService {
       },
       data: {
         isWorkspaceSelected: false,
+      },
+    });
+
+    await this.prisma.channel.create({
+      data: {
+        name: DEFAULT_CHANNEL_NAME,
+        description: 'General channel',
+        workspaceId: workspace.id,
       },
     });
 

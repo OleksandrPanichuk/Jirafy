@@ -1,0 +1,17 @@
+# База для Bun
+FROM oven/bun:latest
+
+# Встановлюємо робочу директорію
+WORKDIR /app
+
+# Копіюємо package.json і bun.lockb
+COPY package.json bun.lockb ./
+
+# Встановлюємо залежності
+RUN bun install
+
+# Копіюємо весь код
+COPY . .
+
+# Запускаємо Next.js у dev-режимі
+CMD ["bun", "run", "dev"]

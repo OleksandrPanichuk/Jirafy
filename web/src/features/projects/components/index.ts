@@ -1,6 +1,7 @@
 export * from './CreateProjectModal'
 export * from './IdentifierInput'
 export * from './NetworkSelect'
+export * from './ProjectJoinConfirmationModal'
 export * from './ProjectLeadSelect'
 export * from './ProjectsFilters'
 export * from './ProjectsList'

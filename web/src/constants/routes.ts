@@ -41,14 +41,20 @@ export const Routes = {
 	WORKSPACE_VIEWS_ALL: (slug: string) => `/${slug}/workspace-views/all-issues`,
 	WORKSPACE_ANALYTICS: (slug: string) => `/${slug}/analytics`,
 	WORKSPACE_AI: (slug: string) => `/${slug}/ai`,
-	WORKSPACE_CHAT: (slug: string) => `/${slug}/chat`,
 	WORKSPACE_MEMBER: (slug: string, userId: string) =>
-		`/${slug}/members/${userId}`
+		`/${slug}/members/${userId}`,
+
+	// CHAT ROUTES
+	WORKSPACE_CHANNELS: (slug: string) => `/${slug}/c/channels`,
+	WORKSPACE_CONVERSATIONS: (slug: string) => `/${slug}/c/conversations`,
+	CHAT_SETTINGS: (slug: string) => `/${slug}/c/settings`,
+	CHANNEL_BY_ID: (slug: string, channelId: string) =>
+		`/${slug}/c/channels/${channelId}`,
+	CONVERSATION_BY_ID: (slug: string, conversationId: string) =>
+		`/${slug}/c/conversations/${conversationId}`
 } as const
 
 export type Routes = (typeof Routes)[keyof typeof Routes]
-
-
 
 export const ApiRoutes = {
 	AUTH: {
@@ -83,7 +89,8 @@ export const ApiRoutes = {
 		BY_WORKSPACE_SLUG: (slug: string) => `/projects/by-workspace-slug/${slug}`,
 		BY_WORKSPACE_SLUG_WITH_FILTERS: (slug: string) =>
 			`/projects/by-workspace-slug/${slug}/with-filters`,
-		REORDER: '/projects/reorder'
+		REORDER: '/projects/reorder',
+		JOIN: '/projects/join'
 	},
 	STORAGE: {
 		ROOT: '/storage',

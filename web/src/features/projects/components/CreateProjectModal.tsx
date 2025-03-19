@@ -24,9 +24,9 @@ import { useUploadFileMutation } from '@/features/storage'
 import { useCurrentWorkspace } from '@/features/workspaces'
 import { Network, TypeFile } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Divider, Modal, ModalContent, Tooltip } from "@heroui/react"
+import { Divider, Modal, ModalContent, Tooltip } from '@heroui/react'
 import { IconInfoCircle, IconX } from '@tabler/icons-react'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -39,8 +39,7 @@ const defaultValues: Partial<CreateProjectInput> = {
 
 type FormValues = z.infer<typeof createProjectSchema>
 
-// TODO: fix mobile view
-export const CreateProjectModal = () => {
+export const CreateProjectModal = memo(() => {
 	const currentWorkspace = useCurrentWorkspace()
 
 	const { isOpen, close } = useCreateProjectModalStore()
@@ -62,8 +61,6 @@ export const CreateProjectModal = () => {
 		formState: { isValid }
 	} = form
 
-	// TODO: fix bug: when i open the modal, enter name and choose cover, the form is invalid
-
 	const { data: initialImage } = useGetRandomImageQuery({
 		onSuccess: (url) => {
 			setValue('cover', {
@@ -72,20 +69,10 @@ export const CreateProjectModal = () => {
 		}
 	})
 
-	const onCancel = () => {
-		reset({
-			cover: {
-				url: initialImage?.urls.full
-			},
-			workspaceId: currentWorkspace?.id,
-			...defaultValues
-		})
-
-		close()
-	}
-
 	const { mutateAsync: uploadFile } = useUploadFileMutation()
 	const { mutateAsync: createProject } = useCreateProjectMutation()
+
+	if (!isOpen) return null
 
 	const onSubmit = async (values: FormValues) => {
 		try {
@@ -107,7 +94,17 @@ export const CreateProjectModal = () => {
 		}
 	}
 
-	if (!isOpen) return null
+	const onCancel = () => {
+		reset({
+			cover: {
+				url: initialImage?.urls.full
+			},
+			workspaceId: currentWorkspace?.id,
+			...defaultValues
+		})
+
+		close()
+	}
 
 	return (
 		<Modal
@@ -137,7 +134,7 @@ export const CreateProjectModal = () => {
 									<FormItem>
 										<FormControl>
 											<CoverPicker
-												onChange={field.onChange}
+												onChange={(url) => field.onChange({ url })}
 												value={
 													field.value instanceof File
 														? field.value
@@ -254,7 +251,7 @@ export const CreateProjectModal = () => {
 						</div>
 						<Divider />
 						<div className="flex justify-end gap-2">
-							<Button variant="ghost" size="sm" type="reset" onClick={onCancel}>
+							<Button variant="ghost" size="sm" type="reset" onPress={onCancel}>
 								Cancel
 							</Button>
 							<Button
@@ -271,4 +268,6 @@ export const CreateProjectModal = () => {
 			</ModalContent>
 		</Modal>
 	)
-}
+})
+
+CreateProjectModal.displayName = 'CreateProjectModal'

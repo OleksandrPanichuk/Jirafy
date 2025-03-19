@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib'
-import { Tooltip } from "@heroui/react"
+import { Tooltip } from '@heroui/react'
 import { useRouter } from 'next-nprogress-bar'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -14,6 +14,8 @@ interface ISidebarItemProps {
 	action?: ReactNode
 	isFullLink?: boolean
 	isCollapsed?: boolean
+	variant?: 'default' | 'compact'
+	activeVariant?: 'equal' | 'contains'
 	classNames?: {
 		base?: string
 		container?: string
@@ -29,13 +31,17 @@ export const SidebarItem = ({
 	href,
 	icon,
 	action,
-	isFullLink = true
+	isFullLink = true,
+	variant = 'default',
+	activeVariant = 'equal'
 }: ISidebarItemProps) => {
 	const pathname = usePathname()
 	const router = useRouter()
 	const isActive = useMemo(() => {
-		return pathname === href
-	}, [href, pathname])
+		return activeVariant === 'equal'
+			? pathname === href
+			: pathname.includes(href)
+	}, [href, pathname, activeVariant])
 
 	const WrapperComp = isFullLink ? Link : 'div'
 	const TextComp = !isFullLink ? Link : 'p'
@@ -46,21 +52,23 @@ export const SidebarItem = ({
 		}
 	}
 
+	const isCompact = variant === 'compact' || isCollapsed
+
 	return (
 		<Tooltip
-			hidden={!isCollapsed}
+			hidden={!isCompact}
 			content={<span className="text-sm">{text}</span>}
 			placement="right"
 		>
 			<WrapperComp
 				href={isFullLink ? href : '#'}
-				className={cn(!isCollapsed && 'w-full', classNames?.base)}
+				className={cn(!isCompact && 'w-full', classNames?.base)}
 				onClick={onWrapperClick}
 			>
 				<div
 					className={cn(
 						'cursor-pointer relative group w-full flex items-center justify-between gap-1.5 rounded px-2 py-1 outline-none',
-						isCollapsed ? 'w-min aspect-square' : 'w-full',
+						isCompact ? 'w-min aspect-square' : 'w-full',
 						isActive
 							? 'text-tw-primary-200 bg-[#3F76FF1A]'
 							: 'text-tw-text-200 hover:bg-tw-bg-90 active:bg-tw-bg-90',
@@ -74,7 +82,7 @@ export const SidebarItem = ({
 						)}
 					>
 						{icon}
-						{!isCollapsed && (
+						{!isCompact && (
 							<>
 								<TextComp
 									href={!isFullLink ? href : '#'}

@@ -14,7 +14,7 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger
-} from "@heroui/react"
+} from '@heroui/react'
 import { IconChevronDown, IconFilter } from '@tabler/icons-react'
 import { useState } from 'react'
 import { CreateDateSelect } from './CreateDateSelect'
@@ -98,7 +98,7 @@ export const FiltersSelect = () => {
 						title={'Access'}
 						key={'access'}
 					>
-						<AccessSelect />
+						<AccessSelect searchValue={searchValue} />
 					</AccordionItem>
 					<AccordionItem
 						classNames={{

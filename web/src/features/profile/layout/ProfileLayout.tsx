@@ -1,8 +1,8 @@
 'use client'
 
 import { ProfileHeader } from '@/features/profile'
-import { ProfileSidebarDesktop } from '@/features/sidebars'
 import { PropsWithChildren } from 'react'
+import { ProfileSidebarDesktop } from '@/features/sidebars'
 
 export const ProfileLayout = ({ children }: PropsWithChildren) => {
 	return (

@@ -2,7 +2,6 @@
 
 import { breakpoints, Routes } from '@/constants'
 import { useAuth, useSignOutMutation } from '@/features/auth'
-import { useWorkspaceSidebarStore } from '@/features/sidebars'
 import { useMediaQuery } from '@/hooks'
 import {
 	Avatar,
@@ -11,12 +10,15 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger
-} from "@heroui/react"
+} from '@heroui/react'
 import { IconLogout, IconSettings } from '@tabler/icons-react'
 import { useRouter } from 'next-nprogress-bar'
 
-export const UserMenu = () => {
-	const isCollapsed = useWorkspaceSidebarStore((s) => s.isCollapsed)
+interface IUserMenuProps {
+	isCollapsed?: boolean
+}
+
+export const UserMenu = ({ isCollapsed }: IUserMenuProps) => {
 	const [isMobile] = useMediaQuery(breakpoints['max-sm'])
 	const user = useAuth((s) => s.user)
 
@@ -24,7 +26,7 @@ export const UserMenu = () => {
 
 	const { mutate: signOut, isPending: isSigningOut } = useSignOutMutation()
 
-	if (!user || isCollapsed) {
+	if (!user) {
 		return null
 	}
 
@@ -68,6 +70,7 @@ export const UserMenu = () => {
 					Settings
 				</DropdownItem>
 				<DropdownItem
+					key="sign-out"
 					color="danger"
 					variant="flat"
 					className="text-danger rounded-md hover:!bg-tw-bg-80"
