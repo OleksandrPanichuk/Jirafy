@@ -1,3 +1,4 @@
+export * from './channels.types'
 export * from './common.types'
 export * from './favorites.types'
 export * from './file.types'

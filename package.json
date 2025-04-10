@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "prettier": "^3.3.3"
+  },
+  "scripts": {
+    "start:dev": "cd api && bun start:dev",
+    "dev": "cd web && npm  run dev"
   }
 }

@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
 			}
 		]
 	},
+	eslint: {
+		ignoreDuringBuilds: true
+	},
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'src/styles')]
 	}

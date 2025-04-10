@@ -17,9 +17,11 @@ export const ChatLayout = ({ children }: IChatLayoutProps) => {
 	}
 
 	return (
-		<div className="h-screen flex">
-			<ChatSidebarDesktop />
-			{children}
-		</div>
+		<>
+			<div className="h-screen flex">
+				<ChatSidebarDesktop />
+				{children}
+			</div>
+		</>
 	)
 }

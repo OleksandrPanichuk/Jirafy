@@ -89,7 +89,7 @@ export const UserInvitesList = () => {
 
 					<Button
 						className="max-xs:w-full"
-						onPress={router.back}
+						onPress={() => router.back()}
 						variant="ghost"
 						size="sm"
 						isDisabled={isDisabled}

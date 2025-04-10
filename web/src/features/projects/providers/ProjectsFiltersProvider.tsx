@@ -81,7 +81,7 @@ export const ProjectsFiltersProvider = ({ children }: PropsWithChildren) => {
 				set(() => ({
 					selectedDateOption: value
 				})),
-			selectedDateOption: CreateDateSelectOptions.NONE
+			selectedDateOption: undefined
 		}))
 	)
 	return (

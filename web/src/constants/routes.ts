@@ -92,6 +92,13 @@ export const ApiRoutes = {
 		REORDER: '/projects/reorder',
 		JOIN: '/projects/join'
 	},
+	CHANNELS: {
+		ROOT: '/channels',
+		BY_WORKSPACE_SLUG: (slug: string) => `/channels/by-workspace-slug/${slug}`,
+
+		CHANNELS_GROUPS: '/channels/groups',
+		CHANNELS_GROUP: (groupId: string) => `/channels/groups/${groupId}`
+	},
 	STORAGE: {
 		ROOT: '/storage',
 		UPLOAD: '/storage/upload',

@@ -1,26 +1,28 @@
-version: "3.8"
+
 services:
-  web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./web:/app
-      - /app/node_modules
-    env_file:
-      - ./web/.env
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      - api
-    container_name: kpi_web
+  # web:
+  #   build: ./web
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./web:/app
+  #     - /app/node_modules
+  #   env_file:
+  #     - ./web/.env
+  #   environment:
+  #     - NODE_ENV=development
+  #     - NEXT_PUBLIC_API_URL=http://api:8080
+  #   depends_on:
+  #     - api
+  #   container_name: kpi_web
+  #   restart: unless-stopped
+  #   tty: true
+  #   stdin_open: true
+  #   command: ["bun", "run", "dev"]
 
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile.dev
+    build: ./api
+    container_name: kpi_api
     ports:
       - "8080:8080"
     volumes:
@@ -28,14 +30,9 @@ services:
       - /app/node_modules
     env_file:
       - ./api/.env
-    environment:
-      - NODE_ENV=development
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     depends_on:
       - redis
-    container_name: kpi_api
-
+    command: ["npm",'run',"start:dev"]
   redis:
     image: "redis:latest"
     ports:

@@ -56,6 +56,10 @@
   display: none;
 }
 
+html {
+  interpolate-size: allow-keywords;
+}
+
 body, html {
   ::-webkit-scrollbar {
     width: 17px;

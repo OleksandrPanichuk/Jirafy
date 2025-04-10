@@ -1,12 +1,7 @@
 'use client'
 
 import { Button } from '@/features/shared'
-import {
-	Modal,
-	ModalContent,
-	ModalFooter,
-	ModalHeader
-} from "@heroui/react"
+import { Modal, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import { useState } from 'react'
 
 interface IUseConfirmProps {
@@ -50,16 +45,16 @@ export const useConfirm = ({
 		>
 			<ModalContent className="bg-tw-bg-100">
 				<ModalHeader className="flex flex-col">
-					<h3 className="text-lg font-semibold leading-6 mb:-my-5">{title}</h3>
+					<h3 className="text-lg font-semibold leading-6 mb:-my-5 ">{title}</h3>
 					<p className="text-sm tracking-tight text-left font-normal text-zinc-300">
 						{message}
 					</p>
 				</ModalHeader>
 				<ModalFooter>
-					<Button variant={'ghost'} onClick={handleCancel} size="sm">
+					<Button variant={'ghost'} onPress={handleCancel} size="sm">
 						Cancel
 					</Button>
-					<Button onClick={handleConfirm} variant="danger" size="sm">
+					<Button onPress={handleConfirm} variant="danger" size="sm">
 						Confirm
 					</Button>
 				</ModalFooter>

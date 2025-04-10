@@ -37,5 +37,14 @@
 , "src/providers/SocketProvider.tsc", "../fs.ts"  ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "watchOptions": {
+    "excludeDirectories": [
+      "node_modules",
+      "next",
+    ],
+    "watchFile": "dynamicPriorityPolling",
+    "watchDirectory": "dynamicPriorityPolling"
+  }
+
 }

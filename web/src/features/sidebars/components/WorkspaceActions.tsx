@@ -38,9 +38,10 @@ export const WorkspaceActions = () => {
 			</DropdownTrigger>
 			<DropdownMenu>
 				<DropdownItem
+					key={'settings'}
 					className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
 					variant="flat"
-					onClick={handleSettings}
+					onPress={handleSettings}
 					href={Routes.WORKSPACE_SETTINGS(workspaceSlug)}
 					startContent={<IconSettings className="size-4 text-tw-text-200" />}
 				>

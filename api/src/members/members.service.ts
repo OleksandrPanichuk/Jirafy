@@ -18,6 +18,25 @@ const DEFAULT_TAKE_MEMBERS = 10;
 export class MembersService {
   constructor(private readonly prisma: PrismaService) {}
 
+  public async validateWorkspaceMember(
+    workspaceId: string,
+    userId: string,
+    roles?: MemberRole[],
+  ) {
+    return !!(await this.prisma.member.findFirst({
+      where: {
+        type: MemberType.WORKSPACE,
+        workspaceId,
+        userId,
+        ...(roles && {
+          role: {
+            in: roles,
+          },
+        }),
+      },
+    }));
+  }
+
   public async findAll(query: FindAllMembersInput, userId: string) {
     const { type, take, searchValue, cursor, identifier, withUser } = query;
 
@@ -247,7 +266,7 @@ export class MembersService {
       );
     }
 
-    return await this.prisma.member.delete({
+    return this.prisma.member.delete({
       where: {
         id: memberId,
       },

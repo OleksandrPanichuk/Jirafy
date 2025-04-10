@@ -12,6 +12,11 @@ type File {
   key String?
 }
 
+enum ChannelType {
+  TEXT
+  VIDEO
+}
+
 enum InviteState {
   PENDING
   ACCEPTED
@@ -225,6 +230,7 @@ model Workspace {
   activity      Activity[]
   channels      Channel[]
   conversations Conversation[]
+  channelsGroup ChannelsGroup[]
 
   @@map("workspaces")
 }
@@ -512,18 +518,31 @@ model Mention {
   @@map("mentions")
 }
 
+model ChannelsGroup {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name        String
+  workspaceId String    @db.ObjectId
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  channels Channel[]
+
+  @@map("channels_groups")
+}
+
 model Channel {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  image File?
+  type ChannelType @default(TEXT)
 
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String    @db.ObjectId
 
   name        String
-  description String?
 
   messages Message[]
+  group    ChannelsGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId  String        @db.ObjectId
 
   @@map("channels")
 }
@@ -537,6 +556,8 @@ model Conversation {
 
   members  Member[]
   messages Message[]
+
+  @@map("conversations")
 }
 
 // TODO:add attachments

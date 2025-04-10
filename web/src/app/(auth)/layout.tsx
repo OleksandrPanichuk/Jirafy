@@ -2,7 +2,7 @@
 import { Routes } from '@/constants'
 import { useAuth } from '@/features/auth'
 import { redirect } from 'next/navigation'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, Suspense } from 'react'
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
 	const user = useAuth((s) => s.user)
@@ -11,7 +11,7 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
 		return redirect(Routes.ROOT)
 	}
 
-	return <>{children}</>
+	return <Suspense>{children}</Suspense>
 }
 
 export default AuthLayout

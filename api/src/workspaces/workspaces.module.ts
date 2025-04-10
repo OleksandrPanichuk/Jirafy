@@ -7,5 +7,6 @@ import { WorkspacesService } from './workspaces.service';
   controllers: [WorkspacesController],
   providers: [WorkspacesService],
   imports: [CloudinaryModule],
+  exports: [WorkspacesService],
 })
 export class WorkspacesModule {}

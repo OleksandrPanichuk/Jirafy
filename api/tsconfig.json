@@ -29,5 +29,20 @@
       "@app/cloudinary": ["libs/cloudinary/src"],
       "@app/cloudinary/*": ["libs/cloudinary/src/*"]
     }
+  },
+  "watchOptions": {
+    "excludeDirectories": [
+      "node_modules",
+      "dist",
+      "build",
+      "out",
+      "coverage",
+      "lib",
+      "test",
+      "__tests__"
+    ],
+    "watchFile": "dynamicPriorityPolling",
+    "watchDirectory": "dynamicPriorityPolling"
   }
+
 }

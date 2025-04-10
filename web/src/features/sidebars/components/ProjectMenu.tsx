@@ -87,6 +87,7 @@ export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 			</DropdownTrigger>
 			<DropdownMenu>
 				<DropdownItem
+					key={'remove-from-favorites'}
 					variant="flat"
 					onPress={handleToggleFavorite}
 					className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
@@ -101,6 +102,7 @@ export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 					{favorite ? 'Remove from favorites' : 'Add to favorites'}
 				</DropdownItem>
 				<DropdownItem
+					key={'copy-link'}
 					variant="flat"
 					className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
 					startContent={<IconLink className="size-4 text-tw-text-200" />}
@@ -109,6 +111,7 @@ export const ProjectMenu = ({ projectId }: IProjectMenuProps) => {
 					Copy link
 				</DropdownItem>
 				<DropdownItem
+					key={'settings'}
 					variant="flat"
 					className="text-tw-text-200  hover:!text-tw-text-200 hover:!bg-tw-bg-80 rounded-md"
 					startContent={<IconSettings className="size-4 text-tw-text-200" />}

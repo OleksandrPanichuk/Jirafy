@@ -45,6 +45,34 @@ export class WorkspacesService {
     });
   }
 
+  public async findById(workspaceId: string) {
+    const workspace = await this.prisma.workspace.findUnique({
+      where: {
+        id: workspaceId,
+      },
+    });
+
+    if (!workspace) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    return workspace;
+  }
+
+  public async findBySlug(slug: string) {
+    const workspace = await this.prisma.workspace.findUnique({
+      where: {
+        slug,
+      },
+    });
+
+    if (!workspace) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    return workspace;
+  }
+
   // TODO: when creating a workspace, initialize initial channel for the workspace
   public async create(dto: CreateWorkspaceInput, userId: string) {
     const { slug, name, size } = dto;
@@ -94,11 +122,18 @@ export class WorkspacesService {
       },
     });
 
+    const group = await this.prisma.channelsGroup.create({
+      data: {
+        name: 'Text channels',
+        workspaceId: workspace.id,
+      },
+    });
+
     await this.prisma.channel.create({
       data: {
         name: DEFAULT_CHANNEL_NAME,
-        description: 'General channel',
         workspaceId: workspace.id,
+        groupId: group.id,
       },
     });
 

@@ -9,7 +9,7 @@ import {
 	DropdownSection,
 	DropdownTrigger,
 	User
-} from "@heroui/react"
+} from '@heroui/react'
 import { IconEdit, IconLogout } from '@tabler/icons-react'
 import { useRouter } from 'next-nprogress-bar'
 
@@ -49,6 +49,7 @@ export const UserMenu = ({ onlySignOut }: IUserMenuProps) => {
 				{!onlySignOut ? (
 					<DropdownSection showDivider>
 						<DropdownItem
+							key={'change-password'}
 							href={Routes.CHANGE_EMAIL}
 							startContent={<IconEdit />}
 							onPress={() => router.push(Routes.CHANGE_EMAIL)}
@@ -60,6 +61,7 @@ export const UserMenu = ({ onlySignOut }: IUserMenuProps) => {
 					<></>
 				)}
 				<DropdownItem
+					key={'sign-out'}
 					color="danger"
 					className="text-danger"
 					startContent={<IconLogout className={'text-danger'} />}

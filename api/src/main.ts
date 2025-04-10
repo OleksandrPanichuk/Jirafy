@@ -1,17 +1,16 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
 import { corsConfig } from '@/shared/config';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import * as dotenv from 'dotenv';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+dotenv.config();
 
 import { getSessionConfig } from '@/shared/config/session.config';
 import { ValidationPipe } from '@nestjs/common';
 import CookieParser from 'cookie-parser';
 import session from 'express-session';
 import passport from 'passport';
-
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -35,7 +34,8 @@ async function bootstrap() {
   app.use(passport.session());
 
   await app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`);
+    console.log(`Server is running on : ${PORT}`);
   });
 }
+
 bootstrap();

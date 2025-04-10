@@ -86,19 +86,7 @@ export class StorageService {
       throw new ForbiddenException('This file is used');
     }
 
-    const channels = await this.prisma.channel.findMany({
-      where: {
-        image: {
-          is: {
-            key,
-          },
-        },
-      },
-    });
 
-		if (channels.length > 0) {
-			throw new ForbiddenException('This file is used');
-		}
 		//TODO: remove file from messages and comments
   }
 }

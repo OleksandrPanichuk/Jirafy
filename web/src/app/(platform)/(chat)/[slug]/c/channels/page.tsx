@@ -1,5 +1,5 @@
 const Page = () => {
-	return <div>Page</div>
+	return <div>Channel</div>
 }
 
 export default Page

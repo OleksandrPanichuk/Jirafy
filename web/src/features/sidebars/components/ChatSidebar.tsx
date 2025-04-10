@@ -2,12 +2,21 @@
 
 import { Routes } from '@/constants'
 import { useCurrentWorkspaceSlug } from '@/features/workspaces'
-import { IconHome, IconMessage, IconSettings } from '@tabler/icons-react'
+import {
+	IconArrowLeft,
+	IconHome,
+	IconMessage,
+	IconSettings
+} from '@tabler/icons-react'
 
 import { SidebarItem, UserMenu, WorkspaceSwitcher } from '@/features/sidebars'
+import { Button } from '@/features/shared'
+import { Tooltip } from '@heroui/react'
+import Link from 'next/link'
 
 export function ChatSidebarDesktop() {
 	const slug = useCurrentWorkspaceSlug()
+
 	return (
 		<aside
 			className={
@@ -37,17 +46,22 @@ export function ChatSidebarDesktop() {
 					icon={<IconSettings className="size-4" />}
 				/>
 			</div>
+			<Tooltip
+				placement={'right'}
+				size={'sm'}
+				content={<span>Back to main menu</span>}
+			>
+				<Button
+					variant={'light'}
+					size={'sm'}
+					as={Link}
+					href={Routes.ROOT}
+					isIconOnly
+				>
+					<IconArrowLeft className={'size-4 text-tw-text-200'} />
+				</Button>
+			</Tooltip>
 			<UserMenu />
 		</aside>
 	)
 }
-//
-// ChatSidebar.Content = function ContentSidebar({ children }: PropsWithChildren) {
-// 	const [value, setValue] = useState('')
-// 	return (
-// 		<div className=" w-full h-full  border-r border-tw-border-300 md:flex hidden p-4 flex-col gap-4">
-// 			<SearchInput value={value} onChange={setValue} />
-// 			{children}
-// 		</div>
-// 	)
-// }

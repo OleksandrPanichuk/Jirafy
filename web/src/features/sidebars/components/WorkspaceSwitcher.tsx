@@ -206,6 +206,7 @@ export const WorkspaceSwitcher = ({
 					</>
 				</DropdownSection>
 				<DropdownItem
+					key="sign-out"
 					color="danger"
 					variant="faded"
 					className="text-danger rounded-md hover:!bg-tw-bg-80"

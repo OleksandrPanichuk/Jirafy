@@ -8,9 +8,9 @@ import { WorkspaceLayout } from '@/features/workspaces'
 import { PropsWithChildren } from 'react'
 
 interface ILayoutProps extends PropsWithChildren {
-	params: {
+	params: Promise<{
 		slug: string
-	}
+	}>
 }
 
 const Layout = async ({ children, params }: ILayoutProps) => {
@@ -25,6 +25,7 @@ const Layout = async ({ children, params }: ILayoutProps) => {
 		<ProjectsProvider initialProjects={projects}>
 			<FavoritesProvider initialData={favorites}>
 				<WorkspaceLayout>
+					{/*TODO: do something with this modal, it shouldn't be here*/}
 					<CreateProjectModal />
 					{children}
 				</WorkspaceLayout>

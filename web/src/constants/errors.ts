@@ -11,7 +11,9 @@ export const FormErrors = {
 		workspaceSlug: 'Workspace slug is required',
 		workspaceSize: 'Workspace size is required',
 		projectName: 'Project name is required',
-		projectIdentifier: 'ID is required'
+		projectIdentifier: 'ID is required',
+		channelsGroup: 'Channels group name is required',
+		channels: 'Channel name is required',
 	},
 	length: {
 		firstName: 'First name is too short',
