@@ -79,7 +79,32 @@ export class ChannelsService {
     });
   }
 
-  public async delete() {}
+  public async delete(channelId: string, userId: string) {
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        id: channelId,
+        workspace: {
+          members: {
+            some: {
+              userId,
+              role: {
+                in: [MemberRole.ADMIN, MemberRole.OWNER],
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!channel) {
+      throw new ForbiddenException('Channel not found');
+    }
+
+    return this.prisma.channel.delete({
+      where: {
+        id: channelId,
+      },
+    });
+  }
 
   public async deleteGroup(groupId: string, userId: string) {
     const group = await this.prisma.channelsGroup.findUnique({
@@ -122,6 +147,7 @@ export class ChannelsService {
       },
     });
   }
+
   public async updateGroup(
     groupId: string,
     dto: UpdateChannelsGroupInput,

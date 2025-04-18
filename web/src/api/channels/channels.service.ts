@@ -56,10 +56,15 @@ const deleteGroup = async (groupId: string) => {
 	return await axios.delete(ApiRoutes.CHANNELS.CHANNELS_GROUP(groupId))
 }
 
+const deleteChannel = async (channelId: string) => {
+	return await axios.delete(ApiRoutes.CHANNELS.BY_ID(channelId))
+}
+
 export const ChannelsApi = {
 	findAll,
 	create,
 	createGroup,
 	updateGroup,
-	deleteGroup
+	deleteGroup,
+	delete: deleteChannel
 } as const

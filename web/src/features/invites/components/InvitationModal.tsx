@@ -12,14 +12,12 @@ import {
 	FormItem
 } from '@/features/shared'
 import { useCurrentWorkspace } from '@/features/workspaces'
-import { useChildrenWithProps, useDisclosure } from '@/hooks'
 import { useSocket } from '@/providers'
 import { MemberRole, SocketNamespace } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Input, Modal, ModalContent } from "@heroui/react"
+import { Input, Modal, ModalContent } from '@heroui/react'
 import { IconPlus, IconX } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
-import { PropsWithChildren } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -36,8 +34,15 @@ const defaultValue: InviteMembersInput = [
 	}
 ]
 
-export const InvitationModal = ({ children }: PropsWithChildren) => {
-	const { isOpen, open, close } = useDisclosure()
+interface IInvitationModalProps {
+	isOpen?: boolean
+	onOpenChange?: (isOpen: boolean) => void
+}
+
+export const InvitationModal = ({
+	isOpen,
+	onOpenChange
+}: IInvitationModalProps) => {
 	const currentWorkspace = useCurrentWorkspace()
 
 	const invitesSocket = useSocket(SocketNamespace.INVITES)
@@ -68,12 +73,12 @@ export const InvitationModal = ({ children }: PropsWithChildren) => {
 		reset({
 			members: defaultValue
 		})
-		close()
+		onOpenChange?.(false)
 	}
 
 	const handleOpenChange = (isOpen: boolean) => {
 		if (isOpen) {
-			open()
+			onOpenChange?.(true)
 		} else {
 			handleCancel()
 		}
@@ -81,6 +86,7 @@ export const InvitationModal = ({ children }: PropsWithChildren) => {
 
 	const onSubmit = (values: FormValues) => {
 		const workspaceId = currentWorkspace.id
+
 		values.members.forEach((member) => {
 			const payload = { ...member, workspaceId }
 			invitesSocket?.emit(SocketEvents.CREATE_INVITE, payload)
@@ -93,13 +99,8 @@ export const InvitationModal = ({ children }: PropsWithChildren) => {
 		handleCancel()
 	}
 
-	const childrenWithHandler = useChildrenWithProps(children, {
-		onClick: open
-	})
-
 	return (
 		<>
-			{childrenWithHandler}
 			<Modal
 				isOpen={isOpen}
 				onOpenChange={handleOpenChange}

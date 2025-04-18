@@ -61,4 +61,10 @@ export class ChannelsController {
   ) {
     return this.channelsService.deleteGroup(groupId, userId);
   }
+
+
+  @Delete("/:channelId")
+  public delete(@Param("channelId") channelId:string, @CurrentUser('id') userId:string) {
+    return this.channelsService.delete(channelId, userId);
+  }
 }

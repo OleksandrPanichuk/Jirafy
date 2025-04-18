@@ -13,7 +13,7 @@ interface IChannelsStore {
 	channelsGroups: TypeChannelsGroupWithChannels[]
 	addGroup: (data: TypeChannelsGroupWithChannels) => void
 	addChannel: (groupId: string, data: TypeChannel) => void
-	removeChannel: (groupId: string, channelId: string) => void
+	removeChannel: (channelId: string) => void
 	updateChannel: (
 		groupId: string,
 		channelId: string,
@@ -50,18 +50,14 @@ export const ChannelsProvider = ({
 							: group
 					)
 				})),
-			removeChannel: (groupId, channelId) =>
+			removeChannel: (channelId) =>
 				set((state) => ({
-					channelsGroups: state.channelsGroups.map((group) =>
-						group.id === groupId
-							? {
-									...group,
-									channels: group.channels.filter(
-										(channel) => channel.id !== channelId
-									)
-								}
-							: group
-					)
+					channelsGroups: state.channelsGroups.map((group) => ({
+						...group,
+						channels: group.channels.filter(
+							(channel) => channel.id !== channelId
+						)
+					}))
 				})),
 			updateChannel: (groupId, channelId, data) =>
 				set((state) => ({

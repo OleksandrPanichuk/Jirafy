@@ -12,7 +12,7 @@ import {
 } from '@/features/shared'
 import { useDebounce } from '@/hooks'
 import { MemberRole, MemberType } from '@/types'
-import { Input, Spinner } from "@heroui/react"
+import { Input, Spinner } from '@heroui/react'
 import { IconSearch } from '@tabler/icons-react'
 import {
 	flexRender,
@@ -21,10 +21,9 @@ import {
 } from '@tanstack/react-table'
 import { ChangeEvent, useMemo, useState } from 'react'
 
-import { InvitationModal } from '@/features/invites'
-
 import { checkMemberPermissions } from '@/lib'
 import { columns } from './MembersTable.columns'
+import { InvitationModal } from '@/features/invites'
 
 interface IMembersTableProps {
 	type: MemberType
@@ -38,6 +37,7 @@ export const MembersTable = ({
 	currentMemberRole
 }: IMembersTableProps) => {
 	const [searchValue, setSearchValue] = useState('')
+	const [isInvitationModalOpen, setIsInvitationModalOpen] = useState(false)
 
 	const debouncedSearchValue = useDebounce(searchValue)
 
@@ -85,6 +85,10 @@ export const MembersTable = ({
 
 	return (
 		<div className={'overflow-hidden'}>
+			<InvitationModal
+				onOpenChange={setIsInvitationModalOpen}
+				isOpen={isInvitationModalOpen}
+			/>
 			<div className={'flex w-full gap-2 items-center'}>
 				<h2 className="flex-1 hidden sm:block">Members</h2>
 
@@ -98,11 +102,14 @@ export const MembersTable = ({
 				<div className="flex-1 sm:flex-none sm:hidden" />
 				{checkMemberPermissions(currentMemberRole) &&
 					type === MemberType.WORKSPACE && (
-						<InvitationModal>
-							<Button variant="primary" size="sm" className={'px-5'}>
-								Add member
-							</Button>
-						</InvitationModal>
+						<Button
+							variant="primary"
+							size="sm"
+							className={'px-5'}
+							onPress={() => setIsInvitationModalOpen(true)}
+						>
+							Add member
+						</Button>
 					)}
 			</div>
 			{/* TODO: separate into custom component */}
