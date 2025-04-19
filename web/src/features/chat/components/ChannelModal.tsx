@@ -1,23 +1,19 @@
 'use client'
 
 import {
+	CreateChannelInput,
+	createChannelSchema,
+	UpdateChannelInput,
+	updateChannelSchema
+} from '@/api'
+import {
 	ChannelTypeSelect,
 	GroupSelect,
+	ModalVariants,
 	useChannelsModalStore,
-	useCreateChannelMutation
+	useCreateChannelMutation,
+	useUpdateChannelMutation
 } from '@/features/chat'
-import {
-	Input,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalHeader
-} from '@heroui/react'
-import { useCurrentWorkspace } from '@/features/workspaces'
-import { useForm } from 'react-hook-form'
-import { ChannelsInput, channelsSchema } from '@/api'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
 import {
 	Button,
 	Form,
@@ -27,23 +23,45 @@ import {
 	FormLabel,
 	FormMessage
 } from '@/features/shared'
+import { useCurrentWorkspace } from '@/features/workspaces'
 import { ChannelType } from '@/types'
+import {
+	Input,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalHeader
+} from '@heroui/react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+
+type FormValues = CreateChannelInput | UpdateChannelInput
 
 export const ChannelsModal = () => {
 	const { isOpen, close, data, variant } = useChannelsModalStore()
 
 	const workspace = useCurrentWorkspace()
 
-	const form = useForm<ChannelsInput>({
-		resolver: zodResolver(channelsSchema)
+	const form = useForm<FormValues>({
+		resolver: zodResolver(
+			variant === ModalVariants.CREATE
+				? createChannelSchema
+				: updateChannelSchema
+		)
 	})
 
 	const { control, handleSubmit, reset } = form
 
 	const { mutate: createChannel, isPending: isCreating } =
 		useCreateChannelMutation()
+	const { mutate: updateChannel, isPending: isUpdating } =
+		useUpdateChannelMutation()
 
-	const isDisabled = isCreating
+	const isDisabled = isCreating || isUpdating
+
+	const isGroupSelectDisabled =
+		variant === ModalVariants.CREATE && !!data?.groupId
 
 	const onClose = () => {
 		if (isDisabled) {
@@ -53,13 +71,15 @@ export const ChannelsModal = () => {
 		close()
 	}
 
-	const onSubmit = (values: ChannelsInput) => {
-		if (variant === 'create') {
-			createChannel(values, {
+	const onSubmit = (values: FormValues) => {
+		if (variant === ModalVariants.CREATE) {
+			createChannel(values as CreateChannelInput, {
 				onSuccess: close
 			})
 		} else {
-			// updateChannelsGroup(values)
+			updateChannel(values as UpdateChannelInput, {
+				onSuccess: close
+			})
 		}
 	}
 
@@ -68,7 +88,7 @@ export const ChannelsModal = () => {
 	}, [isOpen, data, reset, workspace.id])
 
 	return (
-		<Modal isOpen={isOpen} onOpenChange={onClose}>
+		<Modal isOpen={isOpen} onOpenChange={onClose} placement='center' >
 			<ModalContent>
 				<ModalHeader>
 					{variant === 'create' ? 'Create' : 'Edit'} channel
@@ -120,7 +140,10 @@ export const ChannelsModal = () => {
 									<FormItem>
 										<FormLabel>Channels group</FormLabel>
 										<FormControl>
-											<GroupSelect {...field} disabled={isDisabled} />
+											<GroupSelect
+												{...field}
+												disabled={isDisabled || isGroupSelectDisabled}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>

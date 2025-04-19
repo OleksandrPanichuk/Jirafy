@@ -1,23 +1,22 @@
 import { create } from 'zustand'
-
-type ModalVariant = 'create' | 'edit'
+import { ModalVariants } from '../types'
 
 interface IChannelsGroupModalStore {
 	isOpen: boolean
-	variant: ModalVariant
+	variant: ModalVariants
 	groupId?: string
 	name?: string
-	open: (variant?: ModalVariant, data?: { id: string; name: string }) => void
+	open: (variant?: ModalVariants, data?: { id: string; name: string }) => void
 	close: () => void
 }
 
 export const useChannelsGroupModalStore = create<IChannelsGroupModalStore>(
 	(set) => ({
 		isOpen: false,
-		variant: 'create',
+		variant: ModalVariants.CREATE,
 		groupId: undefined,
 		name: undefined,
-		open: (variant = 'create', data) =>
+		open: (variant = ModalVariants.CREATE, data) =>
 			set({ isOpen: true, variant, name: data?.name, groupId: data?.id }),
 		close: () => set({ isOpen: false, groupId: undefined, name: undefined })
 	})

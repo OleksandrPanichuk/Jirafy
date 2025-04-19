@@ -2,9 +2,8 @@ import { currentUser } from '@/api'
 import { AuthProvider } from '@/features/auth'
 import { ProgressBar } from '@/features/shared'
 import { Notifications } from '@/features/toast'
-import { QueryProvider, SocketsProvider } from '@/providers'
+import { QueryProvider, SocketsProvider, UIProvider } from '@/providers'
 import '@/styles/globals.scss'
-import { HeroUIProvider } from '@heroui/react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ReactNode } from 'react'
@@ -53,7 +52,7 @@ export default async function RootLayout({
 				<QueryProvider>
 					<AuthProvider initialUser={user}>
 						<SocketsProvider>
-							<HeroUIProvider>{children}</HeroUIProvider>
+							<UIProvider>{children}</UIProvider>
 						</SocketsProvider>
 					</AuthProvider>
 				</QueryProvider>

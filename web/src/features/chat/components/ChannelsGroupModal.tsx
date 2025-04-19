@@ -1,11 +1,17 @@
 'use client'
 
-import { ChannelsGroupInput, channelsGroupSchema } from '@/api'
-import { useChannelsGroupModalStore } from '@/features/chat'
 import {
+	CreateChannelsGroupInput,
+	createChannelsGroupSchema,
+	UpdateChannelsGroupInput,
+	updateChannelsGroupSchema
+} from '@/api'
+import {
+	ModalVariants,
+	useChannelsGroupModalStore,
 	useCreateChannelsGroupMutation,
 	useUpdateChannelsGroupMutation
-} from '@/features/chat/api'
+} from '@/features/chat'
 import {
 	Button,
 	Form,
@@ -27,12 +33,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
+type FormValues = CreateChannelsGroupInput | UpdateChannelsGroupInput
+
 export const ChannelsGroupModal = () => {
 	const { isOpen, variant, close, name, groupId } = useChannelsGroupModalStore()
 	const workspace = useCurrentWorkspace()
 
-	const form = useForm<ChannelsGroupInput>({
-		resolver: zodResolver(channelsGroupSchema)
+	const form = useForm<FormValues>({
+		resolver: zodResolver(
+			variant === ModalVariants.CREATE
+				? createChannelsGroupSchema
+				: updateChannelsGroupSchema
+		)
 	})
 
 	const { control, handleSubmit, reset } = form
@@ -51,23 +63,31 @@ export const ChannelsGroupModal = () => {
 		close()
 	}
 
-	const onSubmit = (values: ChannelsGroupInput) => {
-		if (variant === 'create') {
-			createChannelsGroup(values, { onSuccess: close })
+	const onSubmit = (values: FormValues) => {
+		if (variant === ModalVariants.CREATE) {
+			createChannelsGroup(values as CreateChannelsGroupInput, {
+				onSuccess: close
+			})
 		} else {
-			updateChannelsGroup(values, { onSuccess: close })
+			updateChannelsGroup(values as UpdateChannelsGroupInput, {
+				onSuccess: close
+			})
 		}
 	}
 
 	useEffect(() => {
-		reset({ name: name || '', workspaceId: workspace.id, groupId })
+		reset({
+			name: name || '',
+			workspaceId: workspace.id,
+			id: groupId
+		})
 	}, [isOpen, name, groupId, reset, workspace.id])
 
 	return (
-		<Modal isOpen={isOpen} onOpenChange={onClose}>
+		<Modal isOpen={isOpen} onOpenChange={onClose} placement='center'>
 			<ModalContent>
 				<ModalHeader>
-					{variant === 'create' ? 'Create' : 'Edit'} channels group
+					{variant === ModalVariants.CREATE ? 'Create' : 'Edit'} channels group
 				</ModalHeader>
 				<ModalBody>
 					<Form {...form}>

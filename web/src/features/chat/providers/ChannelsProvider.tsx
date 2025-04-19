@@ -11,14 +11,12 @@ import { createStore, StoreApi, useStore } from 'zustand'
 
 interface IChannelsStore {
 	channelsGroups: TypeChannelsGroupWithChannels[]
+	searchValue: string
+	setSearchValue: (value: string) => void
 	addGroup: (data: TypeChannelsGroupWithChannels) => void
 	addChannel: (groupId: string, data: TypeChannel) => void
 	removeChannel: (channelId: string) => void
-	updateChannel: (
-		groupId: string,
-		channelId: string,
-		data: Partial<TypeChannel>
-	) => void
+	updateChannel: (channelId: string, data: Partial<TypeChannel>) => void
 	updateGroup: (groupId: string, data: Partial<TypeChannelsGroup>) => void
 	removeGroup: (groupId: string) => void
 }
@@ -37,6 +35,8 @@ export const ChannelsProvider = ({
 }: PropsWithChildren<IChannelsProviderProps>) => {
 	const [store] = useState(
 		createStore<IChannelsStore>((set) => ({
+			searchValue: '',
+			setSearchValue: (value) => set({ searchValue: value }),
 			channelsGroups: initialData || [],
 			addGroup: (data) =>
 				set((state) => ({
@@ -54,24 +54,48 @@ export const ChannelsProvider = ({
 				set((state) => ({
 					channelsGroups: state.channelsGroups.map((group) => ({
 						...group,
-						channels: group.channels.filter(
-							(channel) => channel.id !== channelId
-						)
+						channels: group.channels.filter((c) => c.id !== channelId)
 					}))
 				})),
-			updateChannel: (groupId, channelId, data) =>
-				set((state) => ({
-					channelsGroups: state.channelsGroups.map((group) =>
-						group.id === groupId
-							? {
+			updateChannel: (channelId, data) =>
+				set((state) => {
+					const fromGroup = state.channelsGroups.find((g) =>
+						g.channels.some((c) => c.id === channelId)
+					)
+					if (!fromGroup) return state
+					const channel = fromGroup.channels.find((c) => c.id === channelId)!
+					const oldGroupId = fromGroup.id
+
+					const updatedChannel = { ...channel, ...data }
+					const targetGroupId = updatedChannel.groupId ?? oldGroupId
+
+					return {
+						channelsGroups: state.channelsGroups.map((group) => {
+							if (group.id === oldGroupId && oldGroupId === targetGroupId) {
+								return {
 									...group,
-									channels: group.channels.map((channel) =>
-										channel.id === channelId ? { ...channel, ...data } : channel
+									channels: group.channels.map((c) =>
+										c.id === channelId ? updatedChannel : c
 									)
 								}
-							: group
-					)
-				})),
+							}
+
+							if (group.id === oldGroupId) {
+								return {
+									...group,
+									channels: group.channels.filter((c) => c.id !== channelId)
+								}
+							}
+							if (group.id === targetGroupId) {
+								return {
+									...group,
+									channels: [...group.channels, updatedChannel]
+								}
+							}
+							return group
+						})
+					}
+				}),
 			updateGroup: (groupId, data) =>
 				set((state) => ({
 					channelsGroups: state.channelsGroups.map((group) =>
@@ -80,9 +104,7 @@ export const ChannelsProvider = ({
 				})),
 			removeGroup: (groupId) =>
 				set((state) => ({
-					channelsGroups: state.channelsGroups.filter(
-						(group) => group.id !== groupId
-					)
+					channelsGroups: state.channelsGroups.filter((g) => g.id !== groupId)
 				}))
 		}))
 	)

@@ -1,9 +1,13 @@
 import {
-	ChannelsGroupInput,
-	channelsGroupSchema,
-	ChannelsInput,
-	channelsSchema
-} from '@/api/channels/channels.dto'
+	CreateChannelInput,
+	createChannelSchema,
+	CreateChannelsGroupInput,
+	createChannelsGroupSchema,
+	UpdateChannelInput,
+	updateChannelSchema,
+	UpdateChannelsGroupInput,
+	updateChannelsGroupSchema
+} from '@/api'
 import { ApiRoutes } from '@/constants'
 import { axios } from '@/lib'
 import {
@@ -20,14 +24,33 @@ const findAll = async (slug: string) => {
 	).data
 }
 
-const create = async (input: ChannelsInput) => {
-	channelsSchema.parse(input)
+const findByName = async (slug: string, name: string) => {
+	return (
+		await axios.get<TypeChannel>(
+			ApiRoutes.CHANNELS.BY_NAME_AND_SLUG(slug, name)
+		)
+	).data
+}
 
+const create = async (input: CreateChannelInput) => {
+	createChannelSchema.parse(input)
 	return await axios.post<TypeChannel>(ApiRoutes.CHANNELS.ROOT, input)
 }
 
-const createGroup = async (input: ChannelsGroupInput) => {
-	channelsGroupSchema.parse(input)
+const update = async (input: UpdateChannelInput) => {
+	updateChannelSchema.parse(input)
+
+	const dto = {
+		name: input.name,
+		type: input.type,
+		groupId: input.groupId
+	}
+
+	return await axios.patch<TypeChannel>(ApiRoutes.CHANNELS.BY_ID(input.id), dto)
+}
+
+const createGroup = async (input: CreateChannelsGroupInput) => {
+	createChannelsGroupSchema.parse(input)
 
 	return await axios.post<TypeChannelsGroup>(
 		ApiRoutes.CHANNELS.CHANNELS_GROUPS,
@@ -35,19 +58,15 @@ const createGroup = async (input: ChannelsGroupInput) => {
 	)
 }
 
-const updateGroup = async (input: ChannelsGroupInput) => {
-	channelsGroupSchema.parse(input)
-
-	if (!input.groupId) {
-		throw new Error('Group ID is required for updating a group')
-	}
+const updateGroup = async (input: UpdateChannelsGroupInput) => {
+	updateChannelsGroupSchema.parse(input)
 
 	const dto = {
 		name: input.name
 	}
 
 	return await axios.patch<TypeChannelsGroup>(
-		ApiRoutes.CHANNELS.CHANNELS_GROUP(input.groupId),
+		ApiRoutes.CHANNELS.CHANNELS_GROUP(input.id),
 		dto
 	)
 }
@@ -62,7 +81,9 @@ const deleteChannel = async (channelId: string) => {
 
 export const ChannelsApi = {
 	findAll,
+	findByName,
 	create,
+	update,
 	createGroup,
 	updateGroup,
 	deleteGroup,

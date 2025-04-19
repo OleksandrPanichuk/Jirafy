@@ -30,6 +30,14 @@ const nextConfig: NextConfig = {
 	},
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'src/styles')]
+	},
+	turbopack: {
+		rules: {
+			'*.scss': {
+				loaders: ['sass-loader'],
+				as: '*.scss'
+			}
+		}
 	}
 }
 

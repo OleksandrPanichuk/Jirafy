@@ -1,6 +1,7 @@
 import {
   CreateChannelInput,
   CreateChannelsGroupInput,
+  UpdateChannelInput,
   UpdateChannelsGroupInput,
 } from '@/channels/dto';
 import { MembersService } from '@/members/members.service';
@@ -21,6 +22,25 @@ export class ChannelsService {
     private readonly workspacesService: WorkspacesService,
     private readonly membersService: MembersService,
   ) {}
+
+  public async findByName(workspaceSlug: string, name: string, userId: string) {
+    const workspace = await this.workspacesService.findBySlug(workspaceSlug);
+    if (
+      !(await this.membersService.validateWorkspaceMember(workspace.id, userId))
+    ) {
+      throw new ForbiddenException('You are not a member of this workspace');
+    }
+    const channel = await this.prisma.channel.findFirst({
+      where: {
+        workspaceId: workspace.id,
+        name,
+      },
+    });
+    if (!channel) {
+      throw new NotFoundException('Channel not found');
+    }
+    return channel;
+  }
 
   public async findAll(workspaceSlug: string, userId: string) {
     const workspace = await this.workspacesService.findBySlug(workspaceSlug);
@@ -75,6 +95,57 @@ export class ChannelsService {
     }
 
     return this.prisma.channel.create({
+      data: dto,
+    });
+  }
+
+  public async update(channelId: string, dto: UpdateChannelInput) {
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        id: channelId,
+      },
+    });
+
+    if (!channel) {
+      throw new NotFoundException('Channel not found');
+    }
+
+    const existingChannel = await this.prisma.channel.findFirst({
+      where: {
+        groupId: channel.groupId,
+        name: dto.name,
+        type: dto.type,
+        id: {
+          not: channelId,
+        },
+      },
+    });
+
+    if (existingChannel) {
+      throw new ConflictException(
+        'Channel with this name already exists in group',
+      );
+    }
+
+    if (channel.type !== dto.type) {
+      const messages = await this.prisma.message.findMany({
+        take: 1,
+        where: {
+          channelId: channelId,
+        },
+      });
+
+      if (messages.length > 0) {
+        throw new ConflictException(
+          'You cannot change channel type after messages have been sent',
+        );
+      }
+    }
+
+    return this.prisma.channel.update({
+      where: {
+        id: channelId,
+      },
       data: dto,
     });
   }
@@ -180,5 +251,4 @@ export class ChannelsService {
       data: dto,
     });
   }
-  public async update() {}
 }

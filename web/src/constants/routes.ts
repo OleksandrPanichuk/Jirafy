@@ -96,6 +96,8 @@ export const ApiRoutes = {
 		ROOT: '/channels',
 		BY_WORKSPACE_SLUG: (slug: string) => `/channels/by-workspace-slug/${slug}`,
 		BY_ID: (channelId: string) => `/channels/${channelId}`,
+		BY_NAME_AND_SLUG: (slug: string, name: string) =>
+			`/channels/by-workspace-slug/${slug}/${name}`,
 
 		CHANNELS_GROUPS: '/channels/groups',
 		CHANNELS_GROUP: (groupId: string) => `/channels/groups/${groupId}`

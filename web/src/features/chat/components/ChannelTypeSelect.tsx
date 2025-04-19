@@ -1,17 +1,19 @@
 'use client'
 
-import { ControllerRenderProps } from 'react-hook-form'
-import { ChannelsInput } from '@/api'
-import { Select, SelectItem, SharedSelection } from '@heroui/react'
-import { useState } from 'react'
 import { ChannelType } from '@/types'
+import { Select, SelectItem, SharedSelection } from '@heroui/react'
+import { useEffect, useState } from 'react'
+import { ControllerRenderProps } from 'react-hook-form'
 
 interface IChannelTypeSelectProps
-	extends ControllerRenderProps<ChannelsInput, 'type'> {}
+	extends ControllerRenderProps<{ type: ChannelType }, 'type'> {}
 
 export const ChannelTypeSelect = ({
 	onChange,
 	disabled,
+	name,
+	onBlur,
+	ref,
 	value
 }: IChannelTypeSelectProps) => {
 	const [selected, setSelected] = useState(new Set([value]))
@@ -23,10 +25,19 @@ export const ChannelTypeSelect = ({
 		setSelected(new Set([selectedValue]))
 		onChange?.(selectedValue)
 	}
+
+	useEffect(() => {
+		if (value !== undefined) {
+			setSelected(new Set([value]))
+		}
+	}, [value])
 	return (
 		<Select
 			selectedKeys={selected}
 			size={'sm'}
+			ref={ref}
+			name={name}
+			onBlur={onBlur}
 			classNames={{
 				trigger: 'rounded',
 				popoverContent: 'rounded'

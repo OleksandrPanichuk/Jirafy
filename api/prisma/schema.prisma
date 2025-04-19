@@ -14,7 +14,7 @@ type File {
 
 enum ChannelType {
   TEXT
-  VIDEO
+  VOICE
 }
 
 enum InviteState {

@@ -12,8 +12,8 @@ export const FormErrors = {
 		workspaceSize: 'Workspace size is required',
 		projectName: 'Project name is required',
 		projectIdentifier: 'ID is required',
-		channelsGroup: 'Channels group name is required',
-		channels: 'Channel name is required',
+		channelsGroupName: 'Channels group name is required',
+		channelName: 'Channel name is required',
 	},
 	length: {
 		firstName: 'First name is too short',

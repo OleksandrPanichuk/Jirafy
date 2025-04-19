@@ -1,3 +1,4 @@
+'use client'
 import { cn } from '@/lib'
 import {
 	Modal,
@@ -6,7 +7,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalProps
-} from "@heroui/react"
+} from '@heroui/react'
 
 type Props = Omit<
 	ModalProps,

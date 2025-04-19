@@ -1,15 +1,17 @@
 import {
+	ModalVariants,
 	useChannelsGroupModalStore,
+	useChannelsModalStore,
 	useDeleteChannelsGroupMutation
 } from '@/features/chat'
+import { useCurrentWorkspaceMember } from '@/features/members'
 import { Button } from '@/features/shared'
 import { useConfirm } from '@/hooks'
+import { checkMemberPermissions } from '@/lib'
 import { TypeChannelsGroupWithChannels } from '@/types'
 import { Accordion, AccordionItem, Tooltip } from '@heroui/react'
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react'
 import { ChannelItem } from './ChannelItem'
-import { useCurrentWorkspaceMember } from '@/features/members'
-import { checkMemberPermissions } from '@/lib'
 
 interface IChannelsGroupProps {
 	data: TypeChannelsGroupWithChannels
@@ -18,8 +20,10 @@ interface IChannelsGroupProps {
 export const ChannelsGroup = ({ data }: IChannelsGroupProps) => {
 	const [ConfirmationModal, confirm] = useConfirm()
 	const { mutate: deleteGroup } = useDeleteChannelsGroupMutation()
+
 	const { role } = useCurrentWorkspaceMember()
 	const openChannelsGroupModal = useChannelsGroupModalStore((s) => s.open)
+	const openChannelModal = useChannelsModalStore((s) => s.open)
 
 	const handleGroupDelete = async () => {
 		const ok = await confirm()
@@ -60,7 +64,7 @@ export const ChannelsGroup = ({ data }: IChannelsGroupProps) => {
 											as="div"
 											size="sm"
 											onPress={() => {
-												openChannelsGroupModal('edit', {
+												openChannelsGroupModal(ModalVariants.UPDATE, {
 													id: data.id,
 													name: data.name
 												})
@@ -73,12 +77,14 @@ export const ChannelsGroup = ({ data }: IChannelsGroupProps) => {
 									<Tooltip
 										content={<span className="text-sm">Add channel</span>}
 									>
-										{/* TODO: onclick: open add new channel modal */}
 										<Button
 											className="!size-6 !min-w-0 text-inherit opacity-0 group-hover:opacity-100 transition-all hover:text-white"
 											variant={'light'}
 											as="div"
 											size="sm"
+											onPress={() =>
+												openChannelModal(ModalVariants.CREATE, { groupId: data.id })
+											}
 											isIconOnly
 										>
 											<IconPlus className="size-4" />

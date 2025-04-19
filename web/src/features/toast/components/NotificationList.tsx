@@ -36,7 +36,7 @@ export const NotificationList = ({ children }: Props) => {
 					ref={listRef}
 					aria-live="assertive"
 					className={cn(
-						'flex fixed z-50 flex-col gap-4 m-4 lg:m-8 pointer-events-none',
+						'flex fixed z-[100000000000] flex-col gap-4 m-4 lg:m-8 pointer-events-none',
 						positions[position]
 					)}
 				>

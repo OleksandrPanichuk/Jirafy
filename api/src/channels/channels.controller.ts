@@ -1,6 +1,7 @@
 import {
   CreateChannelInput,
   CreateChannelsGroupInput,
+  UpdateChannelInput,
   UpdateChannelsGroupInput,
 } from '@/channels/dto';
 import { CurrentUser, Roles } from '@/shared/decorators';
@@ -31,11 +32,21 @@ export class ChannelsController {
     return this.channelsService.findAll(slug, userId);
   }
 
+  @Get('/by-workspace-slug/:slug/:name')
+  public findByName(
+    @Param('slug') slug: string,
+    @Param('name') name: string,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.channelsService.findByName(slug, name, userId);
+  }
+
   @Roles(MemberRole.ADMIN, MemberRole.OWNER)
   @Post('/')
   public create(@Body() dto: CreateChannelInput) {
     return this.channelsService.create(dto);
   }
+
 
   @Roles(MemberRole.ADMIN, MemberRole.OWNER)
   @Post('/groups')
@@ -43,6 +54,15 @@ export class ChannelsController {
     @Body() dto: CreateChannelsGroupInput,
   ) {
     return this.channelsService.createGroup(dto);
+  }
+
+  @Roles(MemberRole.ADMIN, MemberRole.OWNER)
+  @Patch('/:channelId')
+  public async update(
+    @Param('channelId') channelId: string,
+    @Body() dto: UpdateChannelInput,
+  ) {
+    return this.channelsService.update(channelId, dto);
   }
 
   @Patch('/groups/:groupId')
@@ -62,9 +82,11 @@ export class ChannelsController {
     return this.channelsService.deleteGroup(groupId, userId);
   }
 
-
-  @Delete("/:channelId")
-  public delete(@Param("channelId") channelId:string, @CurrentUser('id') userId:string) {
+  @Delete('/:channelId')
+  public delete(
+    @Param('channelId') channelId: string,
+    @CurrentUser('id') userId: string,
+  ) {
     return this.channelsService.delete(channelId, userId);
   }
 }

@@ -9,3 +9,11 @@ export const getAllChannels = async (slug: string) => {
 		return []
 	}
 }
+
+export const getChannelByName = async (slug: string, name: string) => {
+	try {
+		return await ChannelsApi.findByName(slug, name)
+	} catch {
+		return null
+	}
+}

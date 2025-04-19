@@ -1,7 +1,6 @@
 import { ChannelType } from '@/types'
 import { create } from 'zustand'
-
-type ModalVariant = 'create' | 'edit'
+import { ModalVariants } from '../types'
 
 type ChannelData = {
 	id: string
@@ -12,15 +11,16 @@ type ChannelData = {
 
 interface IChannelsModalStore {
 	isOpen: boolean
-	variant: ModalVariant
+	variant: ModalVariants
 	data?: Partial<ChannelData>
-	open: (variant?: ModalVariant, data?: Partial<ChannelData>) => void
+	open: (variant?: ModalVariants, data?: Partial<ChannelData>) => void
 	close: () => void
 }
 
 export const useChannelsModalStore = create<IChannelsModalStore>((set) => ({
 	isOpen: false,
-	variant: 'create',
-	open: (variant = 'create', data) => set({ isOpen: true, variant, data }),
+	variant: ModalVariants.CREATE,
+	open: (variant = ModalVariants.CREATE, data) =>
+		set({ isOpen: true, variant, data }),
 	close: () => set({ isOpen: false, data: undefined })
 }))
