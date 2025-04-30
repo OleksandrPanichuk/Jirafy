@@ -5,9 +5,11 @@ import {
   UpdateChannelsGroupInput,
 } from '@/channels/dto';
 import { MembersService } from '@/members/members.service';
+import { DEFAULT_CHANNEL_NAME } from '@/shared/constants';
 import { WorkspacesService } from '@/workspaces/workspaces.service';
 import { PrismaService } from '@app/prisma';
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -110,6 +112,10 @@ export class ChannelsService {
       throw new NotFoundException('Channel not found');
     }
 
+    if (channel.name === DEFAULT_CHANNEL_NAME) {
+      throw new BadRequestException('You cannot change the default channel');
+    }
+
     const existingChannel = await this.prisma.channel.findFirst({
       where: {
         groupId: channel.groupId,
@@ -168,6 +174,10 @@ export class ChannelsService {
     });
     if (!channel) {
       throw new ForbiddenException('Channel not found');
+    }
+
+    if (channel.name === DEFAULT_CHANNEL_NAME) {
+      throw new BadRequestException('You cannot delete the default channel');
     }
 
     return this.prisma.channel.delete({

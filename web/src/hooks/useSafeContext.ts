@@ -1,3 +1,4 @@
+'use client'
 import { Context, useContext } from 'react'
 
 export const useSafeContext = <T>(

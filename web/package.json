@@ -78,6 +78,7 @@
     "react-hook-form": "^7.55.0",
     "react-image-crop": "^11.0.10",
     "react-resizable-panels": "^2.1.7",
+    "server-only": "^0.0.1",
     "socket.io-client": "^4.8.1",
     "tailwind-merge": "^2.6.0",
     "unsplash-js": "^7.0.19",

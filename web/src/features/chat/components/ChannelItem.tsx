@@ -65,12 +65,12 @@ export const ChannelItem = ({ data }: IChannelItemProps) => {
 			>
 				<p className="flex gap-2 items-center w-full text-xs leading-5 font-medium ">
 					{data.type === ChannelType.TEXT ? (
-						<IconHash className="size-3.5" />
+						<IconHash className="size-3.5 shrink-0" />
 					) : (
-						<IconMicrophone className="size-3.5" />
+						<IconMicrophone className="size-3.5 shrink-0" />
 					)}
 
-					<span>{data.name}</span>
+					<span className='truncate'>{data.name}</span>
 				</p>
 				{checkMemberPermissions(role) && (
 					<>

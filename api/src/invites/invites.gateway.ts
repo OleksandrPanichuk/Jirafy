@@ -39,7 +39,8 @@ import { InvitesService } from './invites.service';
 export class InvitesGateway {
   constructor(
     @Inject(forwardRef(() => InvitesService))
-    private readonly invitesService: InvitesService) {}
+    private readonly invitesService: InvitesService,
+  ) {}
 
   @WebSocketServer()
   server: Server;

@@ -26,11 +26,12 @@ export const SocketsProvider = ({ children }: PropsWithChildren) => {
 
 		const config: Partial<ManagerOptions & SocketOptions> = {
 			withCredentials: true,
-			reconnectionAttempts: 2,
+			reconnectionAttempts: 2
 		}
 
 		const invitesSocket = io(API_URL + '/invites', {
 			path: '/invites',
+			transports: ['polling', 'websocket'],
 			...config
 		})
 		const chatSocket = io(API_URL + '/chat', {

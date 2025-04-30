@@ -42,7 +42,10 @@ export const ChannelsLayout = async ({ children, params }: ILayoutProps) => {
 				>
 					<ChannelsSidebar />
 				</ResizablePanel>
-				<ResizableHandle withHandle className="md:flex hidden" />
+				<ResizableHandle
+					withHandle
+					className="md:flex hidden bg-neutral-900/50"
+				/>
 				<ResizablePanel minSize={20} defaultSize={80}>
 					{children}
 				</ResizablePanel>

@@ -17,7 +17,7 @@ export const WorkspaceSettingsNavigation = () => {
 	const routes = useMemo(() => getSettingsLinks(slug), [slug])
 	const pathname = usePathname()
 
-	const [isMobile] = useMediaQuery(breakpoints['max-md'], { ssr: false })
+	const [isMobile] = useMediaQuery(breakpoints['max-md'])
 
 	const active = useMemo(() => {
 		return routes.find((route) => route.href === pathname)

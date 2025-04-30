@@ -105,7 +105,8 @@ export const ChannelsProvider = ({
 			removeGroup: (groupId) =>
 				set((state) => ({
 					channelsGroups: state.channelsGroups.filter((g) => g.id !== groupId)
-				}))
+				})),
+
 		}))
 	)
 

@@ -124,8 +124,6 @@ model User {
   activities     Activity[]
   comments       Comment[]
   reactions      Reaction[]
-  mentions       Mention[]
-  messages       Message[]
 
   @@map("users")
 }
@@ -194,6 +192,9 @@ model Member {
 
   conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId String?       @db.ObjectId
+  reads          MessageRead[]
+  messages       Message[]
+  mentions       Mention[]
 
   @@map("members")
 }
@@ -506,11 +507,14 @@ model Document {
 model Mention {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @db.ObjectId
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String @db.ObjectId
 
-  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  documentId String   @db.ObjectId
+  document   Document? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentId String?   @db.ObjectId
+
+  message   Message? @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId String?  @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -538,7 +542,7 @@ model Channel {
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String    @db.ObjectId
 
-  name        String
+  name String
 
   messages Message[]
   group    ChannelsGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
@@ -569,8 +573,8 @@ model Message {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @db.ObjectId
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String @db.ObjectId
 
   conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId String?       @db.ObjectId
@@ -584,8 +588,25 @@ model Message {
   submessages Message[] @relation("submessages")
 
   reactions Reaction[]
+  reads     MessageRead[]
+  mentions  Mention[]
 
   @@map("messages")
+}
+
+model MessageRead {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId String  @db.ObjectId
+
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String @db.ObjectId
+
+  readAt DateTime @default(now())
+
+  @@unique([messageId, memberId])
+  @@map("messages_read")
 }
 
 // TODO:
