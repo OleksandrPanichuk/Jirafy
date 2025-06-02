@@ -8,7 +8,7 @@ export const QueryProvider = ({ children }: PropsWithChildren) => {
 	const queryClient = getQueryClient()
 	return (
 		<QueryClientProvider client={queryClient}>
-			<ReactQueryDevtools />
+			{/* <ReactQueryDevtools /> */}
 			{children}
 		</QueryClientProvider>
 	)

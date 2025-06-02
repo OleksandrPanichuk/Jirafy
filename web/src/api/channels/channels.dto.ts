@@ -4,7 +4,12 @@ import { ChannelType } from '@/types'
 import { z } from 'zod'
 
 export const createChannelSchema = z.object({
-	name: zRequired(FormErrors.required.channelName),
+	name: zRequired(FormErrors.required.channelName).refine(
+		(val) => /^[a-zA-Z0-9_]+$/.test(val),
+		{
+			message: FormErrors.invalid.channelName
+		}
+	),
 	type: z.nativeEnum(ChannelType),
 	groupId: zMongoId(),
 	workspaceId: zMongoId()
@@ -14,7 +19,9 @@ export type CreateChannelInput = z.infer<typeof createChannelSchema>
 
 export const updateChannelSchema = z.object({
 	id: zMongoId(),
-	name: zRequired(FormErrors.required.channelName),
+	name: zRequired(FormErrors.required.channelName).refine((val) =>
+		/^[a-zA-Z0-9_]+$/.test(val)
+	),
 	type: z.nativeEnum(ChannelType),
 	groupId: zMongoId()
 })

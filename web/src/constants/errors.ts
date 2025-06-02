@@ -13,7 +13,7 @@ export const FormErrors = {
 		projectName: 'Project name is required',
 		projectIdentifier: 'ID is required',
 		channelsGroupName: 'Channels group name is required',
-		channelName: 'Channel name is required',
+		channelName: 'Channel name is required'
 	},
 	length: {
 		firstName: 'First name is too short',
@@ -31,7 +31,9 @@ export const FormErrors = {
 		password: 'Password is too weak',
 		verificationToken: 'Invalid token',
 		workspaceSize: 'Workspace size cannot be negative',
-		projectNetwork: 'Invalid network'
+		projectNetwork: 'Invalid network',
+		channelName:
+			'Channel name can only contain letters, numbers, and underscores'
 	},
 	match: {
 		passwords: 'Passwords do not match'
